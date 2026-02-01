@@ -1,1 +1,42 @@
 @import "tailwindcss";
+
+@theme {
+    --font-google: "Google Sans", sans-serif;
+    --color-bg: #050505;
+    --color-surface: #0a0a0a;
+    --color-border: #1f1f1f;
+    --color-textmute: #a1a1a1;
+    --color-text: #ededed;
+}
+
+html {
+    @apply h-full;
+}
+
+body {
+    @apply font-google bg-bg text-text;
+}
+
+main {
+    @apply m-4 flex flex-col items-center gap-4;
+}
+
+h1 {
+    @apply text-2xl font-extrabold md:text-5xl lg:text-5xl;
+}
+
+h2 {
+    @apply text-xl font-bold md:text-2xl lg:text-3xl;
+}
+
+h3 {
+    @apply font-semibold md:text-lg lg:text-xl;
+}
+
+input {
+    @apply border-textmute w-full rounded-2xl border p-4 font-medium;
+}
+
+button {
+    @apply font-bold;
+}

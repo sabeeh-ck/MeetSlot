@@ -1,8 +1,8 @@
 import { rooms } from "../constants";
 
-const RoomSelector = ({ selectedRoom, onClick }) => {
+const RoomSelector = ({ selectedRoom, selectRoom, closeSheet }) => {
     return (
-        <div className="bg-bg border-border fixed bottom-0 flex w-full flex-col gap-4 rounded-2xl border-t p-4 pb-50">
+        <div className="flex flex-col gap-4">
             <h2 className="text-textmute">Rooms</h2>
             {rooms.map((room) => {
                 const isSelected = selectedRoom === room;
@@ -10,7 +10,10 @@ const RoomSelector = ({ selectedRoom, onClick }) => {
                 return (
                     <button
                         key={room}
-                        onClick={() => onClick(room)}
+                        onClick={() => {
+                            selectRoom(room);
+                            closeSheet();
+                        }}
                         className={`rounded-lg px-2 py-2 text-left ${isSelected ? "bg-border" : "bg-transparent"}`}
                     >
                         {room}

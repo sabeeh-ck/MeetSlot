@@ -34,9 +34,30 @@ h3 {
 }
 
 input {
-    @apply border-textmute w-full rounded-2xl border p-4 font-medium;
+    @apply bg-border w-full rounded-lg p-2 font-medium;
+}
+
+input[type="date"] {
+    @apply w-auto px-2 font-normal;
+}
+
+label {
+    @apply text-textmute;
 }
 
 button {
     @apply font-bold;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(100%);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
+
+.animate-slideUp {
+    animation: slideUp 0.25s ease-in-out;
 }

@@ -59,13 +59,15 @@ const SlotTimeline = ({ selectedSlots, setSelectedSlots }) => {
                         <div key={slot}>
                             <button
                                 onClick={() => handleSelect(slot)}
-                                className={`flex h-25 w-full items-start border-x pt-3 pl-5 ${roundTop ? " rounded-t-3xl border-t" : ""} ${roundBottom ? "rounded-b-3xl border-b" : ""} ${isSelected ? "bg-border border-textmuteP" : "border-border bg-transparent"} `}
+                                className={`flex h-25 w-full items-start border-x pt-3 pl-5 ${roundTop ? " rounded-t-3xl border-t" : ""} ${roundBottom ? "mb-2 rounded-b-3xl border-b" : ""} ${isSelected ? "bg-border border-textmute" : "border-border bg-surface"} `}
                             >
                                 {toTime(slot)}
                             </button>
-                            {/* {i < slots.length - 1 && (
-                                <hr className="text-border" />
-                            )} */}
+                            {!roundBottom && (
+                                <hr
+                                    className={`text-border border-x py-1 ${isSelected ? "bg-border border-textmute" : "border-border bg-surface"} `}
+                                />
+                            )}
                         </div>
                     );
                 })}

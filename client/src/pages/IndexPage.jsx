@@ -1,6 +1,6 @@
 import { CalendarIcon, ChevronUpDownIcon } from "@heroicons/react/24/solid";
 import SlotTimeline from "../components/SlotTimeline";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import RoomSelector from "../components/RoomSelector";
 import BottomSheet from "../components/BottomSheet";
 import { AnimatePresence } from "motion/react";
@@ -17,6 +17,8 @@ const IndexPage = () => {
         setSelectedDate(new Date().toISOString().split("T")[0]);
     }, []);
 
+    const dateInputRef = useRef(null);
+
     const toggleSelectedRoom = (room) => setSelectedRoom(room);
 
     const formattedDate = (() => {
@@ -25,6 +27,11 @@ const IndexPage = () => {
         const weekday = date.toLocaleDateString("en-US", { weekday: "short" });
         return `${String(day).padStart(2, "0")}/${String(month).padStart(2, "0")} ${weekday}`;
     })();
+
+    const today = new Date().toISOString().split("T")[0];
+    const tomorrow = new Date(Date.now() + 86400000)
+        .toISOString()
+        .split("T")[0];
 
     return (
         <main>
@@ -38,35 +45,53 @@ const IndexPage = () => {
             <section className="flex w-full flex-col gap-4">
                 <div className="flex w-full items-center gap-2">
                     <button
-                        onClick={() =>
-                            setSelectedDate(
-                                new Date().toISOString().split("T")[0],
-                            )
-                        }
-                        className="border-textmute rounded-full border px-4 py-1 text-sm"
+                        onClick={() => setSelectedDate(today)}
+                        className={`rounded-full border px-4 py-1 text-sm ${
+                            selectedDate === today
+                                ? "border-text bg-text text-bg md:hover:bg-border"
+                                : "border-border active:bg-border md:hover:bg-border bg-transparent"
+                        }`}
                     >
                         Today
                     </button>
 
                     <button
-                        onClick={() =>
-                            setSelectedDate(
-                                new Date(Date.now() + 86400000)
-                                    .toISOString()
-                                    .split("T")[0],
-                            )
-                        }
-                        className="border-border rounded-full border px-4 py-1 text-sm"
+                        onClick={() => setSelectedDate(tomorrow)}
+                        className={`rounded-full border px-4 py-1 text-sm ${
+                            selectedDate === tomorrow
+                                ? "border-text bg-text text-bg md:hover:bg-border"
+                                : "border-border md:hover:bg-border active:bg-border bg-transparent"
+                        }`}
                     >
                         Tomorrow
                     </button>
 
-                    <button className="border-border rounded-full border px-4 py-1 text-sm">
+                    <button
+                        className={`rounded-full border px-4 py-1 text-sm ${
+                            selectedDate !== today && selectedDate !== tomorrow
+                                ? "border-text bg-text text-bg md:hover:bg-border"
+                                : "border-border md:hover:bg-border active:bg-border bg-transparent"
+                        }`}
+                        onClick={() =>
+                            dateInputRef.current.showPicker?.() ||
+                            dateInputRef.current.click()
+                        }
+                    >
                         <CalendarIcon className="h-5" />
                     </button>
+
+                    <input
+                        ref={dateInputRef}
+                        type="date"
+                        hidden
+                        min={today}
+                        onChange={(e) =>
+                            setSelectedDate(e.target.value || today)
+                        }
+                    />
                 </div>
 
-                <div className="text-sm">{formattedDate}</div>
+                <div className="font-bold">{formattedDate}</div>
             </section>
 
             <SlotTimeline
@@ -76,7 +101,7 @@ const IndexPage = () => {
 
             {selectedSlots.length !== 0 && (
                 <button
-                    className="bg-text text-bg sticky bottom-8 rounded-xl px-4 py-2"
+                    className="bg-text text-bg sticky bottom-8 mt-4 rounded-xl px-4 py-2"
                     onClick={() => setActiveSheet("form")}
                 >
                     Create Meeting

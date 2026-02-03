@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { minutesToTime } from "../utils/time";
 
 const START = 9 * 60;
 const END = 18 * 60;
@@ -11,12 +11,7 @@ const generateSlots = () => {
 
 const slots = generateSlots();
 
-const toTime = (slot) =>
-    `${String(Math.floor(slot / 60)).padStart(2, "0")}:${String(slot % 60).padStart(2, "0")}`;
-
 const SlotTimeline = ({ selectedSlots, setSelectedSlots }) => {
-    console.log(selectedSlots);
-
     const handleSelect = (slot) =>
         setSelectedSlots((prev) => {
             if (prev.length !== 1) return [slot];
@@ -59,9 +54,9 @@ const SlotTimeline = ({ selectedSlots, setSelectedSlots }) => {
                         <div key={slot}>
                             <button
                                 onClick={() => handleSelect(slot)}
-                                className={`flex h-25 w-full items-start border-x pt-3 pl-5 ${roundTop ? " rounded-t-3xl border-t" : ""} ${roundBottom ? "mb-2 rounded-b-3xl border-b" : ""} ${isSelected ? "bg-border border-textmute" : "border-border bg-surface"} `}
+                                className={`flex h-25 w-full items-start border-x pt-3 pl-5 text-sm ${roundTop ? " rounded-t-3xl border-t" : ""} ${roundBottom ? "mb-2 rounded-b-3xl border-b" : ""} ${isSelected ? "bg-border border-textmute" : "border-border bg-surface"} `}
                             >
-                                {toTime(slot)}
+                                {minutesToTime(slot)}
                             </button>
                             {!roundBottom && (
                                 <hr

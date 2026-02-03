@@ -1,23 +1,77 @@
+import { useEffect, useState } from "react";
+import { minutesToTime } from "../utils/time";
+
 const MeetingForm = ({ selectedDate, selectedSlots, closeSheet }) => {
+    const [formData, setFormData] = useState({
+        meetingTitle: "",
+        selectedDate: "",
+        startTime: "",
+        endTime: "",
+    });
+
+    useEffect(
+        () =>
+            setFormData((prev) => ({
+                ...prev,
+                selectedDate: selectedDate,
+                startTime: selectedSlots[0],
+                endTime: selectedSlots.at(-1),
+            })),
+        [],
+    );
+
+    const handleChange = (event) => {
+        const { name, value } = event.target;
+
+        setFormData((prev) => ({ ...prev, [name]: value }));
+    };
+
+    console.log(selectedDate);
+
     return (
         <div className="flex flex-col py-4">
             <form className="flex flex-col gap-4 text-sm">
                 <div className="flex flex-col gap-2">
                     <label htmlFor="purpose">Meeting title</label>
-                    <input type="text" id="purpose" required />
+                    <input
+                        type="text"
+                        name="meetingTitle"
+                        onChange={handleChange}
+                        value={formData.meetingTitle}
+                        id="purpose"
+                        required
+                    />
                 </div>
                 <div className="flex gap-4">
                     <div className="flex w-full flex-col gap-2">
                         <label htmlFor="date">Date</label>
-                        <input type="date" />
+                        <input
+                            type="date"
+                            id="date"
+                            name="selectedDate"
+                            value={formData.selectedDate}
+                            onChange={handleChange}
+                        />
                     </div>
                     <div className="flex w-full flex-col gap-2">
-                        <label htmlFor="time">Beginning</label>
-                        <input type="time" />
+                        <label htmlFor="startTime">Beginning</label>
+                        <input
+                            type="time"
+                            id="startTime"
+                            name="startTime"
+                            value={minutesToTime(formData.startTime)}
+                            onChange={handleChange}
+                        />
                     </div>
                     <div className="flex w-full flex-col gap-2">
-                        <label htmlFor="date">Ending</label>
-                        <input type="time" />
+                        <label htmlFor="endTime">Ending</label>
+                        <input
+                            type="time"
+                            id="endTime"
+                            name="endTime"
+                            value={minutesToTime(formData.endTime)}
+                            onChange={handleChange}
+                        />
                     </div>
                 </div>
 

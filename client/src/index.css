@@ -18,7 +18,7 @@ body {
 }
 
 main {
-    @apply m-4 flex flex-col items-center gap-4;
+    @apply mx-4 flex flex-col;
 }
 
 h1 {
@@ -34,11 +34,7 @@ h3 {
 }
 
 input {
-    @apply bg-border w-full rounded-lg p-2 font-medium;
-}
-
-input[type="date"] {
-    @apply w-auto px-2 font-normal;
+    @apply bg-surface border-border w-full rounded-lg border p-4 font-medium;
 }
 
 label {

@@ -36,12 +36,12 @@ const BottomSheet = ({ closeSheet, open, children }) => {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                onClick={closeSheet}
+                onClick={keyboardOffset === 0 ? closeSheet : ""}
             />
 
             <motion.div
                 key="sheet"
-                className="border-border bg-bg fixed inset-x-0 -bottom-1/4 z-50 min-h-3/4 touch-none rounded-2xl border-x border-t p-4 pb-8"
+                className="border-border bg-bg fixed inset-x-0 -bottom-10 z-50 min-h-1/2 touch-none rounded-2xl border-x border-t p-4 pb-16"
                 initial={{ y: "100%" }}
                 animate={{ y: -keyboardOffset }}
                 exit={{ y: "100%" }}
@@ -55,7 +55,7 @@ const BottomSheet = ({ closeSheet, open, children }) => {
                     }
                 }}
             >
-                <div className="bg-textmute mx-auto mb-3 h-1.5 w-15 rounded-full" />
+                <div className="bg-textmute mx-auto mb-4 h-1.5 w-15 rounded-full" />
                 {children}
             </motion.div>
         </>

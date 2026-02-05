@@ -26,33 +26,35 @@ const MeetingForm = ({ selectedDate, selectedSlots, closeSheet }) => {
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
-    console.log(selectedDate);
-
     return (
-        <div className="flex flex-col py-4">
+        <div className="flex flex-col">
             <form className="flex flex-col gap-4 text-sm">
                 <div className="flex flex-col gap-2">
-                    <label htmlFor="purpose">Meeting title</label>
+                    <label htmlFor="purpose">
+                        Meeting title <span className="text-red-700">*</span>
+                    </label>
                     <input
                         type="text"
                         name="meetingTitle"
                         onChange={handleChange}
                         value={formData.meetingTitle}
                         id="purpose"
+                        placeholder="Enter a title"
                         required
                     />
                 </div>
+                <div className="flex w-full flex-col gap-2">
+                    <label htmlFor="date">Date</label>
+                    <input
+                        type="date"
+                        id="date"
+                        name="selectedDate"
+                        value={formData.selectedDate}
+                        onChange={handleChange}
+                    />
+                </div>
+
                 <div className="flex gap-4">
-                    <div className="flex w-full flex-col gap-2">
-                        <label htmlFor="date">Date</label>
-                        <input
-                            type="date"
-                            id="date"
-                            name="selectedDate"
-                            value={formData.selectedDate}
-                            onChange={handleChange}
-                        />
-                    </div>
                     <div className="flex w-full flex-col gap-2">
                         <label htmlFor="startTime">Beginning</label>
                         <input
@@ -69,7 +71,7 @@ const MeetingForm = ({ selectedDate, selectedSlots, closeSheet }) => {
                             type="time"
                             id="endTime"
                             name="endTime"
-                            value={minutesToTime(formData.endTime)}
+                            value={minutesToTime(formData.endTime + 30)}
                             onChange={handleChange}
                         />
                     </div>

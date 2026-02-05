@@ -5,6 +5,7 @@ import RoomSelector from "../components/RoomSelector";
 import BottomSheet from "../components/BottomSheet";
 import { AnimatePresence } from "motion/react";
 import MeetingForm from "../components/MeetingForm";
+import { minutesToTime } from "../utils/time";
 
 const IndexPage = () => {
     const [selectedRoom, setSelectedRoom] = useState("");
@@ -35,21 +36,20 @@ const IndexPage = () => {
 
     return (
         <main>
-            <section className="flex w-full gap-2">
-                <h1>{selectedRoom}</h1>
-                <button onClick={() => setActiveSheet("room")}>
-                    <ChevronUpDownIcon className="h-6" />
-                </button>
-            </section>
-
-            <section className="flex w-full flex-col gap-4">
+            <section className="bg-bg sticky top-14 flex w-full flex-col gap-4 py-4">
+                <div className="flex w-full gap-2">
+                    <h1>{selectedRoom}</h1>
+                    <button onClick={() => setActiveSheet("room")}>
+                        <ChevronUpDownIcon className="h-6" />
+                    </button>
+                </div>
                 <div className="flex w-full items-center gap-2">
                     <button
                         onClick={() => setSelectedDate(today)}
                         className={`rounded-full border px-4 py-1 text-sm ${
                             selectedDate === today
                                 ? "border-text bg-text text-bg md:hover:bg-border"
-                                : "border-border active:bg-border md:hover:bg-border bg-transparent"
+                                : "border-border active:bg-border md:hover:bg-border bg-surface"
                         }`}
                     >
                         Today
@@ -91,7 +91,16 @@ const IndexPage = () => {
                     />
                 </div>
 
-                <div className="font-bold">{formattedDate}</div>
+                <div className="flex gap-4 font-bold">
+                    {formattedDate}
+
+                    {selectedSlots.length !== 0 && (
+                        <p>
+                            {minutesToTime(selectedSlots[0])} -{" "}
+                            {minutesToTime(selectedSlots.at(-1) + 30)}
+                        </p>
+                    )}
+                </div>
             </section>
 
             <SlotTimeline
@@ -100,12 +109,14 @@ const IndexPage = () => {
             />
 
             {selectedSlots.length !== 0 && (
-                <button
-                    className="bg-text text-bg sticky bottom-8 mt-4 rounded-xl px-4 py-2"
-                    onClick={() => setActiveSheet("form")}
-                >
-                    Create Meeting
-                </button>
+                <section className="sticky bottom-8 mt-4 flex flex-col items-center gap-2">
+                    <button
+                        className="bg-text text-bg rounded-xl px-4 py-2"
+                        onClick={() => setActiveSheet("form")}
+                    >
+                        Create Meeting
+                    </button>
+                </section>
             )}
 
             <AnimatePresence>

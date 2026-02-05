@@ -1,9 +1,12 @@
 import express from "express";
 import cors from "cors";
-import dotenv from "dotenv";
-dotenv.config();
+import authRoutes from "./routes/auth.routes.js";
+
+import { config } from "dotenv";
+config();
 
 import connectDB from "./db.js";
+import User from "./models/User.js";
 
 const app = express();
 
@@ -19,6 +22,19 @@ app.post("/login", (req, res) => {
     res.json({ email });
 });
 
-app.listen(4000);
+app.post("/users/test", async (req, res) => {
+    try {
+        const user = await User.create({
+            email: "test@meetslot.com",
+            name: "Test User",
+        });
 
-//saX7RqEBNOa8j3fc
+        res.status(201).json(user);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+app.use("/auth", authRoutes);
+
+app.listen(4000);

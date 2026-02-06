@@ -20,15 +20,27 @@ const MeetingForm = ({ selectedDate, selectedSlots, closeSheet }) => {
         [],
     );
 
-    const handleChange = (event) => {
-        const { name, value } = event.target;
+    const handleChange = (e) => {
+        const { name, value } = e.target;
 
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
+    const handleSubmit = (e) => {
+        e.preventDefault();
+    };
+
     return (
         <div className="flex flex-col">
-            <form className="flex flex-col gap-4 text-sm">
+            <form
+                className="flex flex-col gap-4 text-sm"
+                onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                        e.preventDefault();
+                    }
+                }}
+                onSubmit={handleSubmit}
+            >
                 <div className="flex flex-col gap-2">
                     <label htmlFor="purpose">
                         Meeting title <span className="text-red-700">*</span>
@@ -43,36 +55,47 @@ const MeetingForm = ({ selectedDate, selectedSlots, closeSheet }) => {
                         required
                     />
                 </div>
+
                 <div className="flex w-full flex-col gap-2">
-                    <label htmlFor="date">Date</label>
+                    <label htmlFor="date">
+                        Date <span className="text-red-700">*</span>
+                    </label>
                     <input
                         type="date"
                         id="date"
                         name="selectedDate"
                         value={formData.selectedDate}
                         onChange={handleChange}
+                        required
                     />
                 </div>
 
                 <div className="flex gap-4">
                     <div className="flex w-full flex-col gap-2">
-                        <label htmlFor="startTime">Beginning</label>
+                        <label htmlFor="startTime">
+                            Beginning <span className="text-red-700">*</span>
+                        </label>
                         <input
                             type="time"
                             id="startTime"
                             name="startTime"
                             value={minutesToTime(formData.startTime)}
                             onChange={handleChange}
+                            required
                         />
                     </div>
+
                     <div className="flex w-full flex-col gap-2">
-                        <label htmlFor="endTime">Ending</label>
+                        <label htmlFor="endTime">
+                            Ending <span className="text-red-700">*</span>
+                        </label>
                         <input
                             type="time"
                             id="endTime"
                             name="endTime"
                             value={minutesToTime(formData.endTime + 30)}
                             onChange={handleChange}
+                            required00
                         />
                     </div>
                 </div>

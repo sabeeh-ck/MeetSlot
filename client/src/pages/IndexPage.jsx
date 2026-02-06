@@ -11,7 +11,7 @@ const IndexPage = () => {
     const [selectedRoom, setSelectedRoom] = useState("");
     const [selectedSlots, setSelectedSlots] = useState([]);
     const [selectedDate, setSelectedDate] = useState("");
-    const [activeSheet, setActiveSheet] = useState("");
+    const [sheet, setSheet] = useState("");
 
     useEffect(() => {
         setSelectedRoom("Room 1");
@@ -39,8 +39,10 @@ const IndexPage = () => {
             <section className="bg-bg sticky top-14 flex w-full flex-col gap-4 py-4">
                 <div className="flex w-full gap-2">
                     <h1>{selectedRoom}</h1>
-                    <button onClick={() => setActiveSheet("room")}>
-                        <ChevronUpDownIcon className="h-6" />
+                    <button onClick={() => setSheet("room")}>
+                        <ChevronUpDownIcon
+                            className={`text-text md:hover:bg-border border-border active:bg-border h-8 rounded-lg border py-1 text-sm ${sheet === "room" ? "bg-border" : "bg-surface"} `}
+                        />
                     </button>
                 </div>
                 <div className="flex w-full items-center gap-2">
@@ -60,7 +62,7 @@ const IndexPage = () => {
                         className={`rounded-full border px-4 py-1 text-sm ${
                             selectedDate === tomorrow
                                 ? "border-text bg-text text-bg md:hover:bg-border"
-                                : "border-border md:hover:bg-border active:bg-border bg-transparent"
+                                : "border-border md:hover:bg-border active:bg-border bg-surface"
                         }`}
                     >
                         Tomorrow
@@ -70,7 +72,7 @@ const IndexPage = () => {
                         className={`rounded-full border px-4 py-1 text-sm ${
                             selectedDate !== today && selectedDate !== tomorrow
                                 ? "border-text bg-text text-bg md:hover:bg-border"
-                                : "border-border md:hover:bg-border active:bg-border bg-transparent"
+                                : "border-border md:hover:bg-border active:bg-border bg-surface"
                         }`}
                         onClick={() =>
                             dateInputRef.current.showPicker?.() ||
@@ -112,7 +114,7 @@ const IndexPage = () => {
                 <section className="sticky bottom-8 mt-4 flex flex-col items-center gap-2">
                     <button
                         className="bg-text text-bg rounded-xl px-4 py-2"
-                        onClick={() => setActiveSheet("form")}
+                        onClick={() => setSheet("form")}
                     >
                         Create Meeting
                     </button>
@@ -120,28 +122,22 @@ const IndexPage = () => {
             )}
 
             <AnimatePresence>
-                {activeSheet === "room" && (
-                    <BottomSheet
-                        open={activeSheet}
-                        closeSheet={() => setActiveSheet("")}
-                    >
+                {sheet === "room" && (
+                    <BottomSheet open={sheet} closeSheet={() => setSheet("")}>
                         <RoomSelector
                             selectedRoom={selectedRoom}
                             selectRoom={toggleSelectedRoom}
-                            closeSheet={() => setActiveSheet("")}
+                            closeSheet={() => setSheet("")}
                         />
                     </BottomSheet>
                 )}
 
-                {activeSheet === "form" && (
-                    <BottomSheet
-                        open={activeSheet}
-                        closeSheet={() => setActiveSheet("")}
-                    >
+                {sheet === "form" && (
+                    <BottomSheet open={sheet} closeSheet={() => setSheet("")}>
                         <MeetingForm
                             selectedDate={selectedDate}
                             selectedSlots={selectedSlots}
-                            closeSheet={() => setActiveSheet("")}
+                            closeSheet={() => setSheet("")}
                         />
                     </BottomSheet>
                 )}

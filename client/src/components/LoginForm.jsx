@@ -1,9 +1,16 @@
-const LoginForm = ({ step, onSubmit, value, onChange, email }) => (
+const LoginForm = ({ step, onSubmit, value, onChange, email, error }) => (
     <div className="mt-4 flex w-full flex-col gap-4">
         <p className="font-semibold">
             {step === "email" ? "Email" : `Enter OTP send to ${email}`}
         </p>
-        <form className="flex flex-col items-center gap-4" onSubmit={onSubmit}>
+        <form className="flex flex-col gap-2" onSubmit={onSubmit}>
+            {error !== "" && (
+                <p className="text-xs font-semibold text-red-700/80">
+                    {error === "Not authorised"
+                        ? "You are not authorised. Contact the admin"
+                        : error}
+                </p>
+            )}
             <input
                 type={`${step === "email" ? "email" : "text"}`}
                 required
@@ -14,7 +21,7 @@ const LoginForm = ({ step, onSubmit, value, onChange, email }) => (
                 placeholder={`${step === "email" ? "johndoe@email.com" : "0 0 0 0 0 0"}`}
             />
             <button
-                className="text-bg rounded-lg bg-amber-300 px-4 py-2"
+                className="text-bg mt-2 self-center rounded-lg bg-amber-300 px-4 py-2"
                 type="submit"
             >
                 {step === "email" ? "Send OTP" : "Verify OTP"}

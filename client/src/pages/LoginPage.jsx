@@ -2,32 +2,40 @@ import { useState } from "react";
 import axios from "axios";
 import LoginForm from "../components/LoginForm";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 const LoginPage = () => {
     const [email, setEmail] = useState("");
     const [otp, setOtp] = useState("");
     const [step, setStep] = useState("email");
+    const [error, setError] = useState("");
 
     const navigate = useNavigate();
 
     const sendOtp = async (event) => {
         event.preventDefault();
         try {
+            setError("");
             await axios.post("/auth/send-otp", { email });
             setStep("otp");
-        } catch (error) {
-            console.log(error);
+        } catch (err) {
+            if (err.response.data.msg) {
+                setError(err.response.data.msg);
+            } else {
+                console.log(err);
+            }
         }
     };
 
     const verifyOtp = async (event) => {
         event.preventDefault();
         try {
-            await axios.post("/auth/verify-otp", { email, otp });
+            const res = await axios.post("/auth/verify-otp", { email, otp });
+            localStorage.setItem("token", res.data.token);
             navigate("/");
-        } catch (error) {
+        } catch (err) {
             if (err.response && err.response.data && err.response.data.msg) {
-                console.log(err.response.data.msg);
+                setError(err.response.data.msg);
             } else {
                 console.log(err);
             }
@@ -49,6 +57,7 @@ const LoginPage = () => {
                         onSubmit={sendOtp}
                         value={email}
                         onChange={setEmail}
+                        error={error}
                     />
                 ) : (
                     <LoginForm
@@ -57,6 +66,7 @@ const LoginPage = () => {
                         value={otp}
                         onChange={setOtp}
                         email={email}
+                        error={error}
                     />
                 )}
             </section>

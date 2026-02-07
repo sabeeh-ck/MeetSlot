@@ -5,28 +5,27 @@ import LoginPage from "./pages/LoginPage";
 import Layout from "./Layout";
 import axios from "axios";
 import ProtectedRoute from "./components/ProtectedRoute";
+import NotFoundPage from "./pages/NotFoundPage";
 
 axios.defaults.baseURL = "http://localhost:4000";
 
-function App() {
-    return (
-        <>
-            <Routes>
-                <Route path="/" element={<Layout />}>
-                    <Route path="/login" element={<LoginPage />} />
+const App = () => (
+    <Routes>
+        <Route path="/" element={<Layout />}>
+            <Route path="/login" element={<LoginPage />} />
 
-                    <Route
-                        index
-                        element={
-                            <ProtectedRoute>
-                                <IndexPage />
-                            </ProtectedRoute>
-                        }
-                    />
-                </Route>
-            </Routes>
-        </>
-    );
-}
+            <Route
+                index
+                element={
+                    <ProtectedRoute>
+                        <IndexPage />
+                    </ProtectedRoute>
+                }
+            />
+
+            <Route path="*" element={<NotFoundPage />} />
+        </Route>
+    </Routes>
+);
 
 export default App;

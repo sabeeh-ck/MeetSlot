@@ -1,4 +1,8 @@
-import { CalendarIcon, ChevronUpDownIcon } from "@heroicons/react/24/solid";
+import {
+    CalendarIconSolid,
+    CalendarIconOutline,
+    ChevronUpDownIcon,
+} from "../icons";
 import SlotTimeline from "../components/SlotTimeline";
 import { useEffect, useRef, useState } from "react";
 import RoomSelector from "../components/RoomSelector";
@@ -36,9 +40,9 @@ const IndexPage = () => {
 
     return (
         <main>
-            <section className="bg-bg sticky top-14 flex w-full flex-col gap-4 py-4">
-                <div className="flex w-full gap-2">
-                    <h1>{selectedRoom}</h1>
+            <section className="bg-bg sticky top-14 z-30 flex w-full flex-col gap-4 py-4">
+                <div className="flex w-full items-center gap-2">
+                    <h2>{selectedRoom}</h2>
                     <button onClick={() => setSheet("room")}>
                         <ChevronUpDownIcon
                             className={`text-text md:hover:bg-border border-border active:bg-border h-8 rounded-lg border py-1 text-sm ${sheet === "room" ? "bg-border" : "bg-surface"} `}
@@ -79,7 +83,11 @@ const IndexPage = () => {
                             dateInputRef.current.click()
                         }
                     >
-                        <CalendarIcon className="h-5" />
+                        {selectedDate !== today && selectedDate !== tomorrow ? (
+                            <CalendarIconSolid className="h-5" />
+                        ) : (
+                            <CalendarIconOutline className="h-5" />
+                        )}
                     </button>
 
                     <input

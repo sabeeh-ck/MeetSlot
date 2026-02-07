@@ -30,7 +30,7 @@ h2 {
 }
 
 h3 {
-    @apply font-semibold md:text-lg lg:text-xl;
+    @apply text-lg font-medium md:text-lg lg:text-xl;
 }
 
 input {

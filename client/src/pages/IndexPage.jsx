@@ -4,7 +4,7 @@ import {
     ChevronUpDownIcon,
 } from "../icons";
 import SlotTimeline from "../components/SlotTimeline";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import RoomSelector from "../components/RoomSelector";
 import BottomSheet from "../components/BottomSheet";
 import { AnimatePresence } from "motion/react";
@@ -12,15 +12,15 @@ import MeetingForm from "../components/MeetingForm";
 import { minutesToTime } from "../utils/time";
 
 const IndexPage = () => {
-    const [selectedRoom, setSelectedRoom] = useState("");
-    const [selectedSlots, setSelectedSlots] = useState([]);
-    const [selectedDate, setSelectedDate] = useState("");
-    const [sheet, setSheet] = useState("");
+    const today = new Date().toISOString().split("T")[0];
+    const tomorrow = new Date(Date.now() + 86400000)
+        .toISOString()
+        .split("T")[0];
 
-    useEffect(() => {
-        setSelectedRoom("Room 1");
-        setSelectedDate(new Date().toISOString().split("T")[0]);
-    }, []);
+    const [selectedRoom, setSelectedRoom] = useState("Room 1");
+    const [selectedSlots, setSelectedSlots] = useState([]);
+    const [selectedDate, setSelectedDate] = useState(today);
+    const [sheet, setSheet] = useState(null);
 
     const dateInputRef = useRef(null);
 
@@ -33,62 +33,57 @@ const IndexPage = () => {
         return `${String(day).padStart(2, "0")}/${String(month).padStart(2, "0")} ${weekday}`;
     })();
 
-    const today = new Date().toISOString().split("T")[0];
-    const tomorrow = new Date(Date.now() + 86400000)
-        .toISOString()
-        .split("T")[0];
+    const dateSelector = [
+        {
+            content: "Today",
+            action: () => setSelectedDate(today),
+            isSelected: selectedDate === today,
+        },
+        {
+            content: "Tomorrow",
+            action: () => setSelectedDate(tomorrow),
+            isSelected: selectedDate === tomorrow,
+        },
+        {
+            content:
+                selectedDate === today || selectedDate === tomorrow ? (
+                    <CalendarIconOutline className="h-5" />
+                ) : (
+                    <CalendarIconSolid className="h-5" />
+                ),
+            action: () =>
+                dateInputRef.current?.showPicker?.() ??
+                dateInputRef.current?.click(),
+            isSelected: selectedDate !== today && selectedDate !== tomorrow,
+        },
+    ];
 
     return (
         <main>
-            <section className="bg-bg sticky top-14 z-30 flex w-full flex-col gap-4 py-4">
+            <section className="bg-bg sticky top-16 z-30 flex w-full flex-col gap-4 pt-4">
                 <div className="flex w-full items-center gap-2">
-                    <h2>{selectedRoom}</h2>
+                    <h2 className="select-none">{selectedRoom}</h2>
                     <button onClick={() => setSheet("room")}>
                         <ChevronUpDownIcon
-                            className={`text-text md:hover:bg-border border-border active:bg-border h-8 rounded-lg border py-1 text-sm ${sheet === "room" ? "bg-border" : "bg-surface"} `}
+                            className={`md:hover:bg-border border-border active:bg-border h-8 rounded-lg border py-1 text-sm ${sheet === "room" ? "bg-border" : "bg-surface"} `}
                         />
                     </button>
                 </div>
+
                 <div className="flex w-full items-center gap-2">
-                    <button
-                        onClick={() => setSelectedDate(today)}
-                        className={`rounded-full border px-4 py-1 text-sm ${
-                            selectedDate === today
-                                ? "border-text bg-text text-bg md:hover:bg-border"
-                                : "border-border active:bg-border md:hover:bg-border bg-surface"
-                        }`}
-                    >
-                        Today
-                    </button>
-
-                    <button
-                        onClick={() => setSelectedDate(tomorrow)}
-                        className={`rounded-full border px-4 py-1 text-sm ${
-                            selectedDate === tomorrow
-                                ? "border-text bg-text text-bg md:hover:bg-border"
-                                : "border-border md:hover:bg-border active:bg-border bg-surface"
-                        }`}
-                    >
-                        Tomorrow
-                    </button>
-
-                    <button
-                        className={`rounded-full border px-4 py-1 text-sm ${
-                            selectedDate !== today && selectedDate !== tomorrow
-                                ? "border-text bg-text text-bg md:hover:bg-border"
-                                : "border-border md:hover:bg-border active:bg-border bg-surface"
-                        }`}
-                        onClick={() =>
-                            dateInputRef.current.showPicker?.() ||
-                            dateInputRef.current.click()
-                        }
-                    >
-                        {selectedDate !== today && selectedDate !== tomorrow ? (
-                            <CalendarIconSolid className="h-5" />
-                        ) : (
-                            <CalendarIconOutline className="h-5" />
-                        )}
-                    </button>
+                    {dateSelector.map(({ content, action, isSelected }, i) => (
+                        <button
+                            key={i}
+                            onClick={action}
+                            className={`rounded-full border px-4 py-1 text-sm ${
+                                isSelected
+                                    ? "border-text bg-text text-bg md:hover:bg-border"
+                                    : "border-border active:bg-border md:hover:bg-border bg-surface"
+                            }`}
+                        >
+                            {content}
+                        </button>
+                    ))}
 
                     <input
                         ref={dateInputRef}
@@ -101,7 +96,7 @@ const IndexPage = () => {
                     />
                 </div>
 
-                <div className="flex gap-4 font-bold">
+                <div className="mb-4 flex gap-4 font-medium">
                     {formattedDate}
 
                     {selectedSlots.length !== 0 && (
@@ -119,7 +114,7 @@ const IndexPage = () => {
             />
 
             {selectedSlots.length !== 0 && (
-                <section className="sticky bottom-8 mt-4 flex flex-col items-center gap-2">
+                <section className="sticky bottom-8 mt-10 flex flex-col items-center gap-2">
                     <button
                         className="bg-text text-bg rounded-xl px-4 py-2"
                         onClick={() => setSheet("form")}
@@ -131,21 +126,21 @@ const IndexPage = () => {
 
             <AnimatePresence>
                 {sheet === "room" && (
-                    <BottomSheet open={sheet} closeSheet={() => setSheet("")}>
+                    <BottomSheet open={sheet} closeSheet={() => setSheet(null)}>
                         <RoomSelector
                             selectedRoom={selectedRoom}
                             selectRoom={toggleSelectedRoom}
-                            closeSheet={() => setSheet("")}
+                            closeSheet={() => setSheet(null)}
                         />
                     </BottomSheet>
                 )}
 
                 {sheet === "form" && (
-                    <BottomSheet open={sheet} closeSheet={() => setSheet("")}>
+                    <BottomSheet open={sheet} closeSheet={() => setSheet(null)}>
                         <MeetingForm
                             selectedDate={selectedDate}
                             selectedSlots={selectedSlots}
-                            closeSheet={() => setSheet("")}
+                            closeSheet={() => setSheet(null)}
                         />
                     </BottomSheet>
                 )}

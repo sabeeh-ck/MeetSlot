@@ -41,11 +41,11 @@ const BottomSheet = ({ closeSheet, open, children }) => {
 
             <motion.div
                 key="sheet"
-                className="border-border bg-bg fixed inset-x-0 -bottom-10 z-50 min-h-1/2 touch-none rounded-2xl border-x border-t p-4 pb-16"
+                className="border-border bg-bg fixed inset-x-0 -bottom-10 z-50 min-h-1/2 touch-none rounded-2xl border-t p-4 pb-16"
                 initial={{ y: "100%" }}
                 animate={{ y: -keyboardOffset }}
                 exit={{ y: "100%" }}
-                transition={{ duration: 0.2, ease: "easeIn" }}
+                transition={{ duration: 0.3, ease: "easeInOut" }}
                 drag={keyboardOffset === 0 ? "y" : false}
                 dragConstraints={{ top: 0, bottom: 0 }}
                 dragElastic={{ top: 0.05, bottom: 0.5 }}

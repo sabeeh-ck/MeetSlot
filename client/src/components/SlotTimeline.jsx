@@ -11,7 +11,7 @@ const generateSlots = () => {
 
 const slots = generateSlots();
 
-const SlotTimeline = ({ selectedSlots, setSelectedSlots }) => {
+const SlotTimeline = ({ room, selectedSlots, setSelectedSlots }) => {
     const handleSelect = (slot) =>
         setSelectedSlots((prev) => {
             if (prev.length !== 1) return [slot];
@@ -31,7 +31,8 @@ const SlotTimeline = ({ selectedSlots, setSelectedSlots }) => {
         });
 
     return (
-        <section className="w-full">
+        <section className="flex w-full flex-col gap-4">
+            <h3 className="hidden md:flex">{room}</h3>
             <div className="bg-r grid grid-cols-1 rounded-3xl">
                 {slots.map((slot, i) => {
                     const isSelected = selectedSlots.includes(slot);

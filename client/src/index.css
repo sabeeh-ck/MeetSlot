@@ -18,7 +18,7 @@ body {
 }
 
 main {
-    @apply mx-4 flex flex-col;
+    @apply mx-4 flex flex-col lg:mx-auto lg:max-w-6xl;
 }
 
 h1 {
@@ -42,5 +42,5 @@ label {
 }
 
 button {
-    @apply font-bold;
+    @apply cursor-pointer font-bold;
 }

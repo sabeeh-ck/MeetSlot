@@ -17,7 +17,7 @@ const MeetingForm = ({ selectedDate, selectedSlots, closeSheet }) => {
                 startTime: selectedSlots[0],
                 endTime: selectedSlots.at(-1),
             })),
-        [],
+        [selectedSlots],
     );
 
     const handleChange = (e) => {
@@ -95,7 +95,7 @@ const MeetingForm = ({ selectedDate, selectedSlots, closeSheet }) => {
                             name="endTime"
                             value={minutesToTime(formData.endTime + 30)}
                             onChange={handleChange}
-                            required00
+                            required
                         />
                     </div>
                 </div>

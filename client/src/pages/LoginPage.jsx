@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from "axios";
+import api from "../api/axios";
 import LoginForm from "../components/LoginForm";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
@@ -14,13 +14,15 @@ const LoginPage = () => {
 
     const navigate = useNavigate();
 
-    const sendOtp = async (event) => {
-        event.preventDefault();
+    const sendOtp = async (e) => {
+        e.preventDefault();
         try {
             setError("");
-            await axios.post("http://192.168.1.6:4000/auth/send-otp", {
+            const res = await api.post("/auth/send-otp", {
                 email,
             });
+            console.log(res);
+
             setStep("otp");
         } catch (err) {
             if (err.response.data.msg) {
@@ -34,10 +36,7 @@ const LoginPage = () => {
     const verifyOtp = async (event) => {
         event.preventDefault();
         try {
-            const res = await axios.post(
-                "http://192.168.1.6:4000/auth/verify-otp",
-                { email, otp },
-            );
+            const res = await api.post("/auth/verify-otp", { email, otp });
 
             login(res.data.token);
             navigate("/");
@@ -52,11 +51,11 @@ const LoginPage = () => {
 
     return (
         <main>
-            <section className="flex h-40 items-center justify-center">
+            <section className="flex h-40 items-center justify-center lg:justify-normal">
                 <h1>Welcome to MeetSlot</h1>
             </section>
 
-            <section className="mx-2">
+            <section className="md:mx-8 lg:mx-0">
                 <h1>Login</h1>
                 {step === "email" ? (
                     <LoginForm

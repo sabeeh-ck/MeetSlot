@@ -1,0 +1,19 @@
+import { useState, useEffect } from "react";
+
+export function useWindowWidth() {
+    const [width, setWidth] = useState(
+        typeof window !== "undefined" ? window.innerWidth : 0,
+    );
+
+    useEffect(() => {
+        const handleResize = () => setWidth(window.innerWidth);
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+    }, []);
+
+    const isMobile = width < 768;
+    const isTablet = width >= 768 && width < 1024;
+    const isLaptop = width >= 1024;
+
+    return { isMobile, isTablet, isLaptop };
+}

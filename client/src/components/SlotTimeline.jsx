@@ -32,8 +32,8 @@ const SlotTimeline = ({ room, selectedSlots, setSelectedSlots }) => {
 
     return (
         <section className="flex w-full flex-col gap-4">
-            <h3 className="hidden md:flex">{room}</h3>
-            <div className="bg-r grid grid-cols-1 rounded-3xl">
+            <h3 className="hidden lg:flex">{room}</h3>
+            <div className="grid grid-cols-1 rounded-3xl">
                 {slots.map((slot, i) => {
                     const isSelected = selectedSlots.includes(slot);
                     const prevSelected = selectedSlots.includes(slots[i - 1]);
@@ -55,7 +55,7 @@ const SlotTimeline = ({ room, selectedSlots, setSelectedSlots }) => {
                         <div key={slot}>
                             <button
                                 onClick={() => handleSelect(slot)}
-                                className={`flex h-25 w-full flex-col items-start border-x py-1 pl-8 text-sm ${roundTop ? " rounded-t-3xl border-t" : ""} ${roundBottom ? "mb-2 rounded-b-3xl border-b" : ""} ${isSelected ? "bg-border border-textmute" : "border-border bg-surface"} `}
+                                className={`flex h-25 w-full flex-col items-start border-x py-1 pl-8 text-sm ${roundTop ? " rounded-t-3xl border-t" : ""} ${roundBottom ? "mb-2 rounded-b-3xl border-b" : ""} ${isSelected ? "bg-bookedBg border-bookedBorder" : "border-border bg-surface"} `}
                             >
                                 {(!isSelected || selectedSlots[0] === slot) && (
                                     <p>{minutesToTime(slot)}</p>
@@ -71,7 +71,7 @@ const SlotTimeline = ({ room, selectedSlots, setSelectedSlots }) => {
                             </button>
                             {!roundBottom && (
                                 <hr
-                                    className={`text-border border-x pt-1 ${isSelected ? "bg-border border-textmute" : "border-border bg-surface"} `}
+                                    className={`text-border border-x pt-1 ${isSelected ? "bg-bookedBg border-bookedBorder" : "border-border bg-surface"} `}
                                 />
                             )}
                         </div>

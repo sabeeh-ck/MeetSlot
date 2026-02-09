@@ -37,7 +37,7 @@ const NavMenu = ({ setMenu }) => {
         <nav>
             <motion.div
                 key="backdrop"
-                className="fixed inset-0 z-40 bg-black/40"
+                className="fixed inset-0 z-60 bg-black/40"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}

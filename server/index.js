@@ -37,4 +37,6 @@ app.post("/users/test", async (req, res) => {
 
 app.use("/auth", authRoutes);
 
-app.listen(4000);
+app.listen(4000, () => {
+    console.log("Server running on port 4000");
+});

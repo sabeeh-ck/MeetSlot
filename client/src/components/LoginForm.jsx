@@ -1,8 +1,8 @@
-const LoginForm = ({ step, onSubmit, value, onChange, email, error }) => (
-    <div className="mt-4 flex w-full flex-col gap-4">
+const LoginForm = ({ step, onSubmit, value, onChange, error }) => (
+    <div className="mt-4 flex w-full flex-col gap-4 lg:w-1/2 lg:items-start">
         <h3>{step === "email" ? "Email" : "Enter OTP"}</h3>
 
-        <form className="flex flex-col gap-2" onSubmit={onSubmit}>
+        <form className="flex w-full flex-col gap-2" onSubmit={onSubmit}>
             {error !== "" && (
                 <p className="text-xs font-semibold text-red-700/80">
                     {error === "Not authorised"

@@ -2,11 +2,13 @@
 
 @theme {
     --font-google: "Google Sans", sans-serif;
-    --color-bg: #050505;
-    --color-surface: #0a0a0a;
-    --color-border: #1f1f1f;
-    --color-textmute: #a1a1a1;
-    --color-text: #ededed;
+    --color-bg: hsl(0, 0%, 2%);
+    --color-surface: hsl(0, 0%, 5%);
+    --color-border: hsl(0, 0%, 10%);
+    --color-textmute: hsl(0, 0%, 65%);
+    --color-text: hsl(0, 0%, 90%);
+    --color-bookedBorder: hsl(0, 70%, 15%);
+    --color-bookedBg: hsl(0, 70%, 4%);
 }
 
 html {
@@ -18,7 +20,7 @@ body {
 }
 
 main {
-    @apply mx-4 flex flex-col lg:mx-auto lg:max-w-6xl;
+    @apply mx-auto w-full max-w-7xl px-4;
 }
 
 h1 {
@@ -33,8 +35,18 @@ h3 {
     @apply text-lg font-medium md:text-lg lg:text-xl;
 }
 
-input {
+p {
+    @apply text-sm;
+}
+
+input,
+select {
     @apply bg-surface border-border w-full rounded-lg border p-4 font-medium;
+}
+
+select:disabled,
+input:disabled {
+    @apply appearance-none border-0;
 }
 
 label {

@@ -1,23 +1,31 @@
 import { useEffect, useState } from "react";
 import { minutesToTime } from "../utils/time";
+import { useWindowWidth } from "../hooks/useWindowWidth";
 
-const MeetingForm = ({ selectedDate, selectedSlots, closeSheet }) => {
+const MeetingForm = ({
+    selectedDate,
+    selectedSlots,
+    selectedRoom,
+    closeSheet,
+}) => {
     const [formData, setFormData] = useState({
         meetingTitle: "",
-        selectedDate: "",
+        selectedDate,
+        selectedRoom,
         startTime: "",
         endTime: "",
     });
 
     useEffect(
         () =>
-            setFormData((prev) => ({
-                ...prev,
-                selectedDate: selectedDate,
+            setFormData({
+                meetingTitle: "",
+                selectedDate,
+                selectedRoom,
                 startTime: selectedSlots[0],
                 endTime: selectedSlots.at(-1),
-            })),
-        [selectedSlots],
+            }),
+        [selectedDate, selectedRoom, selectedSlots],
     );
 
     const handleChange = (e) => {
@@ -30,8 +38,10 @@ const MeetingForm = ({ selectedDate, selectedSlots, closeSheet }) => {
         e.preventDefault();
     };
 
+    const { isMobile, isLaptop } = useWindowWidth();
+
     return (
-        <div className="flex flex-col">
+        <section className="flex flex-col">
             <form
                 className="flex flex-col gap-4 text-sm"
                 onKeyDown={(e) => {
@@ -57,54 +67,65 @@ const MeetingForm = ({ selectedDate, selectedSlots, closeSheet }) => {
                 </div>
 
                 <div className="flex w-full flex-col gap-2">
-                    <label htmlFor="date">
-                        Date <span className="text-red-700">*</span>
-                    </label>
+                    <label htmlFor="date">Date</label>
                     <input
                         type="date"
                         id="date"
                         name="selectedDate"
                         value={formData.selectedDate}
+                        onClick={(e) => e.target.showPicker()}
                         onChange={handleChange}
-                        required
+                        disabled={isMobile}
                     />
+                </div>
+
+                <div className="flex w-full flex-col gap-2">
+                    <label htmlFor="room">Room</label>
+                    <select
+                        id="room"
+                        name="selectedRoom"
+                        value={formData.selectedRoom}
+                        onChange={handleChange}
+                        disabled={isMobile || isLaptop}
+                    >
+                        <option value="Room 1">Room 1</option>
+                        <option value="Room 2">Room 2</option>
+                    </select>
                 </div>
 
                 <div className="flex gap-4">
                     <div className="flex w-full flex-col gap-2">
-                        <label htmlFor="startTime">
-                            Beginning <span className="text-red-700">*</span>
-                        </label>
+                        <label htmlFor="startTime">Beginning</label>
                         <input
                             type="time"
                             id="startTime"
                             name="startTime"
                             value={minutesToTime(formData.startTime)}
                             onChange={handleChange}
+                            disabled
                             required
                         />
                     </div>
 
                     <div className="flex w-full flex-col gap-2">
-                        <label htmlFor="endTime">
-                            Ending <span className="text-red-700">*</span>
-                        </label>
+                        <label htmlFor="endTime">Ending</label>
                         <input
                             type="time"
                             id="endTime"
                             name="endTime"
                             value={minutesToTime(formData.endTime + 30)}
                             onChange={handleChange}
+                            disabled
                             required
                         />
                     </div>
                 </div>
 
-                <button className="bg-text text-bg mx-auto mt-15 rounded-2xl px-8 py-2">
-                    Save
+                <button className="bg-text text-bg mx-auto my-4 rounded-lg px-8 py-2">
+                    {isMobile ? "Confirm" : "Save"}
                 </button>
             </form>
-        </div>
+        </section>
     );
 };
 

@@ -2,12 +2,7 @@ import { useEffect, useState } from "react";
 import { minutesToTime } from "../utils/time";
 import { useWindowWidth } from "../hooks/useWindowWidth";
 
-const MeetingForm = ({
-    selectedDate,
-    selectedSlots,
-    selectedRoom,
-    closeSheet,
-}) => {
+const BookingForm = ({ selectedDate, selectedSlots, selectedRoom }) => {
     const [formData, setFormData] = useState({
         meetingTitle: "",
         selectedDate,
@@ -36,6 +31,12 @@ const MeetingForm = ({
 
     const handleSubmit = (e) => {
         e.preventDefault();
+
+        const payload = {
+            title: formData.meetingTitle,
+        };
+
+        if (!meetingTitle || !selectedDate || !selectedRoom) return;
     };
 
     const { isMobile, isLaptop } = useWindowWidth();
@@ -88,8 +89,8 @@ const MeetingForm = ({
                         onChange={handleChange}
                         disabled={isMobile || isLaptop}
                     >
-                        <option value="Room 1">Room 1</option>
-                        <option value="Room 2">Room 2</option>
+                        <option value="Room A">Room A</option>
+                        <option value="Room B">Room B</option>
                     </select>
                 </div>
 
@@ -129,4 +130,4 @@ const MeetingForm = ({
     );
 };
 
-export default MeetingForm;
+export default BookingForm;

@@ -1,1 +1,1 @@
-export const rooms = ["Room 1", "Room 2"];
+export const rooms = ["Room A", "Room B"];

@@ -17,7 +17,10 @@ export const AuthProvider = ({ children }) => {
 
             try {
                 const res = await axios.get("/auth/me", {
-                    headers: { Authorization: `Bearer ${token}` },
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        "Cache-Control": "no-cache",
+                    },
                 });
 
                 setUser(res.data.user);

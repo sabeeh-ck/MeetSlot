@@ -3,11 +3,13 @@ import User from "../models/User.js";
 
 export const getMe = async (req, res) => {
     try {
+        res.set("Cache-Control", "no-store");
+
         const user = await User.findById(req.userId);
 
         if (!user) return res.status(404).json({ msg: "User not found" });
 
-        res.json(user);
+        res.json({ user });
     } catch (err) {
         res.status(500).json({ msg: "Server error" });
     }

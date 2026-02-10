@@ -3,12 +3,15 @@
 @theme {
     --font-google: "Google Sans", sans-serif;
     --color-bg: hsl(0, 0%, 2%);
-    --color-surface: hsl(0, 0%, 5%);
+    --color-surface: hsl(0, 0%, 4%);
     --color-border: hsl(0, 0%, 10%);
     --color-textmute: hsl(0, 0%, 65%);
     --color-text: hsl(0, 0%, 90%);
-    --color-bookedBorder: hsl(0, 70%, 15%);
-    --color-bookedBg: hsl(0, 70%, 4%);
+    --color-bookedBorder: hsl(0, 70%, 10%);
+    --color-bookedText: hsl(0, 70%, 25%);
+    --color-bookedBg: hsl(0, 70%, 2%);
+    --color-selectedBorder: hsl(240, 70%, 15%);
+    --color-selectedBg: hsl(240, 70%, 4%);
 }
 
 html {

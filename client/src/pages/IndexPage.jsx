@@ -4,7 +4,7 @@ import { AnimatePresence } from "motion/react";
 import SlotTimeline from "../components/SlotTimeline";
 import RoomSelector from "../components/RoomSelector";
 import BottomSheet from "../components/BottomSheet";
-import MeetingForm from "../components/MeetingForm";
+import BookingForm from "../components/BookingForm";
 import { minutesToTime } from "../utils/time";
 import { useWindowWidth } from "../hooks/useWindowWidth";
 import {
@@ -20,7 +20,7 @@ const IndexPage = () => {
         .split("T")[0];
     const { isMobile, isTablet, isLaptop } = useWindowWidth();
 
-    const [selectedRoom, setSelectedRoom] = useState("Room 1");
+    const [selectedRoom, setSelectedRoom] = useState("Room B");
     const [selectedSlots, setSelectedSlots] = useState([]);
     const [selectedDate, setSelectedDate] = useState(today);
     const [sheet, setSheet] = useState(null);
@@ -87,8 +87,6 @@ const IndexPage = () => {
         </>
     );
 
-    console.log(selectedSlots);
-
     return (
         <main>
             <div>
@@ -118,10 +116,10 @@ const IndexPage = () => {
                     </div>
                 </section>
 
-                <div className="w-full gap-4 py-4 md:grid md:grid-cols-2 lg:grid-cols-3">
+                <div className="w-full gap-4 md:grid md:grid-cols-2 lg:grid-cols-3 lg:py-4">
                     <aside className="sticky top-20 hidden h-fit gap-4 md:z-30 md:flex md:flex-col">
                         <h3>Create Meeting</h3>
-                        <MeetingForm
+                        <BookingForm
                             selectedDate={selectedDate}
                             selectedSlots={selectedSlots}
                             selectedRoom={selectedRoom}
@@ -132,7 +130,8 @@ const IndexPage = () => {
                         key={isMobile ? selectedRoom : "desktop-room-1"}
                         selectedSlots={selectedSlots}
                         setSelectedSlots={setSelectedSlots}
-                        room={isMobile ? selectedRoom : "Room 1"}
+                        date={selectedDate}
+                        currentRoom={isMobile ? selectedRoom : "Room 1"}
                     />
 
                     {isLaptop && (
@@ -140,7 +139,7 @@ const IndexPage = () => {
                             <SlotTimeline
                                 selectedSlots={selectedSlots}
                                 setSelectedSlots={setSelectedSlots}
-                                room="Room 2"
+                                currentRoom="Room 2"
                             />
                         </>
                     )}
@@ -148,7 +147,7 @@ const IndexPage = () => {
             </div>
 
             {isMobile && selectedSlots.length !== 0 && (
-                <div className="sticky bottom-8 mt-10 flex flex-col items-center gap-2">
+                <div className="fixed inset-x-0 bottom-8 flex w-full flex-col items-center">
                     <button
                         className="bg-text text-bg rounded-xl px-4 py-2"
                         onClick={() => setSheet("form")}
@@ -171,7 +170,7 @@ const IndexPage = () => {
 
                 {sheet === "form" && (
                     <BottomSheet open={sheet} closeSheet={() => setSheet(null)}>
-                        <MeetingForm
+                        <BookingForm
                             selectedDate={selectedDate}
                             selectedSlots={selectedSlots}
                             selectedRoom={selectedRoom}

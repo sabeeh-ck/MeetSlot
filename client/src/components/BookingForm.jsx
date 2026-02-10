@@ -2,7 +2,16 @@ import { useEffect, useState } from "react";
 import { minutesToTime } from "../utils/time";
 import { useWindowWidth } from "../hooks/useWindowWidth";
 
-const BookingForm = ({ selectedDate, selectedSlots, selectedRoom }) => {
+const BookingForm = ({
+    selectedDate,
+    setSelectedDate,
+    selectedSlots,
+    setSelectedSlots,
+    selectedRoom,
+    setSelectedRoom,
+}) => {
+    const today = new Date().toISOString().split("T")[0];
+
     const [formData, setFormData] = useState({
         meetingTitle: "",
         selectedDate,
@@ -11,22 +20,28 @@ const BookingForm = ({ selectedDate, selectedSlots, selectedRoom }) => {
         endTime: "",
     });
 
-    useEffect(
-        () =>
-            setFormData({
-                meetingTitle: "",
-                selectedDate,
-                selectedRoom,
-                startTime: selectedSlots[0],
-                endTime: selectedSlots.at(-1),
-            }),
-        [selectedDate, selectedRoom, selectedSlots],
-    );
+    useEffect(() => {
+        setFormData({
+            meetingTitle: "",
+            selectedDate,
+            selectedRoom,
+            startTime: selectedSlots[0],
+            endTime: selectedSlots.at(-1),
+        });
+    }, [selectedDate, selectedRoom, selectedSlots]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
 
-        setFormData((prev) => ({ ...prev, [name]: value }));
+        if (name === "selectedDate") {
+            setSelectedDate(value || today);
+            setSelectedSlots({
+                "Room A": [],
+                "Room B": [],
+            });
+        } else if (name === "selectedRoom") {
+            setSelectedRoom(value);
+        } else setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
     const handleSubmit = (e) => {
@@ -77,6 +92,7 @@ const BookingForm = ({ selectedDate, selectedSlots, selectedRoom }) => {
                         onClick={(e) => e.target.showPicker()}
                         onChange={handleChange}
                         disabled={isMobile}
+                        min={today}
                     />
                 </div>
 

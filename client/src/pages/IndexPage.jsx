@@ -21,7 +21,10 @@ const IndexPage = () => {
     const { isMobile, isTablet, isLaptop } = useWindowWidth();
 
     const [selectedRoom, setSelectedRoom] = useState("Room B");
-    const [selectedSlots, setSelectedSlots] = useState([]);
+    const [selectedSlots, setSelectedSlots] = useState({
+        "Room A": [],
+        "Room B": [],
+    });
     const [selectedDate, setSelectedDate] = useState(today);
     const [sheet, setSheet] = useState(null);
 
@@ -61,6 +64,8 @@ const IndexPage = () => {
         },
     ];
 
+    console.log(selectedSlots[selectedRoom]);
+
     const DateSelector = () => (
         <>
             {dateSelector.map(({ content, action, isSelected }, i) => (
@@ -87,6 +92,8 @@ const IndexPage = () => {
         </>
     );
 
+    const currentRoom = isLaptop ? "Room A" : selectedRoom;
+
     return (
         <main>
             <div>
@@ -107,46 +114,74 @@ const IndexPage = () => {
                     <div className="mb-4 flex gap-4 font-medium">
                         <p>{formattedDate}</p>
 
-                        {selectedSlots.length !== 0 && (
+                        {selectedSlots[selectedRoom].length !== 0 && (
                             <p>
-                                {minutesToTime(selectedSlots[0])} -{" "}
-                                {minutesToTime(selectedSlots.at(-1) + 30)}
+                                {minutesToTime(selectedSlots[selectedRoom][0])}{" "}
+                                -{" "}
+                                {minutesToTime(
+                                    selectedSlots[selectedRoom].at(-1) + 30,
+                                )}
                             </p>
                         )}
                     </div>
                 </section>
 
-                <div className="w-full gap-4 md:grid md:grid-cols-2 lg:grid-cols-3 lg:py-4">
-                    <aside className="sticky top-20 hidden h-fit gap-4 md:z-30 md:flex md:flex-col">
-                        <h3>Create Meeting</h3>
-                        <BookingForm
-                            selectedDate={selectedDate}
-                            selectedSlots={selectedSlots}
-                            selectedRoom={selectedRoom}
-                        />
-                    </aside>
+                <div className="w-full gap-4 md:grid md:grid-cols-2 md:py-4 lg:grid-cols-3">
+                    {!isMobile && (
+                        <aside className="sticky top-20 hidden h-fit gap-4 md:z-30 md:flex md:flex-col">
+                            <h3>Create Meeting</h3>
+                            <BookingForm
+                                selectedDate={selectedDate}
+                                setSelectedDate={setSelectedDate}
+                                selectedSlots={selectedSlots[selectedRoom]}
+                                setSelectedSlots={setSelectedSlots}
+                                selectedRoom={selectedRoom}
+                                setSelectedRoom={setSelectedRoom}
+                            />
+                        </aside>
+                    )}
 
                     <SlotTimeline
-                        key={isMobile ? selectedRoom : "desktop-room-1"}
-                        selectedSlots={selectedSlots}
-                        setSelectedSlots={setSelectedSlots}
+                        key={
+                            isLaptop
+                                ? "desktop-room-a"
+                                : `mobile-${selectedRoom}`
+                        }
+                        selectedSlots={selectedSlots[currentRoom]}
+                        setSelectedSlots={(slots) =>
+                            setSelectedSlots({
+                                "Room A": currentRoom === "Room A" ? slots : [],
+                                "Room B": currentRoom === "Room B" ? slots : [],
+                            })
+                        }
+                        selectedRoom={selectedRoom}
+                        setSelectedRoom={setSelectedRoom}
                         date={selectedDate}
-                        currentRoom={isMobile ? selectedRoom : "Room 1"}
+                        currentRoom={currentRoom}
                     />
 
                     {isLaptop && (
                         <>
                             <SlotTimeline
-                                selectedSlots={selectedSlots}
-                                setSelectedSlots={setSelectedSlots}
-                                currentRoom="Room 2"
+                                key="desktop-room-b"
+                                selectedSlots={selectedSlots["Room B"]}
+                                setSelectedSlots={(slots) =>
+                                    setSelectedSlots({
+                                        "Room A": [],
+                                        "Room B": slots,
+                                    })
+                                }
+                                selectedRoom={selectedRoom}
+                                setSelectedRoom={setSelectedRoom}
+                                date={selectedDate}
+                                currentRoom="Room B"
                             />
                         </>
                     )}
                 </div>
             </div>
 
-            {isMobile && selectedSlots.length !== 0 && (
+            {isMobile && selectedSlots[selectedRoom].length !== 0 && (
                 <div className="fixed inset-x-0 bottom-8 flex w-full flex-col items-center">
                     <button
                         className="bg-text text-bg rounded-xl px-4 py-2"
@@ -172,7 +207,7 @@ const IndexPage = () => {
                     <BottomSheet open={sheet} closeSheet={() => setSheet(null)}>
                         <BookingForm
                             selectedDate={selectedDate}
-                            selectedSlots={selectedSlots}
+                            selectedSlots={selectedSlots[selectedRoom]}
                             selectedRoom={selectedRoom}
                             closeSheet={() => setSheet(null)}
                             // isMobile={true}

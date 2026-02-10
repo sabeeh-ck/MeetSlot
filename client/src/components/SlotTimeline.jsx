@@ -15,9 +15,11 @@ const slots = generateSlots();
 
 const SlotTimeline = ({
     currentRoom,
-    selectedSlots,
     date,
+    selectedSlots,
     setSelectedSlots,
+    selectedRoom,
+    setSelectedRoom,
 }) => {
     const [availability, setAvailability] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -30,7 +32,7 @@ const SlotTimeline = ({
                     `/bookings/availability?date=${date}`,
                 );
                 setAvailability(res.data);
-                console.log(res.data);
+                // console.log(res.data);
             } catch (error) {
                 console.log(error);
             }
@@ -38,7 +40,7 @@ const SlotTimeline = ({
         };
 
         fetchAvailability();
-    }, [date]);
+    }, [date, currentRoom]);
 
     const currentRoomData = availability.find(
         (room) => room.roomName === currentRoom,
@@ -61,23 +63,47 @@ const SlotTimeline = ({
               .sort((a, b) => a - b)
         : [];
 
-    const handleSelect = (slot) =>
-        setSelectedSlots((prev) => {
-            if (prev.length !== 1) return [slot];
+    const handleSelect = (slot) => {
+        if (currentRoom !== selectedRoom) {
+            setSelectedRoom(currentRoom);
+            setSelectedSlots([slot]);
+            return;
+        }
 
-            if (prev[0] === slot) return [];
+        if (selectedSlots.length === 0) {
+            setSelectedSlots([slot]);
+            return;
+        }
 
-            const start = prev[0];
-            const end = slot;
+        if (selectedSlots.length === 1) {
+            const start = selectedSlots[0];
 
-            const min = Math.min(start, end);
-            const max = Math.max(start, end);
+            if (start === slot) {
+                setSelectedSlots([]);
+                return;
+            }
 
-            return Array.from(
+            const min = Math.min(start, slot);
+            const max = Math.max(start, slot);
+
+            const range = Array.from(
                 { length: (max - min) / 30 + 1 },
                 (_, i) => min + i * 30,
             );
-        });
+
+            const hitsBooked = range.some((s) => bookedSlots.includes(s));
+
+            if (hitsBooked) {
+                setSelectedSlots([slot]);
+                return;
+            }
+
+            setSelectedSlots(range);
+            return;
+        }
+
+        setSelectedSlots([slot]);
+    };
 
     return (
         <section className="flex w-full flex-col gap-4">

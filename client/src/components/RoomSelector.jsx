@@ -1,11 +1,14 @@
 import { useEffect } from "react";
 import { ChevronUpDownIcon } from "../icons";
 import BottomSheet from "./BottomSheet";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 const RoomSelector = ({
     selectedRoom,
     setSelectedRoom,
     availability,
+    loading,
     sheet,
     setSheet,
 }) => {
@@ -22,20 +25,28 @@ const RoomSelector = ({
 
     return (
         <>
-            <div className="flex gap-2">
-                <h2 className="select-none">
-                    {
-                        availability.find(
-                            (room) => room.roomId === selectedRoom,
-                        )?.roomName
-                    }
-                </h2>
-                <button onClick={() => setSheet("room")}>
-                    <ChevronUpDownIcon
-                        className={`md:hover:bg-border border-border active:bg-border h-8 rounded-lg border py-1 text-sm ${sheet === "room" ? "bg-border" : "bg-surface"} `}
+            <div className="flex w-20 gap-2">
+                {loading ? (
+                    <Skeleton
+                        className="h-8"
+                        containerClassName="flex-1 leading-none"
+                        borderRadius={8}
                     />
-                </button>
+                ) : (
+                    <h2 className="w-19 select-none">
+                        {
+                            availability.find(
+                                (room) => room.roomId === selectedRoom,
+                            )?.roomName
+                        }
+                    </h2>
+                )}
             </div>
+            <button onClick={() => setSheet("room")}>
+                <ChevronUpDownIcon
+                    className={`md:hover:bg-border border-border active:bg-border h-8 rounded-lg border py-1 text-sm ${sheet === "room" ? "bg-border" : "bg-surface"} `}
+                />
+            </button>
 
             {sheet === "room" && (
                 <BottomSheet open={sheet} closeSheet={closeSheet}>

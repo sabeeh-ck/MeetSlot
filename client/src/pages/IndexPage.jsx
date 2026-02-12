@@ -13,6 +13,7 @@ import {
     ChevronUpDownIcon,
 } from "../icons";
 import { useAvailability } from "../hooks/useAvailability";
+import Skeleton from "react-loading-skeleton";
 
 const IndexPage = () => {
     const today = new Date().toISOString().split("T")[0];
@@ -41,7 +42,7 @@ const IndexPage = () => {
     const formattedDate = (() => {
         const [year, month, day] = selectedDate.split("-").map(Number);
         const date = new Date(year, month - 1, day);
-        const weekday = date.toLocaleDateString("en-US", { weekday: "short" });
+        const weekday = date.toLocaleDateString("en-US", { weekday: "long" });
         return `${String(day).padStart(2, "0")}/${String(month).padStart(2, "0")} ${weekday}`;
     })();
 
@@ -106,6 +107,7 @@ const IndexPage = () => {
                     <div className="flex w-full items-center gap-2">
                         <RoomSelector
                             availability={availability}
+                            loading={loading}
                             selectedRoom={selectedRoom}
                             setSelectedRoom={setSelectedRoom}
                             sheet={sheet}
@@ -167,6 +169,7 @@ const IndexPage = () => {
                             setSelectedRoom={setSelectedRoom}
                             date={selectedDate}
                             availability={availability}
+                            loading={loading}
                         />
 
                         {isLaptop && (
@@ -186,6 +189,7 @@ const IndexPage = () => {
                                     date={selectedDate}
                                     currentRoom={availability[1]?.roomId}
                                     availability={availability}
+                                    loading={loading}
                                 />
                             </>
                         )}
@@ -193,7 +197,7 @@ const IndexPage = () => {
                 </div>
             </div>
 
-            {isMobile && selectedSlots[selectedRoom]?.length !== 0 && (
+            {isMobile && selectedSlots[selectedRoom]?.length > 0 && (
                 <div className="fixed inset-x-0 bottom-10 flex w-full flex-col items-center">
                     <button
                         className="bg-text text-bg rounded-xl px-4 py-2"

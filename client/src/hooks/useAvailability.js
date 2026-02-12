@@ -9,8 +9,10 @@ export const useAvailability = (date) => {
         if (!date) return;
 
         const fetchAvailability = async () => {
+            const start = Date.now();
+            setLoading(true);
+
             try {
-                setLoading(true);
                 const res = await api.get(
                     `/bookings/availability?date=${date}`,
                 );
@@ -19,7 +21,16 @@ export const useAvailability = (date) => {
             } catch (error) {
                 console.log(error);
             } finally {
-                setLoading(false);
+                const elapsed = Date.now() - start;
+                const minDelay = 700;
+                // setLoading(false);
+
+                setTimeout(
+                    () => {
+                        setLoading(false);
+                    },
+                    Math.max(minDelay - elapsed, 0),
+                );
             }
         };
 

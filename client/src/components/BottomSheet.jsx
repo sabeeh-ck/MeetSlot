@@ -1,32 +1,11 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect } from "react";
 import { motion } from "motion/react";
 
 const BottomSheet = ({ closeSheet, open, children }) => {
-    const [keyboardOffset, setKeyboardOffset] = useState(0);
-
-    const initialVh = useRef(
-        window.visualViewport?.height || window.innerHeight,
-    );
-
     useEffect(() => {
         document.body.style.overflow = open ? "hidden" : "auto";
         return () => (document.body.style.overflow = "auto");
     }, [open]);
-
-    useEffect(() => {
-        const onResize = () => {
-            const currentVh =
-                window.visualViewport?.height || window.innerHeight;
-
-            const diff = initialVh.current - currentVh;
-
-            setKeyboardOffset(Math.min(diff, 100));
-        };
-
-        window.visualViewport?.addEventListener("resize", onResize);
-        return () =>
-            window.visualViewport?.removeEventListener("resize", onResize);
-    }, []);
 
     return (
         <>
@@ -36,17 +15,17 @@ const BottomSheet = ({ closeSheet, open, children }) => {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                onClick={keyboardOffset === 0 ? closeSheet : ""}
+                onClick={closeSheet}
             />
 
             <motion.div
                 key="sheet"
                 className="border-border bg-bg fixed inset-x-0 -bottom-10 z-50 min-h-1/2 touch-none rounded-2xl border-t p-4 pb-16"
                 initial={{ y: "100%" }}
-                animate={{ y: -keyboardOffset }}
+                animate={{ y: 1 }}
                 exit={{ y: "100%" }}
                 transition={{ duration: 0.3, ease: "easeInOut" }}
-                drag={keyboardOffset === 0 ? "y" : false}
+                drag={"y"}
                 dragConstraints={{ top: 0, bottom: 0 }}
                 dragElastic={{ top: 0.05, bottom: 0.5 }}
                 onDragEnd={(event, info) => {

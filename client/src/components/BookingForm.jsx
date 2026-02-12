@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { minutesToTime } from "../utils/time";
+import { minutesTo12Hour } from "../utils/time";
 import { useWindowWidth } from "../hooks/useWindowWidth";
 
 const BookingForm = ({
@@ -9,37 +9,38 @@ const BookingForm = ({
     setSelectedSlots,
     selectedRoom,
     setSelectedRoom,
+    availability,
 }) => {
     const today = new Date().toISOString().split("T")[0];
 
     const [formData, setFormData] = useState({
-        meetingTitle: "",
-        selectedDate,
-        selectedRoom,
+        title: "",
+        date: selectedDate,
+        room: selectedRoom,
         startTime: "",
         endTime: "",
     });
 
     useEffect(() => {
         setFormData({
-            meetingTitle: "",
-            selectedDate,
-            selectedRoom,
-            startTime: selectedSlots[0],
-            endTime: selectedSlots.at(-1),
+            title: "",
+            date: selectedDate,
+            room: selectedRoom,
+            startTime: selectedSlots?.[0],
+            endTime: selectedSlots?.length ? selectedSlots.at(-1) + 30 : null,
         });
     }, [selectedDate, selectedRoom, selectedSlots]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
 
-        if (name === "selectedDate") {
+        if (name === "date") {
             setSelectedDate(value || today);
             setSelectedSlots({
                 "Room A": [],
                 "Room B": [],
             });
-        } else if (name === "selectedRoom") {
+        } else if (name === "room") {
             setSelectedRoom(value);
         } else setFormData((prev) => ({ ...prev, [name]: value }));
     };
@@ -47,11 +48,14 @@ const BookingForm = ({
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        const payload = {
-            title: formData.meetingTitle,
-        };
+        if (!formData.title || !formData.date || !formData.room) return;
 
-        if (!meetingTitle || !selectedDate || !selectedRoom) return;
+        console.log(formData);
+
+        // const payload = {
+        //     title: formData.title,
+        //     roomId: formData.room,
+        // };
     };
 
     const { isMobile, isLaptop } = useWindowWidth();
@@ -73,9 +77,9 @@ const BookingForm = ({
                     </label>
                     <input
                         type="text"
-                        name="meetingTitle"
+                        name="title"
                         onChange={handleChange}
-                        value={formData.meetingTitle}
+                        value={formData.title}
                         id="purpose"
                         placeholder="Enter a title"
                         required
@@ -87,8 +91,8 @@ const BookingForm = ({
                     <input
                         type="date"
                         id="date"
-                        name="selectedDate"
-                        value={formData.selectedDate}
+                        name="date"
+                        value={formData.date}
                         onClick={(e) => e.target.showPicker()}
                         onChange={handleChange}
                         disabled={isMobile}
@@ -100,13 +104,16 @@ const BookingForm = ({
                     <label htmlFor="room">Room</label>
                     <select
                         id="room"
-                        name="selectedRoom"
-                        value={formData.selectedRoom}
+                        name="room"
+                        value={formData.room}
                         onChange={handleChange}
                         disabled={isMobile || isLaptop}
                     >
-                        <option value="Room A">Room A</option>
-                        <option value="Room B">Room B</option>
+                        {availability?.map(({ roomName, roomId }) => (
+                            <option key={roomId} value={roomId}>
+                                {roomName}
+                            </option>
+                        ))}
                     </select>
                 </div>
 
@@ -114,10 +121,10 @@ const BookingForm = ({
                     <div className="flex w-full flex-col gap-2">
                         <label htmlFor="startTime">Beginning</label>
                         <input
-                            type="time"
+                            type="text"
                             id="startTime"
                             name="startTime"
-                            value={minutesToTime(formData.startTime)}
+                            value={minutesTo12Hour(formData.startTime)}
                             onChange={handleChange}
                             disabled
                             required
@@ -127,10 +134,10 @@ const BookingForm = ({
                     <div className="flex w-full flex-col gap-2">
                         <label htmlFor="endTime">Ending</label>
                         <input
-                            type="time"
+                            type="text"
                             id="endTime"
                             name="endTime"
-                            value={minutesToTime(formData.endTime + 30)}
+                            value={minutesTo12Hour(formData.endTime)}
                             onChange={handleChange}
                             disabled
                             required
@@ -139,7 +146,7 @@ const BookingForm = ({
                 </div>
 
                 <button className="bg-text text-bg mx-auto my-4 rounded-lg px-8 py-2">
-                    {isMobile ? "Confirm" : "Save"}
+                    Confirm
                 </button>
             </form>
         </section>

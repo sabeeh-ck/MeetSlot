@@ -20,7 +20,7 @@ const LoginForm = ({ step, onSubmit, value, onChange, error }) => (
                 placeholder={`${step === "email" ? "johndoe@email.com" : "0 0 0 0 0 0"}`}
             />
             <button
-                className="text-bg mt-2 self-center rounded-lg bg-amber-300 px-4 py-2"
+                className="text-bg bg-text mt-2 self-center rounded-lg px-4 py-2"
                 type="submit"
             >
                 {step === "email" ? "Send OTP" : "Verify OTP"}

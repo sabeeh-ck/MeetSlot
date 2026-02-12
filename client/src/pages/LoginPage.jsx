@@ -25,7 +25,7 @@ const LoginPage = () => {
 
             setStep("otp");
         } catch (err) {
-            if (err.response.data.msg) {
+            if (err.response?.data.msg) {
                 setError(err.response.data.msg);
             } else {
                 console.log(err);

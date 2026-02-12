@@ -1,17 +1,18 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AnimatePresence } from "motion/react";
 
 import SlotTimeline from "../components/SlotTimeline";
 import RoomSelector from "../components/RoomSelector";
 import BottomSheet from "../components/BottomSheet";
 import BookingForm from "../components/BookingForm";
-import { minutesToTime } from "../utils/time";
+import { minutesTo12Hour } from "../utils/time";
 import { useWindowWidth } from "../hooks/useWindowWidth";
 import {
     CalendarIconSolid,
     CalendarIconOutline,
     ChevronUpDownIcon,
 } from "../icons";
+import { useAvailability } from "../hooks/useAvailability";
 
 const IndexPage = () => {
     const today = new Date().toISOString().split("T")[0];
@@ -20,17 +21,22 @@ const IndexPage = () => {
         .split("T")[0];
     const { isMobile, isTablet, isLaptop } = useWindowWidth();
 
-    const [selectedRoom, setSelectedRoom] = useState("Room B");
-    const [selectedSlots, setSelectedSlots] = useState({
-        "Room A": [],
-        "Room B": [],
-    });
+    const [selectedRoom, setSelectedRoom] = useState("");
+    const [selectedSlots, setSelectedSlots] = useState({});
     const [selectedDate, setSelectedDate] = useState(today);
     const [sheet, setSheet] = useState(null);
 
     const dateInputRef = useRef(null);
 
-    const toggleSelectedRoom = (room) => setSelectedRoom(room);
+    const toggleSelectedRoom = (roomId) => setSelectedRoom(roomId);
+
+    const { availability, loading } = useAvailability(selectedDate);
+
+    useEffect(() => {
+        if (availability.length > 0 && !selectedRoom) {
+            setSelectedRoom(availability[0].roomId);
+        }
+    }, [availability]);
 
     const formattedDate = (() => {
         const [year, month, day] = selectedDate.split("-").map(Number);
@@ -64,8 +70,6 @@ const IndexPage = () => {
         },
     ];
 
-    console.log(selectedSlots[selectedRoom]);
-
     const DateSelector = () => (
         <>
             {dateSelector.map(({ content, action, isSelected }, i) => (
@@ -81,6 +85,7 @@ const IndexPage = () => {
                     {content}
                 </button>
             ))}
+
             <input
                 ref={dateInputRef}
                 type="date"
@@ -92,19 +97,20 @@ const IndexPage = () => {
         </>
     );
 
-    const currentRoom = isLaptop ? "Room A" : selectedRoom;
+    const currentRoom = isLaptop ? availability[0]?.roomId : selectedRoom;
 
     return (
         <main>
             <div>
                 <section className="bg-bg sticky top-16 z-30 flex w-full flex-col gap-4 pt-4 md:hidden">
                     <div className="flex w-full items-center gap-2">
-                        <h2 className="select-none">{selectedRoom}</h2>
-                        <button onClick={() => setSheet("room")}>
-                            <ChevronUpDownIcon
-                                className={`md:hover:bg-border border-border active:bg-border h-8 rounded-lg border py-1 text-sm ${sheet === "room" ? "bg-border" : "bg-surface"} `}
-                            />
-                        </button>
+                        <RoomSelector
+                            availability={availability}
+                            selectedRoom={selectedRoom}
+                            setSelectedRoom={setSelectedRoom}
+                            sheet={sheet}
+                            setSheet={setSheet}
+                        />
                     </div>
 
                     <div className="flex w-full items-center gap-2">
@@ -114,11 +120,13 @@ const IndexPage = () => {
                     <div className="mb-4 flex gap-4 font-medium">
                         <p>{formattedDate}</p>
 
-                        {selectedSlots[selectedRoom].length !== 0 && (
+                        {selectedSlots[selectedRoom]?.length > 0 && (
                             <p>
-                                {minutesToTime(selectedSlots[selectedRoom][0])}{" "}
+                                {minutesTo12Hour(
+                                    selectedSlots[selectedRoom][0],
+                                )}{" "}
                                 -{" "}
-                                {minutesToTime(
+                                {minutesTo12Hour(
                                     selectedSlots[selectedRoom].at(-1) + 30,
                                 )}
                             </p>
@@ -126,7 +134,7 @@ const IndexPage = () => {
                     </div>
                 </section>
 
-                <div className="w-full gap-4 md:grid md:grid-cols-2 md:py-4 lg:grid-cols-3">
+                <div className="w-full gap-6 md:grid md:grid-cols-2 md:py-4 lg:grid-cols-3">
                     {!isMobile && (
                         <aside className="sticky top-20 hidden h-fit gap-4 md:z-30 md:flex md:flex-col">
                             <h3>Create Meeting</h3>
@@ -137,52 +145,56 @@ const IndexPage = () => {
                                 setSelectedSlots={setSelectedSlots}
                                 selectedRoom={selectedRoom}
                                 setSelectedRoom={setSelectedRoom}
+                                availability={availability}
                             />
                         </aside>
                     )}
+                    <div className="flex gap-4 lg:col-span-2">
+                        <SlotTimeline
+                            key={
+                                isLaptop
+                                    ? "desktop-room-a"
+                                    : `mobile-${selectedRoom}`
+                            }
+                            currentRoom={currentRoom}
+                            selectedSlots={selectedSlots[currentRoom]}
+                            selectSlot={(slots) =>
+                                setSelectedSlots({
+                                    [currentRoom]: slots,
+                                })
+                            }
+                            selectedRoom={selectedRoom}
+                            setSelectedRoom={setSelectedRoom}
+                            date={selectedDate}
+                            availability={availability}
+                        />
 
-                    <SlotTimeline
-                        key={
-                            isLaptop
-                                ? "desktop-room-a"
-                                : `mobile-${selectedRoom}`
-                        }
-                        selectedSlots={selectedSlots[currentRoom]}
-                        setSelectedSlots={(slots) =>
-                            setSelectedSlots({
-                                "Room A": currentRoom === "Room A" ? slots : [],
-                                "Room B": currentRoom === "Room B" ? slots : [],
-                            })
-                        }
-                        selectedRoom={selectedRoom}
-                        setSelectedRoom={setSelectedRoom}
-                        date={selectedDate}
-                        currentRoom={currentRoom}
-                    />
-
-                    {isLaptop && (
-                        <>
-                            <SlotTimeline
-                                key="desktop-room-b"
-                                selectedSlots={selectedSlots["Room B"]}
-                                setSelectedSlots={(slots) =>
-                                    setSelectedSlots({
-                                        "Room A": [],
-                                        "Room B": slots,
-                                    })
-                                }
-                                selectedRoom={selectedRoom}
-                                setSelectedRoom={setSelectedRoom}
-                                date={selectedDate}
-                                currentRoom="Room B"
-                            />
-                        </>
-                    )}
+                        {isLaptop && (
+                            <>
+                                <SlotTimeline
+                                    key="desktop-room-b"
+                                    selectedSlots={
+                                        selectedSlots[availability[1]?.roomId]
+                                    }
+                                    selectSlot={(slots) =>
+                                        setSelectedSlots({
+                                            [availability[1]?.roomId]: slots,
+                                        })
+                                    }
+                                    selectedRoom={selectedRoom}
+                                    setSelectedRoom={setSelectedRoom}
+                                    date={selectedDate}
+                                    currentRoom={availability[1]?.roomId}
+                                    availability={availability}
+                                />
+                            </>
+                        )}
+                    </div>
                 </div>
             </div>
 
-            {isMobile && selectedSlots[selectedRoom].length !== 0 && (
-                <div className="fixed inset-x-0 bottom-8 flex w-full flex-col items-center">
+            {isMobile && selectedSlots[selectedRoom]?.length !== 0 && (
+                <div className="fixed inset-x-0 bottom-10 flex w-full flex-col items-center">
                     <button
                         className="bg-text text-bg rounded-xl px-4 py-2"
                         onClick={() => setSheet("form")}
@@ -193,16 +205,6 @@ const IndexPage = () => {
             )}
 
             <AnimatePresence>
-                {sheet === "room" && (
-                    <BottomSheet open={sheet} closeSheet={() => setSheet(null)}>
-                        <RoomSelector
-                            selectedRoom={selectedRoom}
-                            selectRoom={toggleSelectedRoom}
-                            closeSheet={() => setSheet(null)}
-                        />
-                    </BottomSheet>
-                )}
-
                 {sheet === "form" && (
                     <BottomSheet open={sheet} closeSheet={() => setSheet(null)}>
                         <BookingForm
@@ -210,7 +212,7 @@ const IndexPage = () => {
                             selectedSlots={selectedSlots[selectedRoom]}
                             selectedRoom={selectedRoom}
                             closeSheet={() => setSheet(null)}
-                            // isMobile={true}
+                            availability={availability}
                         />
                     </BottomSheet>
                 )}

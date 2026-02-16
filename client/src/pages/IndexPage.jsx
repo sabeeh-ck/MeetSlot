@@ -17,7 +17,7 @@ const IndexPage = () => {
     const [selectedDate, setSelectedDate] = useState(today);
     const [sheet, setSheet] = useState(null);
 
-    const { availability, loading } = useAvailability(selectedDate);
+    const { availability, loading, refetch } = useAvailability(selectedDate);
 
     useEffect(() => {
         if (availability.length > 0 && !selectedRoom) {
@@ -86,6 +86,7 @@ const IndexPage = () => {
                                 selectedRoom={selectedRoom}
                                 setSelectedRoom={setSelectedRoom}
                                 availability={availability}
+                                refetch={refetch}
                                 setSheet={setSheet}
                             />
                         </aside>
@@ -156,6 +157,7 @@ const IndexPage = () => {
                             selectedRoom={selectedRoom}
                             closeSheet={() => setSheet(null)}
                             availability={availability}
+                            refetch={refetch}
                             setSelectedDate={setSelectedDate}
                             setSelectedRoom={setSelectedRoom}
                             setSelectedSlots={setSelectedSlots}

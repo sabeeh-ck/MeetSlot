@@ -12,6 +12,7 @@ const BookingForm = ({
     selectedRoom,
     setSelectedRoom,
     availability,
+    refetch,
     setSheet,
 }) => {
     const today = new Date().toISOString().split("T")[0];
@@ -53,10 +54,7 @@ const BookingForm = ({
         if (!formData.title || !formData.date || !formData.room) return;
 
         const formattedStartTime = minutesTo24Hour(formData.startTime);
-
         const formattedEndTime = minutesTo24Hour(formData.endTime);
-
-        console.log(user);
 
         const payload = {
             title: formData.title,
@@ -85,7 +83,6 @@ const BookingForm = ({
             } else {
                 console.log(err);
             }
-        } finally {
             setLoading(false);
         }
     };

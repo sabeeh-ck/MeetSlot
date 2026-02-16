@@ -1,35 +1,21 @@
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence } from "motion/react";
-
 import SlotTimeline from "../components/SlotTimeline";
 import RoomSelector from "../components/RoomSelector";
 import BottomSheet from "../components/BottomSheet";
 import BookingForm from "../components/BookingForm";
-import { minutesTo12Hour } from "../utils/time";
+import { minutesTo12Hour, today } from "../utils/time";
 import { useWindowWidth } from "../hooks/useWindowWidth";
-import {
-    CalendarIconSolid,
-    CalendarIconOutline,
-    ChevronUpDownIcon,
-} from "../icons";
 import { useAvailability } from "../hooks/useAvailability";
-import Skeleton from "react-loading-skeleton";
+import DateSelector from "../components/DateSelector";
 
 const IndexPage = () => {
-    const today = new Date().toISOString().split("T")[0];
-    const tomorrow = new Date(Date.now() + 86400000)
-        .toISOString()
-        .split("T")[0];
-    const { isMobile, isTablet, isLaptop } = useWindowWidth();
+    const { isMobile, isLaptop } = useWindowWidth();
 
     const [selectedRoom, setSelectedRoom] = useState("");
     const [selectedSlots, setSelectedSlots] = useState({});
     const [selectedDate, setSelectedDate] = useState(today);
     const [sheet, setSheet] = useState(null);
-
-    const dateInputRef = useRef(null);
-
-    const toggleSelectedRoom = (roomId) => setSelectedRoom(roomId);
 
     const { availability, loading } = useAvailability(selectedDate);
 
@@ -45,58 +31,6 @@ const IndexPage = () => {
         const weekday = date.toLocaleDateString("en-US", { weekday: "long" });
         return `${String(day).padStart(2, "0")}/${String(month).padStart(2, "0")} ${weekday}`;
     })();
-
-    const dateSelector = [
-        {
-            content: "Today",
-            action: () => setSelectedDate(today),
-            isSelected: selectedDate === today,
-        },
-        {
-            content: "Tomorrow",
-            action: () => setSelectedDate(tomorrow),
-            isSelected: selectedDate === tomorrow,
-        },
-        {
-            content:
-                selectedDate === today || selectedDate === tomorrow ? (
-                    <CalendarIconOutline className="h-5" />
-                ) : (
-                    <CalendarIconSolid className="h-5" />
-                ),
-            action: () =>
-                dateInputRef.current?.showPicker?.() ??
-                dateInputRef.current?.click(),
-            isSelected: selectedDate !== today && selectedDate !== tomorrow,
-        },
-    ];
-
-    const DateSelector = () => (
-        <>
-            {dateSelector.map(({ content, action, isSelected }, i) => (
-                <button
-                    key={i}
-                    onClick={action}
-                    className={`rounded-full border px-4 py-1 text-sm ${
-                        isSelected
-                            ? "border-text bg-text text-bg md:hover:border-textmute md:hover:bg-textmute"
-                            : "border-border active:bg-border md:hover:bg-border bg-surface"
-                    }`}
-                >
-                    {content}
-                </button>
-            ))}
-
-            <input
-                ref={dateInputRef}
-                type="date"
-                value={selectedDate}
-                hidden
-                min={today}
-                onChange={(e) => setSelectedDate(e.target.value || today)}
-            />
-        </>
-    );
 
     const currentRoom = isLaptop ? availability[0]?.roomId : selectedRoom;
 
@@ -116,7 +50,11 @@ const IndexPage = () => {
                     </div>
 
                     <div className="flex w-full items-center gap-2">
-                        <DateSelector />
+                        <DateSelector
+                            selectedDate={selectedDate}
+                            setSelectedDate={setSelectedDate}
+                            setSelectedSlots={setSelectedSlots}
+                        />
                     </div>
 
                     <div className="mb-4 flex gap-4 font-medium">

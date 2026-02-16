@@ -3,6 +3,7 @@ import { ChevronUpDownIcon } from "../icons";
 import BottomSheet from "./BottomSheet";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import { AnimatePresence } from "motion/react";
 
 const RoomSelector = ({
     selectedRoom,
@@ -48,26 +49,28 @@ const RoomSelector = ({
                 />
             </button>
 
-            {sheet === "room" && (
-                <BottomSheet open={sheet} closeSheet={closeSheet}>
-                    <div className="flex flex-col gap-4">
-                        <h2 className="">Rooms</h2>
-                        {availability.map(({ roomId, roomName }) => {
-                            const isSelected = selectedRoom === roomId;
+            <AnimatePresence>
+                {sheet === "room" && (
+                    <BottomSheet open={sheet} closeSheet={closeSheet}>
+                        <div className="flex flex-col gap-4">
+                            <h2 className="">Rooms</h2>
+                            {availability.map(({ roomId, roomName }) => {
+                                const isSelected = selectedRoom === roomId;
 
-                            return (
-                                <button
-                                    key={roomId}
-                                    onClick={() => handleClick(roomId)}
-                                    className={`active:bg-border rounded-lg px-2 py-2 text-left ${isSelected ? "bg-border" : "bg-transparent"}`}
-                                >
-                                    {roomName}
-                                </button>
-                            );
-                        })}
-                    </div>
-                </BottomSheet>
-            )}
+                                return (
+                                    <button
+                                        key={roomId}
+                                        onClick={() => handleClick(roomId)}
+                                        className={`active:bg-border rounded-lg px-2 py-2 text-left ${isSelected ? "bg-border" : "bg-transparent"}`}
+                                    >
+                                        {roomName}
+                                    </button>
+                                );
+                            })}
+                        </div>
+                    </BottomSheet>
+                )}
+            </AnimatePresence>
         </>
     );
 };

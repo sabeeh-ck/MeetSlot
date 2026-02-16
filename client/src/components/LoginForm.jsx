@@ -1,4 +1,4 @@
-const LoginForm = ({ step, onSubmit, value, onChange, error }) => (
+const LoginForm = ({ step, onSubmit, value, onChange, loading, error }) => (
     <div className="mt-4 flex w-full flex-col gap-4 lg:w-1/2 lg:items-start">
         <h3>{step === "email" ? "Email" : "Enter OTP"}</h3>
 
@@ -22,8 +22,15 @@ const LoginForm = ({ step, onSubmit, value, onChange, error }) => (
             <button
                 className="text-bg bg-text mt-2 self-center rounded-lg px-4 py-2"
                 type="submit"
+                disabled={loading}
             >
-                {step === "email" ? "Send OTP" : "Verify OTP"}
+                {step === "email"
+                    ? loading
+                        ? "Sending..."
+                        : "Send OTP"
+                    : loading
+                      ? "Verifying..."
+                      : "Verify OTP"}
             </button>
         </form>
     </div>

@@ -9,6 +9,7 @@ const LoginPage = () => {
     const [otp, setOtp] = useState("");
     const [step, setStep] = useState("email");
     const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false);
 
     const { login } = useAuth();
 
@@ -17,6 +18,7 @@ const LoginPage = () => {
     const sendOtp = async (e) => {
         e.preventDefault();
         try {
+            setLoading(true);
             setError("");
             const res = await api.post("/auth/send-otp", {
                 email,
@@ -30,12 +32,15 @@ const LoginPage = () => {
             } else {
                 console.log(err);
             }
+        } finally {
+            setLoading(false);
         }
     };
 
     const verifyOtp = async (event) => {
         event.preventDefault();
         try {
+            setLoading(true);
             const res = await api.post("/auth/verify-otp", { email, otp });
 
             login(res.data.token);
@@ -46,6 +51,8 @@ const LoginPage = () => {
             } else {
                 console.log(err);
             }
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -64,6 +71,7 @@ const LoginPage = () => {
                         value={email}
                         onChange={setEmail}
                         error={error}
+                        loading={loading}
                     />
                 ) : (
                     <LoginForm
@@ -72,6 +80,7 @@ const LoginPage = () => {
                         value={otp}
                         onChange={setOtp}
                         email={email}
+                        loading={loading}
                         error={error}
                     />
                 )}

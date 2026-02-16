@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
-import { minutesTo12Hour } from "../utils/time";
+import { minutesTo12Hour, minutesTo24Hour } from "../utils/time";
 import { useWindowWidth } from "../hooks/useWindowWidth";
+import api from "../api/axios";
+import { useAuth } from "../context/AuthContext";
 
 const BookingForm = ({
     selectedDate,
@@ -10,9 +12,12 @@ const BookingForm = ({
     selectedRoom,
     setSelectedRoom,
     availability,
+    setSheet,
 }) => {
     const today = new Date().toISOString().split("T")[0];
+    const { token, user } = useAuth();
 
+    const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
         title: "",
         date: selectedDate,
@@ -36,26 +41,53 @@ const BookingForm = ({
 
         if (name === "date") {
             setSelectedDate(value || today);
-            setSelectedSlots({
-                "Room A": [],
-                "Room B": [],
-            });
+            setSelectedSlots({});
         } else if (name === "room") {
             setSelectedRoom(value);
         } else setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         if (!formData.title || !formData.date || !formData.room) return;
 
-        console.log(formData);
+        const formattedStartTime = minutesTo24Hour(formData.startTime);
 
-        // const payload = {
-        //     title: formData.title,
-        //     roomId: formData.room,
-        // };
+        const formattedEndTime = minutesTo24Hour(formData.endTime);
+
+        console.log(user);
+
+        const payload = {
+            title: formData.title,
+            roomId: formData.room,
+            user: user._id,
+            date: formData.date,
+            startTime: formattedStartTime,
+            endTime: formattedEndTime,
+        };
+
+        try {
+            setLoading(true);
+
+            const res = await api.post("/bookings", payload, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+
+            setSheet("");
+            setSelectedSlots({});
+            await refetch();
+        } catch (err) {
+            if (err.response?.data.msg) {
+                setError(err.response.data.msg);
+            } else {
+                console.log(err);
+            }
+        } finally {
+            setLoading(false);
+        }
     };
 
     const { isMobile, isLaptop } = useWindowWidth();
@@ -146,7 +178,7 @@ const BookingForm = ({
                 </div>
 
                 <button className="bg-text text-bg mx-auto my-4 rounded-lg px-8 py-2">
-                    Confirm
+                    {loading ? "Loading..." : "Confirm"}
                 </button>
             </form>
         </section>

@@ -86,6 +86,7 @@ const IndexPage = () => {
                                 selectedRoom={selectedRoom}
                                 setSelectedRoom={setSelectedRoom}
                                 availability={availability}
+                                setSheet={setSheet}
                             />
                         </aside>
                     )}
@@ -155,6 +156,10 @@ const IndexPage = () => {
                             selectedRoom={selectedRoom}
                             closeSheet={() => setSheet(null)}
                             availability={availability}
+                            setSelectedDate={setSelectedDate}
+                            setSelectedRoom={setSelectedRoom}
+                            setSelectedSlots={setSelectedSlots}
+                            setSheet={setSheet}
                         />
                     </BottomSheet>
                 )}

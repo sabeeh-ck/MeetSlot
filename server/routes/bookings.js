@@ -2,27 +2,42 @@ import { Router } from "express";
 import { auth } from "../middleware/authMiddleware.js";
 import Booking from "../models/Booking.js";
 import Room from "../models/Room.js";
+import { timeToMinutes } from "../../client/src/utils/time.js";
 
 const router = Router();
 
 router.post("/", auth, async (req, res) => {
     try {
-        const { title, roomId, date, startTime, endTIme } = req.body;
+        const { title, roomId, user, date, startTime, endTime } = req.body;
+
         if (!title || !roomId || !date) return res.status(400).json({ msg: "Missing fields" });
 
-        const payload = {
-            title,
-            room: roomId,
-            user: req.user.id,
+        const existingBookings = await Booking.find({
+            roomId,
             date,
-            startTime,
-            endTime,
-            slot,
-        };
+        });
 
-        // const booking = await Booking.create(payload);
+        const newStart = timeToMinutes(startTime);
+        const newEnd = timeToMinutes(endTime);
 
-        // res.status(201).json(booking);
+        const isOverlapping = existingBookings.some((booking) => {
+            const existingStart = timeToMinutes(booking.startTime);
+            const existingEnd = timeToMinutes(booking.endTime);
+
+            return newStart < existingEnd && newEnd > existingStart;
+        });
+
+        if (isOverlapping) {
+            return res.status(400).json({ msg: "Slot already booked" });
+        }
+
+        if (newStart >= newEnd) {
+            return res.status(400).json({ msg: "Invalid time range" });
+        }
+
+        const booking = await Booking.create({ title, roomId, user, date, startTime, endTime });
+
+        res.status(201).json(booking);
     } catch (err) {
         if (err.code === 11000) {
             return res.status(409).json({ msg: "Slot already booked" });

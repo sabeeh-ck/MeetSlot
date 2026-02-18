@@ -11,7 +11,7 @@ const LoginPage = () => {
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
 
-    const { login } = useAuth();
+    const { setUser } = useAuth();
 
     const navigate = useNavigate();
 
@@ -20,10 +20,10 @@ const LoginPage = () => {
         try {
             setLoading(true);
             setError("");
+
             const res = await api.post("/auth/send-otp", {
                 email,
             });
-            console.log(res);
 
             setStep("otp");
         } catch (err) {
@@ -43,7 +43,7 @@ const LoginPage = () => {
             setLoading(true);
             const res = await api.post("/auth/verify-otp", { email, otp });
 
-            login(res.data.token);
+            setUser(res.data.user);
             navigate("/");
         } catch (err) {
             if (err.response && err.response.data && err.response.data.msg) {

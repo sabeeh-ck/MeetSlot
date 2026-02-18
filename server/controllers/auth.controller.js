@@ -42,8 +42,6 @@ export const verifyOtp = async (req, res) => {
 
     const user = await User.findOne({ email }).select("+otp");
 
-    console.log(user);
-
     if (!user || !user.otp) return res.status(400).json({ msg: "Invalid OTP" });
 
     if (user.otp.expiresAt < Date.now()) return res.status(400).json({ msg: "OTP expired" });
@@ -56,5 +54,17 @@ export const verifyOtp = async (req, res) => {
     user.otp = undefined;
     await user.save();
 
-    res.json({ token, msg: "Login successfull", user });
+    res.cookie("token", token, {
+        httpOnly: true,
+        secure: false,
+        sameSite: "lax",
+    }).json({ msg: "Login successfull", user });
+};
+
+const logout = async () => {
+    res.clearCookie("token", {
+        httpOnly: true,
+        secure: false,
+        sameSite: "none",
+    });
 };

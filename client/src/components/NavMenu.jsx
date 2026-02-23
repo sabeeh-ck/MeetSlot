@@ -28,6 +28,7 @@ const NavMenu = ({ setMenu }) => {
             action: () => {
                 logout();
                 closeMenu();
+                navigate("/login");
             },
             icon: <LogoutIcon className="h-5" />,
         },

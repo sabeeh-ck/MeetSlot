@@ -20,17 +20,27 @@ const LoginForm = ({ step, onSubmit, value, onChange, loading, error }) => (
                 placeholder={`${step === "email" ? "johndoe@email.com" : "0 0 0 0 0 0"}`}
             />
             <button
-                className="text-bg bg-text mt-2 self-center rounded-lg px-4 py-2"
+                className="text-bg bg-text mt-2 flex items-center gap-2 self-center rounded-lg px-4 py-2"
                 type="submit"
                 disabled={loading}
             >
-                {step === "email"
-                    ? loading
-                        ? "Sending..."
-                        : "Send OTP"
-                    : loading
-                      ? "Verifying..."
-                      : "Verify OTP"}
+                {step === "email" ? (
+                    loading ? (
+                        <>
+                            <span className="border-bg h-4 w-4 animate-spin rounded-full border-2 border-t-transparent"></span>
+                            Sending...
+                        </>
+                    ) : (
+                        "Send OTP"
+                    )
+                ) : loading ? (
+                    <>
+                        <span className="border-bg h-4 w-4 animate-spin rounded-full border-2 border-t-transparent"></span>
+                        Verifying...
+                    </>
+                ) : (
+                    "Verify OTP"
+                )}
             </button>
         </form>
     </div>

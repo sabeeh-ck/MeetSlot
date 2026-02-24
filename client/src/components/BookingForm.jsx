@@ -53,16 +53,13 @@ const BookingForm = ({
 
         if (!formData.title || !formData.date || !formData.room) return;
 
-        const formattedStartTime = minutesTo24Hour(formData.startTime);
-        const formattedEndTime = minutesTo24Hour(formData.endTime);
-
         const payload = {
             title: formData.title,
             roomId: formData.room,
             user: user._id,
             date: formData.date,
-            startTime: formattedStartTime,
-            endTime: formattedEndTime,
+            startTime: formData.startTime,
+            endTime: formData.endTime,
         };
 
         try {

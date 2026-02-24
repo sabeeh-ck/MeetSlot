@@ -13,7 +13,6 @@ const slots = generateSlots();
 
 const SlotTimeline = ({
     currentRoom,
-    date,
     selectedSlots,
     selectSlot,
     selectedRoom,
@@ -28,15 +27,20 @@ const SlotTimeline = ({
     const bookedSlots = currentRoomData
         ? currentRoomData.bookedSlots
               .flatMap((b) => {
-                  const start = b.start.split(":").map(Number);
-                  const end = b.end.split(":").map(Number);
+                  const startDate = new Date(b.start);
+                  const endDate = new Date(b.end);
+                  const startMin =
+                      startDate.getHours() * 60 + startDate.getMinutes();
+                  const endMin = endDate.getHours() * 60 + endDate.getMinutes();
+
                   let slots = [];
-                  let cur = start[0] * 60 + start[1];
-                  const endMin = end[0] * 60 + end[1];
+                  let cur = startMin;
+
                   while (cur < endMin) {
                       slots.push(cur);
                       cur += SLOT_DURATION;
                   }
+
                   return slots;
               })
               .sort((a, b) => a - b)

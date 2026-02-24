@@ -13,11 +13,6 @@ export const minutesTo12Hour = (minutes) => {
     return `${hours12}:${String(minutesPart).padStart(2, "0")} ${period}`;
 };
 
-export const timeToMinutes = (time) => {
-    const [h, m] = time.split(":").map(Number);
-    return h * 60 + m;
-};
-
 export const today = new Date().toISOString().split("T")[0];
 export const tomorrow = new Date(Date.now() + 86400000)
     .toISOString()

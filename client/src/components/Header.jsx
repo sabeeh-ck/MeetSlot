@@ -4,12 +4,14 @@ import { AnimatePresence } from "motion/react";
 import { HomeIcon, LogoutIcon, MenuIcon, UserIconOutline } from "../icons";
 import NavMenu from "./NavMenu";
 import { useAuth } from "../context/AuthContext";
+import MenuModal from "./MenuModal";
 
 const Header = () => {
     const [menu, setMenu] = useState(false);
+    const [rect, setRect] = useState(false);
 
     useEffect(() => {
-        document.body.style.overflow = menu ? "hidden" : "auto";
+        document.body.style.overflow = rect ? "hidden" : "auto";
         return () => (document.body.style.overflow = "auto");
     }, [menu]);
 
@@ -17,6 +19,11 @@ const Header = () => {
     const { pathname } = useLocation();
     const home = pathname === "/";
     const navigate = useNavigate();
+
+    const handlOpenMenu = (e) => {
+        setRect(e.currentTarget.getBoundingClientRect());
+        setMenu(true);
+    };
 
     const Nav = () => (
         <>
@@ -52,7 +59,7 @@ const Header = () => {
             </nav>
 
             <button
-                onClick={() => setMenu((p) => !p)}
+                onClick={handlOpenMenu}
                 className={`border-border active:bg-border rounded-lg border p-2 lg:hidden ${menu ? "bg-border" : "bg-surface"}`}
             >
                 <MenuIcon className="h-5" />
@@ -75,7 +82,14 @@ const Header = () => {
             </header>
 
             <AnimatePresence>
-                {menu && <NavMenu setMenu={setMenu} />}
+                {menu && (
+                    <MenuModal
+                        triggerRect={rect}
+                        closeMenu={() => setMenu(false)}
+                    >
+                        <NavMenu setMenu={setMenu} />
+                    </MenuModal>
+                )}
             </AnimatePresence>
         </>
     );

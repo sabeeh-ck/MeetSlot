@@ -1,7 +1,6 @@
 import { useNavigate } from "react-router";
 import { useAuth } from "../context/AuthContext";
 import { HomeIcon, LogoutIcon, UserIconOutline } from "../icons";
-import MenuModal from "./MenuModal";
 
 const NavMenu = ({ setMenu }) => {
     const { logout } = useAuth();
@@ -24,37 +23,39 @@ const NavMenu = ({ setMenu }) => {
             ),
         },
         {
-            label: "Log Out",
+            label: (
+                <span className="text-bookedText font-bold select-none">
+                    Log Out
+                </span>
+            ),
             action: () => {
                 logout();
                 closeMenu();
                 navigate("/login");
             },
-            icon: <LogoutIcon className="h-5" />,
+            icon: <LogoutIcon className="text-bookedText h-5" />,
         },
     ];
 
     return (
-        <nav>
-            <MenuModal closeMenu={closeMenu}>
-                <ul className="flex flex-col font-medium">
-                    {menuButtons.map((button) => (
-                        <div key={button.label}>
-                            <li
-                                onClick={button.action}
-                                className="active:bg-border m-2 flex items-center gap-2 rounded-lg p-2"
-                            >
-                                {button.icon}
-                                <p className="select-none">{button.label}</p>
-                            </li>
+        <nav className="bg-surface border-border min-w-35 rounded-lg border">
+            <ul className="flex flex-col font-medium">
+                {menuButtons.map((button) => (
+                    <div key={button.label}>
+                        <li
+                            onClick={button.action}
+                            className="active:bg-border m-2 flex items-center gap-2 rounded-lg p-2"
+                        >
+                            {button.icon}
+                            {button.label}
+                        </li>
 
-                            {button === menuButtons[0] && (
-                                <hr className="text-border" />
-                            )}
-                        </div>
-                    ))}
-                </ul>
-            </MenuModal>
+                        {button === menuButtons[0] && (
+                            <hr className="text-border" />
+                        )}
+                    </div>
+                ))}
+            </ul>
         </nav>
     );
 };

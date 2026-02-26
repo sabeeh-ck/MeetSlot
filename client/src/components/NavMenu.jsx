@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router";
 import { useAuth } from "../context/AuthContext";
-import { motion } from "motion/react";
 import { HomeIcon, LogoutIcon, UserIconOutline } from "../icons";
+import MenuModal from "./MenuModal";
 
 const NavMenu = ({ setMenu }) => {
     const { logout } = useAuth();
@@ -36,21 +36,7 @@ const NavMenu = ({ setMenu }) => {
 
     return (
         <nav>
-            <motion.div
-                key="backdrop"
-                className="fixed inset-0 z-60 bg-black/40"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                onClick={closeMenu}
-            />
-
-            <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="bg-surface border-border fixed right-4 z-60 mt-4 rounded-xl border"
-            >
+            <MenuModal closeMenu={closeMenu}>
                 <ul className="flex flex-col font-medium">
                     {menuButtons.map((button) => (
                         <div key={button.label}>
@@ -68,7 +54,7 @@ const NavMenu = ({ setMenu }) => {
                         </div>
                     ))}
                 </ul>
-            </motion.div>
+            </MenuModal>
         </nav>
     );
 };

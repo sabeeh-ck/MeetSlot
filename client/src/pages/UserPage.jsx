@@ -25,21 +25,21 @@ const UserPage = () => {
 
     return (
         <main className="p-4">
-            <section className="my-2 flex min-h-[70vh] flex-col gap-4">
+            <section className="my-2 flex min-h-[70vh] flex-col gap-6">
                 <div className="">
                     <h2>My meetings</h2>
                 </div>
 
-                <div className="bg-surface border-border flex rounded-xl border p-1">
+                <div className="border-border bg-surface flex gap-1 rounded-xl border p-1">
                     <button
                         onClick={() => setView("upcoming")}
-                        className={`flex-1 rounded-lg py-2 text-sm font-medium transition-all ${view === "upcoming" ? "bg-text text-bg shadow" : "text-textmute"}`}
+                        className={`flex-1 rounded-lg py-2 text-sm font-medium transition-all ${view === "upcoming" ? "bg-text text-bg shadow" : "text-textmute active:bg-border md:hover:bg-border"}`}
                     >
                         Upcoming ({upcoming.length})
                     </button>
                     <button
                         onClick={() => setView("past")}
-                        className={`flex-1 rounded-lg py-2 text-sm font-medium transition-all ${view === "past" ? "bg-text text-bg shadow" : "text-textmute"}`}
+                        className={`flex-1 rounded-lg py-2 text-sm font-medium transition-all ${view === "past" ? "bg-text text-bg shadow" : "active:bg-border text-textmute md:hover:bg-border"}`}
                     >
                         Past ({past.length})
                     </button>

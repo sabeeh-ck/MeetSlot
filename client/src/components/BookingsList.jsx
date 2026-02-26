@@ -1,11 +1,49 @@
 import { useNavigate } from "react-router-dom";
-import { minutesTo12Hour } from "../utils/time";
+import BookingCard from "./BookingCard";
 
 const BookingsList = ({ bookings, isPast, onAction }) => {
     const navigate = useNavigate();
 
+    const today = new Date().toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+    });
+    const tomorrowDate = new Date();
+    tomorrowDate.setDate(tomorrowDate.getDate() + 1);
+    const tomorrow = tomorrowDate.toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+    });
+
+    const sortedBookings = [...bookings].sort(
+        (a, b) => new Date(b.start) - new Date(a.start),
+    );
+
+    const groupedBookings =
+        sortedBookings?.length !== 0 &&
+        sortedBookings.reduce((groups, booking) => {
+            let dateLabel = new Date(booking.start).toLocaleDateString(
+                "en-US",
+                {
+                    month: "short",
+                    day: "numeric",
+                    year: "numeric",
+                },
+            );
+
+            if (dateLabel === today) dateLabel = "Today";
+            else if (dateLabel === tomorrow) dateLabel = "Tomorrow";
+
+            if (!groups[dateLabel]) groups[dateLabel] = [];
+
+            groups[dateLabel].push(booking);
+            return groups;
+        }, {});
+
     return (
-        <div className="flex flex-1 flex-col gap-4">
+        <div className="flex flex-1 flex-col gap-6">
             {bookings?.length === 0 ? (
                 <div className="mx-auto my-auto flex flex-col items-center gap-2">
                     <p className="text-textmute">
@@ -21,47 +59,23 @@ const BookingsList = ({ bookings, isPast, onAction }) => {
                     </button>
                 </div>
             ) : (
-                bookings.map(
-                    ({
-                        _id,
-                        title,
-                        date,
-                        start,
-                        end,
-                        roomId: { name: roomName },
-                    }) => {
-                        const startTime = minutesTo12Hour(
-                            new Date(start).getHours() * 60 +
-                                new Date(start).getMinutes(),
-                        );
+                <>
+                    {Object.keys(groupedBookings).map((date) => (
+                        <section key={date}>
+                            <p className="mb-2 font-bold">{date}</p>
 
-                        const endTime = minutesTo12Hour(
-                            new Date(end).getHours() * 60 +
-                                new Date(end).getMinutes(),
-                        );
-
-                        return (
-                            <div
-                                key={_id}
-                                className="bg-surface border-border flex justify-between rounded-xl border p-4"
-                            >
-                                <div className="flex flex-col gap-1">
-                                    <h3 className="font-semibold">{title}</h3>
-                                    <p>{date}</p>
-                                    <p>{roomName}</p>
-                                    <p>{`${startTime} - ${endTime}`}</p>
-                                </div>
-                                {!isPast && (
-                                    <div className="flex items-center">
-                                        <button className="border-border md:hover:bg-border active:bg-border rounded-lg border px-4 py-1">
-                                            Cancel
-                                        </button>
-                                    </div>
-                                )}
+                            <div className="flex flex-col gap-4">
+                                {groupedBookings[date].map((booking) => (
+                                    <BookingCard
+                                        key={booking._id}
+                                        booking={booking}
+                                        isPast={isPast}
+                                    />
+                                ))}
                             </div>
-                        );
-                    },
-                )
+                        </section>
+                    ))}
+                </>
             )}
         </div>
     );

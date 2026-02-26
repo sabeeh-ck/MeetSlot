@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { AnimatePresence } from "motion/react";
 import SlotTimeline from "../components/SlotTimeline";
 import RoomSelector from "../components/RoomSelector";
@@ -8,6 +8,7 @@ import { minutesTo12Hour, today } from "../utils/time";
 import { useWindowWidth } from "../hooks/useWindowWidth";
 import { useAvailability } from "../hooks/useAvailability";
 import DateSelector from "../components/DateSelector";
+import Skeleton from "react-loading-skeleton";
 
 const IndexPage = () => {
     const { isMobile, isLaptop } = useWindowWidth();
@@ -38,27 +39,33 @@ const IndexPage = () => {
         <main>
             <div>
                 <section className="bg-bg sticky top-16 z-30 flex w-full flex-col gap-4 pt-4 md:hidden">
-                    <div className="flex w-full items-center gap-2">
-                        <RoomSelector
-                            availability={availability}
-                            loading={loading}
-                            selectedRoom={selectedRoom}
-                            setSelectedRoom={setSelectedRoom}
-                            sheet={sheet}
-                            setSheet={setSheet}
-                        />
-                    </div>
+                    <RoomSelector
+                        availability={availability}
+                        loading={loading}
+                        selectedRoom={selectedRoom}
+                        setSelectedRoom={setSelectedRoom}
+                        sheet={sheet}
+                        setSheet={setSheet}
+                    />
 
-                    <div className="flex w-full items-center gap-2">
-                        <DateSelector
-                            selectedDate={selectedDate}
-                            setSelectedDate={setSelectedDate}
-                            setSelectedSlots={setSelectedSlots}
-                        />
-                    </div>
+                    <DateSelector
+                        selectedDate={selectedDate}
+                        setSelectedDate={setSelectedDate}
+                        setSelectedSlots={setSelectedSlots}
+                        loading={loading}
+                    />
 
                     <div className="mb-4 flex gap-4 font-medium">
-                        <p>{formattedDate}</p>
+                        {loading ? (
+                            <Skeleton
+                                height={20}
+                                width={105}
+                                containerClassName="leading-none flex-1"
+                                borderRadius={10}
+                            />
+                        ) : (
+                            <p>{formattedDate}</p>
+                        )}
 
                         {selectedSlots[selectedRoom]?.length > 0 && (
                             <p>

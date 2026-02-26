@@ -28,7 +28,7 @@ const LoginForm = ({ step, onSubmit, value, onChange, loading, error }) => (
                     loading ? (
                         <>
                             <span className="border-bg h-4 w-4 animate-spin rounded-full border-2 border-t-transparent"></span>
-                            Sending...
+                            Sending
                         </>
                     ) : (
                         "Send OTP"
@@ -36,7 +36,7 @@ const LoginForm = ({ step, onSubmit, value, onChange, loading, error }) => (
                 ) : loading ? (
                     <>
                         <span className="border-bg h-4 w-4 animate-spin rounded-full border-2 border-t-transparent"></span>
-                        Verifying...
+                        Verifying
                     </>
                 ) : (
                     "Verify OTP"

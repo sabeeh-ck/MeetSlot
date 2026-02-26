@@ -65,11 +65,7 @@ const BookingForm = ({
         try {
             setLoading(true);
 
-            const res = await api.post("/bookings", payload, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
+            const res = await api.post("/bookings", payload);
 
             setSheet("");
             setSelectedSlots({});
@@ -172,7 +168,14 @@ const BookingForm = ({
                 </div>
 
                 <button className="bg-text text-bg mx-auto my-4 rounded-lg px-8 py-2">
-                    {loading ? "Loading..." : "Confirm"}
+                    {loading ? (
+                        <>
+                            <span className="border-bg h-4 w-4 animate-spin rounded-full border-2 border-t-transparent"></span>
+                            Saving
+                        </>
+                    ) : (
+                        "Confirm"
+                    )}
                 </button>
             </form>
         </section>

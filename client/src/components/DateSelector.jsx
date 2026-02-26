@@ -1,8 +1,14 @@
 import { useRef } from "react";
 import { CalendarIconSolid, CalendarIconOutline } from "../icons";
 import { today, tomorrow } from "../utils/time";
+import Skeleton from "react-loading-skeleton";
 
-const DateSelector = ({ selectedDate, setSelectedDate, setSelectedSlots }) => {
+const DateSelector = ({
+    selectedDate,
+    setSelectedDate,
+    setSelectedSlots,
+    loading,
+}) => {
     const dateInputRef = useRef(null);
 
     const toggleDate = (date) => {
@@ -36,20 +42,32 @@ const DateSelector = ({ selectedDate, setSelectedDate, setSelectedSlots }) => {
     ];
 
     return (
-        <>
-            {dateSelector.map(({ content, action, isSelected }, i) => (
-                <button
-                    key={i}
-                    onClick={action}
-                    className={`rounded-full border px-4 py-1 text-sm ${
-                        isSelected
-                            ? "border-text bg-text text-bg md:hover:border-textmute md:hover:bg-textmute"
-                            : "border-border active:bg-border md:hover:bg-border bg-surface"
-                    }`}
-                >
-                    {content}
-                </button>
-            ))}
+        <div className="flex w-full items-center gap-2">
+            {dateSelector.map(({ content, action, isSelected }, i) => {
+                if (loading)
+                    return (
+                        <Skeleton
+                            height={30}
+                            width={100}
+                            containerClassName="flex-1 leading-none"
+                            borderRadius={16}
+                        />
+                    );
+
+                return (
+                    <button
+                        key={i}
+                        onClick={action}
+                        className={`rounded-full border px-4 py-1 text-sm ${
+                            isSelected
+                                ? "border-text bg-text text-bg md:hover:border-textmute md:hover:bg-textmute"
+                                : "border-border active:bg-border md:hover:bg-border bg-surface"
+                        }`}
+                    >
+                        {content}
+                    </button>
+                );
+            })}
 
             <input
                 ref={dateInputRef}
@@ -59,7 +77,7 @@ const DateSelector = ({ selectedDate, setSelectedDate, setSelectedSlots }) => {
                 min={today}
                 onChange={(e) => setSelectedDate(e.target.value || today)}
             />
-        </>
+        </div>
     );
 };
 

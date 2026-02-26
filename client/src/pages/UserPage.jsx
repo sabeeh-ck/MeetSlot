@@ -15,11 +15,27 @@ const UserPage = () => {
     const past = bookings.filter((b) => new Date(b.end) <= now);
 
     const SkeletonLoad = () => (
-        <div className="flex flex-col gap-4">
-            <Skeleton className="h-35" borderRadius={8} />
-            <Skeleton className="h-35" borderRadius={8} />
-            <Skeleton className="h-35" borderRadius={8} />
-            <Skeleton className="h-35" borderRadius={8} />
+        <div>
+            <Skeleton
+                className="mb-2"
+                height={20}
+                width={75}
+                borderRadius={10}
+            />
+            <div className="flex flex-col gap-4">
+                <Skeleton className="h-35" borderRadius={12} />
+                <Skeleton className="h-35" borderRadius={12} />
+            </div>
+            <Skeleton
+                className="mt-6 mb-2"
+                height={20}
+                width={100}
+                borderRadius={10}
+            />
+            <div className="flex flex-col gap-4">
+                <Skeleton className="h-35" borderRadius={12} />
+                <Skeleton className="h-35" borderRadius={12} />
+            </div>
         </div>
     );
 

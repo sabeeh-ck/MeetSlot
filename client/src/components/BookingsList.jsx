@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import BookingCard from "./BookingCard";
 
-const BookingsList = ({ bookings, isPast, onAction }) => {
+const BookingsList = ({ bookings, isPast, refetch }) => {
     const navigate = useNavigate();
 
     const today = new Date().toLocaleDateString("en-US", {
@@ -70,6 +70,7 @@ const BookingsList = ({ bookings, isPast, onAction }) => {
                                         key={booking._id}
                                         booking={booking}
                                         isPast={isPast}
+                                        refetch={refetch}
                                     />
                                 ))}
                             </div>

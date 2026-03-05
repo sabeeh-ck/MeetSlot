@@ -12,7 +12,7 @@ export const useBookings = (userId) => {
         setLoading(true);
 
         try {
-            const res = await api.get(`/me/bookings`);
+            const res = await api.get(`/user/bookings`);
             setBookings(res.data);
         } catch (err) {
             console.log(err);

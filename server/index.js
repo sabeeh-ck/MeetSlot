@@ -26,7 +26,7 @@ connectDB();
 
 app.use("/auth", authRoutes);
 app.use("/bookings", bookingRoutes);
-app.use("/me", userRoutes);
+app.use("/user", userRoutes);
 
 app.listen(4000, () => {
     console.log("Server running on port 4000");

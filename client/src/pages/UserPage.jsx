@@ -67,7 +67,7 @@ const UserPage = () => {
                     <BookingsList
                         bookings={view === "upcoming" ? upcoming : past}
                         isPast={view === "past"}
-                        onAction={refetch}
+                        refetch={refetch}
                     />
                 )}
             </section>

@@ -3,6 +3,7 @@ import { CheckIcon, ClockIcon, RoomIconSolid, XMarkIcon } from "../icons";
 import { minutesTo12Hour } from "../utils/time";
 import MenuModal from "./MenuModal";
 import { useState } from "react";
+import api from "../api/axios";
 
 const BookingCard = ({
     booking: {
@@ -13,6 +14,7 @@ const BookingCard = ({
         roomId: { name: roomName },
     },
     isPast,
+    refetch,
 }) => {
     const [menu, setMenu] = useState(false);
     const [rect, setRect] = useState(null);
@@ -28,6 +30,42 @@ const BookingCard = ({
 
     const endTime = minutesTo12Hour(
         new Date(end).getHours() * 60 + new Date(end).getMinutes(),
+    );
+
+    const handleCancel = async (_id) => {
+        try {
+            setDeleting(true);
+
+            await api.delete(`/user/delete/${_id}`);
+
+            setMenu(false);
+            setDeleting(false);
+            refetch();
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const Menu = () => (
+        <MenuModal triggerRect={rect} closeMenu={() => setMenu(false)}>
+            <div className="bg-surface border-border flex items-center gap-4 rounded-xl border py-2 pr-2 pl-4">
+                <p className="font-medium">Are you sure?</p>
+                <div className="flex gap-2">
+                    <button
+                        onClick={() => setMenu(false)}
+                        className="border-border md:hover:bg-border active:bg-border rounded-lg border px-2 py-1"
+                    >
+                        <XMarkIcon className="h-5" />
+                    </button>
+                    <button
+                        onClick={() => handleCancel(_id)}
+                        className="border-bookedBorder text-bookedText md:hover:bg-bookedBg active:bg-bookedBg rounded-lg border px-2 py-1"
+                    >
+                        <CheckIcon className="h-5" />
+                    </button>
+                </div>
+            </div>
+        </MenuModal>
     );
 
     return (
@@ -55,29 +93,7 @@ const BookingCard = ({
                         Cancel
                     </button>
 
-                    <AnimatePresence>
-                        {menu && (
-                            <MenuModal
-                                triggerRect={rect}
-                                closeMenu={() => setMenu(false)}
-                            >
-                                <div className="bg-surface border-border flex items-center gap-4 rounded-xl border py-2 pr-2 pl-4">
-                                    <p className="font-medium">Are you sure?</p>
-                                    <div className="flex gap-2">
-                                        <button
-                                            onClick={() => setMenu(false)}
-                                            className="border-border rounded-lg border px-2 py-1"
-                                        >
-                                            <XMarkIcon className="h-5" />
-                                        </button>
-                                        <button className="border-bookedBorder text-bookedText rounded-lg border px-2 py-1">
-                                            <CheckIcon className="h-5" />
-                                        </button>
-                                    </div>
-                                </div>
-                            </MenuModal>
-                        )}
-                    </AnimatePresence>
+                    <AnimatePresence>{menu && <Menu />}</AnimatePresence>
                 </div>
             )}
         </div>

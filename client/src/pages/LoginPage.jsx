@@ -21,7 +21,7 @@ const LoginPage = () => {
             setLoading(true);
             setError("");
 
-            const res = await api.post("/auth/send-otp", {
+            await api.post("/auth/send-otp", {
                 email,
             });
 

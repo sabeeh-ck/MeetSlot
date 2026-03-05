@@ -10,15 +10,11 @@ const Header = () => {
     const [menu, setMenu] = useState(false);
     const [rect, setRect] = useState(false);
 
-    useEffect(() => {
-        document.body.style.overflow = rect ? "hidden" : "auto";
-        return () => (document.body.style.overflow = "auto");
-    }, [menu]);
-
     const { logout } = useAuth();
     const { pathname } = useLocation();
-    const home = pathname === "/";
     const navigate = useNavigate();
+
+    const home = pathname === "/";
 
     const handlOpenMenu = (e) => {
         setRect(e.currentTarget.getBoundingClientRect());

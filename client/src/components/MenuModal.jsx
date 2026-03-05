@@ -1,8 +1,15 @@
 import { motion } from "motion/react";
+import { useEffect } from "react";
 import { createPortal } from "react-dom";
 
 const MenuModal = ({ children, closeMenu, triggerRect }) => {
     if (!triggerRect) return null;
+
+    useEffect(() => {
+        document.body.style.overflow = "hidden";
+
+        return () => (document.body.style.overflow = "");
+    }, []);
 
     return createPortal(
         <>

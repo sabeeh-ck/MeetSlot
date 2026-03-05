@@ -38,7 +38,7 @@ const NavMenu = ({ setMenu }) => {
     ];
 
     return (
-        <nav className="bg-surface border-border min-w-35 rounded-lg border">
+        <nav className="bg-surface border-border min-w-35 rounded-xl border">
             <ul className="flex flex-col font-medium">
                 {menuButtons.map((button) => (
                     <div key={button.label}>

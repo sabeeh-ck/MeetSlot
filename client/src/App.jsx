@@ -11,16 +11,6 @@ const App = () => (
     <Routes>
         <Route path="/" element={<Layout />}>
             <Route path="/login" element={<LoginPage />} />
-
-            <Route
-                path="/user"
-                element={
-                    <ProtectedRoute>
-                        <UserPage />
-                    </ProtectedRoute>
-                }
-            />
-
             <Route
                 index
                 element={
@@ -29,7 +19,14 @@ const App = () => (
                     </ProtectedRoute>
                 }
             />
-
+            <Route
+                path="/user"
+                element={
+                    <ProtectedRoute>
+                        <UserPage />
+                    </ProtectedRoute>
+                }
+            />
             <Route path="*" element={<NotFoundPage />} />
         </Route>
     </Routes>

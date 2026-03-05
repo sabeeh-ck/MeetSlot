@@ -25,29 +25,31 @@ const RoomSelector = ({
     };
 
     return (
-        <>
-            <div className="flex w-20 gap-2">
+        <div className="flex w-full items-center gap-2">
+            <div className="flex min-w-30 items-center gap-2">
                 {loading ? (
                     <Skeleton
-                        className="h-8"
+                        height={32}
                         containerClassName="flex-1 leading-none"
-                        borderRadius={8}
+                        borderRadius={16}
                     />
                 ) : (
-                    <h2 className="w-19 select-none">
-                        {
-                            availability.find(
-                                (room) => room.roomId === selectedRoom,
-                            )?.roomName
-                        }
-                    </h2>
+                    <>
+                        <h3 className="w-19 font-semibold select-none">
+                            {
+                                availability.find(
+                                    (room) => room.roomId === selectedRoom,
+                                )?.roomName
+                            }
+                        </h3>
+                        <button onClick={() => setSheet("room")}>
+                            <ChevronUpDownIcon
+                                className={`md:hover:bg-border border-border active:bg-border h-8 rounded-lg border py-1 text-sm ${sheet === "room" ? "bg-border" : "bg-surface"} `}
+                            />
+                        </button>
+                    </>
                 )}
             </div>
-            <button onClick={() => setSheet("room")}>
-                <ChevronUpDownIcon
-                    className={`md:hover:bg-border border-border active:bg-border h-8 rounded-lg border py-1 text-sm ${sheet === "room" ? "bg-border" : "bg-surface"} `}
-                />
-            </button>
 
             <AnimatePresence>
                 {sheet === "room" && (
@@ -71,7 +73,7 @@ const RoomSelector = ({
                     </BottomSheet>
                 )}
             </AnimatePresence>
-        </>
+        </div>
     );
 };
 

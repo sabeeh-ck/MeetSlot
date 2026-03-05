@@ -47,6 +47,7 @@ const DateSelector = ({
                 if (loading)
                     return (
                         <Skeleton
+                            key={i}
                             height={30}
                             width={100}
                             containerClassName="flex-1 leading-none"

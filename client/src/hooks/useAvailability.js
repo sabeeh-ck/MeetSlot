@@ -23,7 +23,6 @@ export const useAvailability = (date) => {
             return new Promise((resolve) => {
                 setTimeout(() => {
                     setLoading(false);
-                    console.log("fetched");
                     resolve();
                 }, remainingTime);
             });

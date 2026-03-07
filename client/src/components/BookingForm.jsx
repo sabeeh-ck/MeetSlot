@@ -167,14 +167,15 @@ const BookingForm = ({
                     </div>
                 </div>
 
-                <button className="bg-text text-bg mx-auto my-4 rounded-lg px-8 py-2">
-                    {loading ? (
-                        <>
-                            <span className="border-bg h-4 w-4 animate-spin rounded-full border-2 border-t-transparent"></span>
-                            Saving
-                        </>
-                    ) : (
-                        "Confirm"
+                <button
+                    disabled={loading}
+                    className="bg-text text-bg md:hover:bg-text/80 active:bg-text/80 relative mx-auto my-4 flex items-center justify-center rounded-lg px-8 py-2"
+                >
+                    <span className={loading ? "invisible" : "visible"}>
+                        Confirm
+                    </span>
+                    {loading && (
+                        <span className="border-bg absolute h-4 w-4 animate-spin rounded-full border-3 border-t-transparent" />
                     )}
                 </button>
             </form>

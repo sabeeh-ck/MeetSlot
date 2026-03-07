@@ -18,6 +18,7 @@ const BookingCard = ({
 }) => {
     const [menu, setMenu] = useState(false);
     const [rect, setRect] = useState(null);
+    const [deleting, setDeleting] = useState(false);
 
     const handlOpenMenu = (e) => {
         setRect(e.currentTarget.getBoundingClientRect());
@@ -88,9 +89,15 @@ const BookingCard = ({
                 <div className="flex flex-col items-center justify-between">
                     <button
                         onClick={handlOpenMenu}
-                        className={`border-border md:hover:bg-border active:bg-border my-auto rounded-lg border px-4 py-1 ${menu ? "bg-border" : "bg-surface"}`}
+                        disabled={deleting}
+                        className={`border-border md:hover:bg-border active:bg-border relative my-auto flex items-center justify-center gap-2 rounded-lg border px-4 py-1 ${menu ? "bg-border" : "bg-surface"}`}
                     >
-                        Cancel
+                        <span className={deleting ? "invisible" : "visible"}>
+                            Cancel
+                        </span>
+                        {deleting && (
+                            <span className="border-text absolute h-4 w-4 animate-spin rounded-full border-3 border-t-transparent" />
+                        )}
                     </button>
 
                     <AnimatePresence>{menu && <Menu />}</AnimatePresence>

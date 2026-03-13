@@ -11,6 +11,50 @@ const generateSlots = () => {
 
 const slots = generateSlots();
 
+const Slot = ({
+    slot,
+    i,
+    isSelected,
+    isBooked,
+    roundTop,
+    roundBottom,
+    handleSelect,
+}) => {
+    return (
+        <div key={slot}>
+            <button
+                type="button"
+                onClick={() => handleSelect(slot)}
+                disabled={isBooked}
+                className={`flex h-25 w-full flex-col items-start border-x py-1 pl-8 text-sm ${roundTop} ${roundBottom} ${
+                    isBooked
+                        ? isBooked
+                        : isSelected
+                          ? isSelected
+                          : "border-border bg-surface"
+                } `}
+            >
+                <div className="flex gap-2">
+                    {((!isSelected && !isBooked) || roundTop) && (
+                        <p>{minutesTo12Hour(slot)}</p>
+                    )}
+
+                    {isBooked && roundTop && <p>Reserved</p>}
+                </div>
+
+                {(isSelected || isBooked) && roundBottom && (
+                    <p className="mt-auto">{minutesTo12Hour(slot + 30)}</p>
+                )}
+            </button>
+            {!roundBottom && (
+                <hr
+                    className={`text-border border-x pt-1 ${isBooked ? "bg-bookedBg border-bookedBorder" : isSelected ? "bg-border border-textmute" : "border-border bg-surface"} `}
+                />
+            )}
+        </div>
+    );
+};
+
 const SlotTimeline = ({
     currentRoom,
     selectedSlots,
@@ -88,73 +132,6 @@ const SlotTimeline = ({
         selectSlot([slot]);
     };
 
-    const Slot = ({ slot, i }) => {
-        const isSelected = selectedSlots?.includes(slot)
-            ? "bg-border border-textmute"
-            : "";
-
-        const prevSelected = selectedSlots?.includes(slots[i - 1]);
-        const nextSelected = selectedSlots?.includes(slots[i + 1]);
-
-        const isBooked = bookedSlots.includes(slot)
-            ? "bg-bookedBg border-bookedBorder text-bookedText"
-            : "";
-
-        const prevBooked = bookedSlots.includes(slots[i - 1]);
-        const nextBooked = bookedSlots.includes(slots[i + 1]);
-
-        const roundTop =
-            i === 0 ||
-            (isSelected && !prevSelected) ||
-            (!isSelected && prevSelected) ||
-            (isBooked && !prevBooked) ||
-            (!isBooked && prevBooked)
-                ? "rounded-t-3xl border-t"
-                : "";
-
-        const roundBottom =
-            i === slots.length - 1 ||
-            (isSelected && !nextSelected) ||
-            (!isSelected && nextSelected) ||
-            (isBooked && !nextBooked) ||
-            (!isBooked && nextBooked)
-                ? "mb-2 rounded-b-3xl border-b"
-                : "";
-
-        return (
-            <div key={slot}>
-                <button
-                    onClick={() => handleSelect(slot)}
-                    disabled={isBooked}
-                    className={`flex h-25 w-full flex-col items-start border-x py-1 pl-8 text-sm ${roundTop} ${roundBottom} ${
-                        isBooked
-                            ? isBooked
-                            : isSelected
-                              ? isSelected
-                              : "border-border bg-surface"
-                    } `}
-                >
-                    <div className="flex gap-2">
-                        {((!isSelected && !isBooked) || roundTop) && (
-                            <p>{minutesTo12Hour(slot)}</p>
-                        )}
-
-                        {isBooked && roundTop && <p>Reserved</p>}
-                    </div>
-
-                    {(isSelected || isBooked) && roundBottom && (
-                        <p className="mt-auto">{minutesTo12Hour(slot + 30)}</p>
-                    )}
-                </button>
-                {!roundBottom && (
-                    <hr
-                        className={`text-border border-x pt-1 ${isBooked ? "bg-bookedBg border-bookedBorder" : isSelected ? "bg-border border-textmute" : "border-border bg-surface"} `}
-                    />
-                )}
-            </div>
-        );
-    };
-
     return (
         <section className="flex w-full flex-col gap-4">
             {loading ? (
@@ -180,7 +157,57 @@ const SlotTimeline = ({
 
                     <div className="grid grid-cols-1 rounded-3xl">
                         {slots.map((slot, i) => {
-                            return <Slot key={slot} i={i} slot={slot} />;
+                            const isSelected = selectedSlots?.includes(slot)
+                                ? "bg-border border-textmute"
+                                : "";
+
+                            const prevSelected = selectedSlots?.includes(
+                                slots[i - 1],
+                            );
+                            const nextSelected = selectedSlots?.includes(
+                                slots[i + 1],
+                            );
+
+                            const isBooked = bookedSlots.includes(slot)
+                                ? "bg-bookedBg border-bookedBorder text-bookedText"
+                                : "";
+
+                            const prevBooked = bookedSlots.includes(
+                                slots[i - 1],
+                            );
+                            const nextBooked = bookedSlots.includes(
+                                slots[i + 1],
+                            );
+
+                            const roundTop =
+                                i === 0 ||
+                                (isSelected && !prevSelected) ||
+                                (!isSelected && prevSelected) ||
+                                (isBooked && !prevBooked) ||
+                                (!isBooked && prevBooked)
+                                    ? "rounded-t-3xl border-t"
+                                    : "";
+
+                            const roundBottom =
+                                i === slots.length - 1 ||
+                                (isSelected && !nextSelected) ||
+                                (!isSelected && nextSelected) ||
+                                (isBooked && !nextBooked) ||
+                                (!isBooked && nextBooked)
+                                    ? "mb-2 rounded-b-3xl border-b"
+                                    : "";
+                            return (
+                                <Slot
+                                    key={slot}
+                                    slot={slot}
+                                    i={i}
+                                    isSelected={isSelected}
+                                    isBooked={isBooked}
+                                    handleSelect={handleSelect}
+                                    roundTop={roundTop}
+                                    roundBottom={roundBottom}
+                                />
+                            );
                         })}
                     </div>
                 </>

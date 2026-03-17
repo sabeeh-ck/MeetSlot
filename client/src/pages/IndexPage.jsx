@@ -98,7 +98,7 @@ const IndexPage = () => {
                             />
                         </aside>
                     )}
-                    <div className="flex gap-4 lg:col-span-2">
+                    <div className="flex gap-4 lg:col-span-2 lg:snap-x lg:snap-mandatory lg:overflow-x-auto">
                         <SlotTimeline
                             key={
                                 isLaptop
@@ -119,27 +119,24 @@ const IndexPage = () => {
                             loading={loading}
                         />
 
-                        {isLaptop && (
-                            <>
+                        {isLaptop &&
+                            availability.slice(1).map(({ roomId }) => (
                                 <SlotTimeline
-                                    key="desktop-room-b"
-                                    selectedSlots={
-                                        selectedSlots[availability[1]?.roomId]
-                                    }
+                                    key={roomId}
+                                    selectedSlots={selectedSlots[roomId]}
                                     selectSlot={(slots) =>
                                         setSelectedSlots({
-                                            [availability[1]?.roomId]: slots,
+                                            [roomId]: slots,
                                         })
                                     }
                                     selectedRoom={selectedRoom}
                                     setSelectedRoom={setSelectedRoom}
                                     date={selectedDate}
-                                    currentRoom={availability[1]?.roomId}
+                                    currentRoom={roomId}
                                     availability={availability}
                                     loading={loading}
                                 />
-                            </>
-                        )}
+                            ))}
                     </div>
                 </div>
             </div>

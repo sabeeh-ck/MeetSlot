@@ -133,7 +133,7 @@ const SlotTimeline = ({
     };
 
     return (
-        <section className="flex w-full flex-col gap-4">
+        <section className="flex w-full flex-col gap-4 lg:w-[calc(50%-8px)] lg:shrink-0 lg:snap-start">
             {loading ? (
                 <div className="flex flex-col gap-2">
                     <Skeleton

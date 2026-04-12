@@ -1,67 +1,17 @@
-import { useEffect, useState } from "react";
-import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { AnimatePresence } from "motion/react";
-import { HomeIcon, LogoutIcon, MenuIcon, UserIconOutline } from "../icons";
 import NavMenu from "./NavMenu";
-import { useAuth } from "../context/AuthContext";
 import MenuModal from "./MenuModal";
+import Nav from "./Nav";
+import { useWindowWidth } from "../hooks/useWindowWidth";
 
 const Header = () => {
     const [menu, setMenu] = useState(false);
     const [rect, setRect] = useState(false);
 
-    const { logout } = useAuth();
     const { pathname } = useLocation();
-    const navigate = useNavigate();
-
-    const home = pathname === "/";
-
-    const handlOpenMenu = (e) => {
-        setRect(e.currentTarget.getBoundingClientRect());
-        setMenu(true);
-    };
-
-    const Nav = () => (
-        <>
-            <nav className="z-60 hidden items-center gap-4 font-semibold lg:flex">
-                {home ? (
-                    <NavLink
-                        to="/user"
-                        className="active:bg-border border-border md:hover:bg-border flex items-center gap-2 rounded-lg border p-2"
-                    >
-                        <UserIconOutline className="h-5" />
-                        <p className="select-none">My Meetings</p>
-                    </NavLink>
-                ) : (
-                    <NavLink
-                        to="/"
-                        className="active:bg-border border-border md:hover:bg-border flex items-center gap-2 rounded-lg border p-2"
-                    >
-                        <HomeIcon className="h-5" />
-                        <p className="select-none">Home</p>
-                    </NavLink>
-                )}
-
-                <button
-                    className="active:bg-border md:hover:bg-border border-border flex items-center gap-2 rounded-lg border p-2"
-                    onClick={() => {
-                        logout();
-                        navigate("/login");
-                    }}
-                >
-                    <LogoutIcon className="h-5" />
-                    <p className="text-base select-none">Log Out</p>
-                </button>
-            </nav>
-
-            <button
-                onClick={handlOpenMenu}
-                className={`border-border active:bg-border rounded-lg border p-2 lg:hidden ${menu ? "bg-border" : "bg-surface"}`}
-            >
-                <MenuIcon className="h-5" />
-            </button>
-        </>
-    );
+    const { isMobile, isLaptop } = useWindowWidth();
 
     return (
         <>
@@ -73,7 +23,7 @@ const Header = () => {
                         </Link>
                     </div>
 
-                    {pathname !== "/login" && <Nav />}
+                    {pathname !== "/login" && isMobile && <Nav menu={menu} />}
                 </div>
             </header>
 

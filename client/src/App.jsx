@@ -6,6 +6,7 @@ import Layout from "./Layout";
 import ProtectedRoute from "./components/ProtectedRoute";
 import NotFoundPage from "./pages/NotFoundPage";
 import UserPage from "./pages/UserPage";
+import AdminPage from "./pages/AdminPage";
 
 const App = () => (
     <Routes>
@@ -25,6 +26,14 @@ const App = () => (
                     <ProtectedRoute>
                         <UserPage />
                     </ProtectedRoute>
+                }
+            />
+            <Route
+                path="/admin"
+                element={
+                    // <ProtectedRoute requiredRole="admin">
+                    <AdminPage />
+                    // </ProtectedRoute>
                 }
             />
             <Route path="*" element={<NotFoundPage />} />

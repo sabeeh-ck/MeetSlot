@@ -2,7 +2,7 @@ import { motion } from "motion/react";
 import { useEffect } from "react";
 import { createPortal } from "react-dom";
 
-const MenuModal = ({ children, closeMenu, triggerRect }) => {
+const MenuModal = ({ children, onClose, triggerRect }) => {
     if (!triggerRect) return null;
 
     useEffect(() => {
@@ -19,7 +19,7 @@ const MenuModal = ({ children, closeMenu, triggerRect }) => {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                onClick={closeMenu}
+                onClick={onClose}
             />
 
             <motion.div

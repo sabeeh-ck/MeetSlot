@@ -20,7 +20,7 @@ const BookingCard = ({
     const [rect, setRect] = useState(null);
     const [deleting, setDeleting] = useState(false);
 
-    const handlOpenMenu = (e) => {
+    const handleOpenMenu = (e) => {
         setRect(e.currentTarget.getBoundingClientRect());
         setMenu(true);
     };
@@ -48,7 +48,7 @@ const BookingCard = ({
     };
 
     const Menu = () => (
-        <MenuModal triggerRect={rect} closeMenu={() => setMenu(false)}>
+        <MenuModal triggerRect={rect} onClose={() => setMenu(false)}>
             <div className="bg-surface border-border flex items-center gap-4 rounded-xl border py-2 pr-2 pl-4">
                 <p className="font-medium">Are you sure?</p>
                 <div className="flex gap-2">
@@ -85,10 +85,11 @@ const BookingCard = ({
                     <p>{roomName}</p>
                 </div>
             </div>
+
             {!isPast && (
                 <div className="flex flex-col items-center justify-between">
                     <button
-                        onClick={handlOpenMenu}
+                        onClick={handleOpenMenu}
                         disabled={deleting}
                         className={`border-border md:hover:bg-border active:bg-border relative my-auto flex items-center justify-center gap-2 rounded-lg border px-4 py-1 ${menu ? "bg-border" : "bg-surface"}`}
                     >

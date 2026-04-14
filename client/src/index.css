@@ -23,7 +23,7 @@ body {
 }
 
 main {
-    @apply mx-auto w-full max-w-7xl px-4;
+    @apply mx-auto px-4;
 }
 
 h1 {

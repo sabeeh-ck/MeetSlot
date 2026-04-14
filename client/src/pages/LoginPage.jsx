@@ -57,7 +57,7 @@ const LoginPage = () => {
     };
 
     return (
-        <main>
+        <main className="max-w-7xl">
             <section className="flex h-40 items-center justify-center lg:justify-normal">
                 <h1>Welcome to MeetSlot</h1>
             </section>

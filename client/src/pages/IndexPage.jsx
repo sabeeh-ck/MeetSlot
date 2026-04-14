@@ -36,7 +36,7 @@ const IndexPage = () => {
     const currentRoom = isLaptop ? availability[0]?.roomId : selectedRoom;
 
     return (
-        <main>
+        <main className="max-w-7xl">
             <div>
                 <section className="bg-bg sticky top-16 z-30 flex w-full flex-col gap-4 pt-4 md:hidden">
                     <RoomSelector

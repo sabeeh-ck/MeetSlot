@@ -37,7 +37,7 @@ const RoomSelector = ({
                     <>
                         <h3 className="w-19 font-semibold select-none">
                             {
-                                availability.find(
+                                availability?.find(
                                     (room) => room.roomId === selectedRoom,
                                 )?.roomName
                             }

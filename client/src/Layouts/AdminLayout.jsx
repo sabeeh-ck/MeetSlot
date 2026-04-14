@@ -18,7 +18,7 @@ const AdminLayout = () => {
                     />
                 </div>
                 <div>
-                    <main>
+                    <main className="p-4">
                         <Outlet />
                     </main>
                     <div className="md:hidden">

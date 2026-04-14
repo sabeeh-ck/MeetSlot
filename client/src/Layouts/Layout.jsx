@@ -6,7 +6,9 @@ const Layout = () => (
     <>
         <Header />
         <Outlet />
-        <BottomNav />
+        <div className="lg:hidden">
+            <BottomNav />
+        </div>
     </>
 );
 

@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router";
 import { useAuth } from "../context/AuthContext";
-import { HomeIcon, LogoutIcon, UserIconOutline } from "../icons";
+import { CogIconOutline, LogoutIcon } from "../icons";
 
 const Menu = ({ setMenu }) => {
     const { logout } = useAuth();
@@ -10,6 +10,14 @@ const Menu = ({ setMenu }) => {
     const closeMenu = () => setMenu(false);
 
     const menuButtons = [
+        {
+            label: <span className="font-bold select-none">Settings</span>,
+            action: () => {
+                navigate("settings");
+                closeMenu();
+            },
+            icon: <CogIconOutline className="h-5" />,
+        },
         {
             label: (
                 <span className="text-bookedText font-bold select-none">

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import api from "../api/axios";
 import LoginForm from "../components/LoginForm";
 import { useAuth } from "../context/AuthContext";
@@ -11,9 +11,11 @@ const LoginPage = () => {
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
 
-    const { setUser } = useAuth();
+    const { user, setUser } = useAuth();
 
     const navigate = useNavigate();
+
+    if (user) return <Navigate to={user.role === "admin" ? "/admin" : "/"} />;
 
     const sendOtp = async (e) => {
         e.preventDefault();
@@ -27,11 +29,8 @@ const LoginPage = () => {
 
             setStep("otp");
         } catch (err) {
-            if (err.response?.data.msg) {
-                setError(err.response.data.msg);
-            } else {
-                console.log(err);
-            }
+            if (err.response?.data.msg) setError(err.response.data.msg);
+            else console.log(err);
         } finally {
             setLoading(false);
         }
@@ -42,11 +41,13 @@ const LoginPage = () => {
         try {
             setLoading(true);
             const res = await api.post("/auth/verify-otp", { email, otp });
+            const userData = res.data.user;
 
-            setUser(res.data.user);
-            navigate("/");
+            setUser(userData);
+
+            navigate(userData.role === "admin" ? "/admin/dashboard" : "/");
         } catch (err) {
-            if (err.response && err.response.data && err.response.data.msg) {
+            if (err.response?.data?.msg) {
                 setError(err.response.data.msg);
             } else {
                 console.log(err);

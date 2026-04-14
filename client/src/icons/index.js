@@ -1,17 +1,27 @@
 export {
     UserIcon as UserIconOutline,
+    UserGroupIcon as EmployeesOutline,
     ArrowLeftStartOnRectangleIcon as LogoutIcon,
     CalendarDaysIcon as CalendarIconOutline,
     ChevronUpDownIcon,
     Bars3Icon as MenuIcon,
-    HomeIcon,
+    HomeIcon as HomeIconOutline,
     XMarkIcon,
     CheckIcon,
+    BuildingOffice2Icon as RoomIconOutline,
+    Squares2X2Icon as DashboardIconOutline,
+    CogIcon as CogIconOutline,
 } from "@heroicons/react/24/outline";
 
 export {
+    UserGroupIcon as EmployeesSolid,
     UserIcon as UserIconSolid,
     CalendarDaysIcon as CalendarIconSolid,
-    UserGroupIcon as RoomIconSolid,
+    BuildingOffice2Icon as RoomIconSolid,
+    HomeIcon as HomeIconSolid,
+    Squares2X2Icon as DashboardIconSolid,
     ClockIcon,
+    CogIcon as CogIconSolid,
+    PlusIcon,
+    ChevronDoubleLeftIcon,
 } from "@heroicons/react/24/solid";

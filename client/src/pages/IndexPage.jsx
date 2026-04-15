@@ -36,7 +36,7 @@ const IndexPage = () => {
     const currentRoom = isLaptop ? availability[0]?.roomId : selectedRoom;
 
     return (
-        <main className="max-w-7xl">
+        <div className="w-full">
             <div>
                 <section className="bg-bg sticky top-16 z-30 flex w-full flex-col gap-4 pt-4 md:hidden">
                     <RoomSelector
@@ -81,7 +81,7 @@ const IndexPage = () => {
                     </div>
                 </section>
 
-                <div className="w-full gap-6 md:grid md:grid-cols-2 md:py-4 lg:grid-cols-3">
+                <div className="w-full gap-6 md:grid md:grid-cols-2 md:pb-4 lg:grid-cols-3">
                     {!isMobile && (
                         <aside className="sticky top-20 hidden h-fit gap-4 md:z-30 md:flex md:flex-col">
                             <h3>Create Meeting</h3>
@@ -170,7 +170,7 @@ const IndexPage = () => {
                     </BottomSheet>
                 )}
             </AnimatePresence>
-        </main>
+        </div>
     );
 };
 

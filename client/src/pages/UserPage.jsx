@@ -40,7 +40,7 @@ const UserPage = () => {
     );
 
     return (
-        <main className="p-4">
+        <div className="p-4">
             <section className="my-2 flex min-h-[70vh] flex-col gap-6">
                 <div className="">
                     <h2>My meetings</h2>
@@ -71,7 +71,7 @@ const UserPage = () => {
                     />
                 )}
             </section>
-        </main>
+        </div>
     );
 };
 

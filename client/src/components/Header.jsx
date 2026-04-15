@@ -22,7 +22,7 @@ const Header = () => {
         <>
             <header className="bg-bg border-border sticky top-0 z-70 flex h-16 w-full items-center justify-between border-b">
                 <div
-                    className={`mx-auto flex w-full items-center justify-between px-6 ${user?.role === "admin" ? "" : "max-w-7xl"}`}
+                    className={`mx-auto flex w-full items-center justify-between ${user?.role === "admin" ? "px-6" : "max-w-7xl px-4"}`}
                 >
                     <div>
                         <Link
@@ -32,20 +32,6 @@ const Header = () => {
                             MeetSlot
                         </Link>
                     </div>
-
-                    {pathname !== "/login" && (
-                        <button
-                            onClick={handleOpenMenu}
-                            className={`border-border active:bg-border flex items-center gap-2 rounded-lg border p-2 lg:px-4 ${menu ? "bg-border" : "bg-surface"}`}
-                        >
-                            {menu ? (
-                                <UserIconSolid className="h-5" />
-                            ) : (
-                                <UserIconOutline className="h-5" />
-                            )}
-                            <p className="hidden lg:block">{user.name}</p>
-                        </button>
-                    )}
                 </div>
             </header>
 

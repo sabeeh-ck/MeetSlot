@@ -25,7 +25,7 @@ const App = () => (
             <Route path="/login" element={<LoginPage />} />
 
             <Route
-                path="/user"
+                path="/my-meetings"
                 element={
                     <ProtectedRoute requiredRole="employee">
                         <UserPage />
@@ -35,11 +35,12 @@ const App = () => (
 
             <Route path="*" element={<NotFoundPage />} />
         </Route>
+
         <Route
             path="/admin"
             element={
                 <ProtectedRoute requiredRole="admin">
-                    <AdminLayout />
+                    <Layout />
                 </ProtectedRoute>
             }
         >

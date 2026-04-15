@@ -76,6 +76,7 @@ const BookingForm = ({
             } else {
                 console.log(err);
             }
+        } finally {
             setLoading(false);
         }
     };

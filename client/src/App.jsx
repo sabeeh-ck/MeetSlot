@@ -10,6 +10,10 @@ import AdminLayout from "./Layouts/AdminLayout";
 
 const App = () => (
     <Routes>
+        <Route path="/login" element={<LoginPage />} />
+
+        <Route path="*" element={<NotFoundPage />} />
+
         <Route path="/" element={<Layout />}>
             <Route index element={<Navigate to={"/home"} />} />
 
@@ -22,8 +26,6 @@ const App = () => (
                 }
             />
 
-            <Route path="/login" element={<LoginPage />} />
-
             <Route
                 path="/my-meetings"
                 element={
@@ -32,8 +34,6 @@ const App = () => (
                     </ProtectedRoute>
                 }
             />
-
-            <Route path="*" element={<NotFoundPage />} />
         </Route>
 
         <Route

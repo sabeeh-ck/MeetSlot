@@ -12,6 +12,8 @@ import connectDB from "./db.js";
 
 const app = express();
 
+const PORT = process.env.PORT || 4000;
+
 app.use(
     cors({
         origin: true,
@@ -27,7 +29,8 @@ connectDB();
 app.use("/auth", authRoutes);
 app.use("/bookings", bookingRoutes);
 app.use("/user", userRoutes);
+app.use("/admin", adminRoutes);
 
-app.listen(4000, () => {
+app.listen(PORT, () => {
     console.log("Server running on port 4000");
 });

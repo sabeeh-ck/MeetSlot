@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
+import { sendOtpEmail } from "../utils/sendEmail.js";
 
 export const getMe = async (req, res) => {
     try {
@@ -30,10 +31,15 @@ export const sendOtp = async (req, res) => {
 
     await user.save();
 
-    // TODO: send otp via email
-    console.log("OTP: ", otp);
+    try {
+        await sendOtpEmail(user.email, otp);
+        console.log("Sending OTP to:", user.email);
+        console.log("OTP: ", otp);
 
-    res.json({ msg: "OTP sent" });
+        res.json({ msg: "OTP sent" });
+    } catch (error) {
+        console.error("Email error:", error);
+    }
 };
 
 export const verifyOtp = async (req, res) => {

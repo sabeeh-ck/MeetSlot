@@ -1,8 +1,9 @@
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import User from "../models/User.js";
+import path from "path";
 
-dotenv.config();
+dotenv.config({ path: path.resolve(process.cwd(), ".env") });
 
 const seedUser = async () => {
     try {
@@ -13,6 +14,7 @@ const seedUser = async () => {
         const user = await User.create({
             email: process.env.TEST_USER_EMAIL,
             name: "Test User",
+            role: "employee",
         });
 
         console.log("✅ Test user seeded", user._id);

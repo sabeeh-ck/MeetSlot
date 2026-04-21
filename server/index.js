@@ -8,6 +8,7 @@ config();
 import authRoutes from "./routes/auth.routes.js";
 import bookingRoutes from "./routes/bookings.js";
 import userRoutes from "./routes/users.js";
+import adminRoutes from "./routes/admin.js";
 import connectDB from "./db.js";
 
 const app = express();

@@ -7,6 +7,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import NotFoundPage from "./pages/NotFoundPage";
 import UserPage from "./pages/UserPage";
 import AdminLayout from "./Layouts/AdminLayout";
+import DashboardPage from "./pages/admin/DashboardPage";
 
 const App = () => (
     <Routes>

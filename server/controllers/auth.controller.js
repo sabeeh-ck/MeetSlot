@@ -72,8 +72,8 @@ export const verifyOtp = async (req, res) => {
 export const logout = async (req, res) => {
     res.clearCookie("token", {
         httpOnly: true,
-        secure: false,
-        sameSite: "lax",
+        secure: isProd,
+        sameSite: isProd ? "none" : "lax",
     });
 
     res.status(200).json({ message: "Logged out successfully" });

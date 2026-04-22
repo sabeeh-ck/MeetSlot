@@ -9,6 +9,7 @@ import { useWindowWidth } from "../hooks/useWindowWidth";
 import { useAvailability } from "../hooks/useAvailability";
 import DateSelector from "../components/DateSelector";
 import Skeleton from "react-loading-skeleton";
+import { PlusIcon } from "../icons";
 
 const IndexPage = () => {
     const { isMobile, isLaptop } = useWindowWidth();
@@ -142,12 +143,12 @@ const IndexPage = () => {
             </div>
 
             {isMobile && selectedSlots[selectedRoom]?.length > 0 && (
-                <div className="fixed inset-x-0 bottom-10 flex w-full flex-col items-center">
+                <div className="fixed right-4 bottom-24 flex flex-col items-end">
                     <button
-                        className="bg-text text-bg rounded-xl px-4 py-2"
+                        className="bg-text text-bg drop-shadow-bg rounded-2xl p-4 drop-shadow-lg"
                         onClick={() => setSheet("form")}
                     >
-                        Create Meeting
+                        <PlusIcon className="size-8" />
                     </button>
                 </div>
             )}

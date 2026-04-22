@@ -18,15 +18,17 @@ const Header = () => {
         setMenu(true);
     };
 
+    const isAdmin = user?.role === "admin";
+
     return (
         <>
             <header className="bg-bg border-border sticky top-0 z-70 flex h-16 w-full items-center justify-between border-b">
                 <div
-                    className={`mx-auto flex w-full items-center justify-between ${user?.role === "admin" ? "px-6" : "max-w-7xl px-4"}`}
+                    className={`mx-auto flex w-full items-center justify-between px-4`}
                 >
                     <div>
                         <Link
-                            to={user?.role === "admin" ? "/admin" : "/"}
+                            to={isAdmin ? "/admin" : "/"}
                             className="text-lg font-black"
                         >
                             MeetSlot

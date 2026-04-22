@@ -5,9 +5,9 @@ import LoginPage from "./pages/LoginPage";
 import Layout from "./Layouts/Layout";
 import ProtectedRoute from "./components/ProtectedRoute";
 import NotFoundPage from "./pages/NotFoundPage";
-import UserPage from "./pages/UserPage";
 import AdminLayout from "./Layouts/AdminLayout";
 import DashboardPage from "./pages/admin/DashboardPage";
+import MyMeetingsPage from "./pages/MyMeetingsPage";
 
 const App = () => (
     <Routes>

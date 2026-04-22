@@ -11,6 +11,7 @@ export {
     BuildingOffice2Icon as RoomIconOutline,
     Squares2X2Icon as DashboardIconOutline,
     CogIcon as CogIconOutline,
+    UserCircleIcon,
 } from "@heroicons/react/24/outline";
 
 export {

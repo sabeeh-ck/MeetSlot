@@ -31,7 +31,7 @@ const App = () => (
                 path="/my-meetings"
                 element={
                     <ProtectedRoute requiredRole="employee">
-                        <UserPage />
+                        <MyMeetingsPage />
                     </ProtectedRoute>
                 }
             />

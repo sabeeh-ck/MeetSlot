@@ -60,18 +60,18 @@ const LoginPage = () => {
     return (
         <>
             <header className="bg-bg border-border fixed top-0 z-70 flex h-16 w-full items-center border-b">
-                <div className="mx-auto w-full max-w-7xl px-6">
+                <div className="mx-auto w-full max-w-7xl px-4">
                     <span className="text-lg font-black">MeetSlot</span>
                 </div>
             </header>
 
-            <main className="flex h-screen max-w-7xl flex-col justify-center">
-                <section className="flex h-40 items-center justify-center lg:justify-normal">
-                    <h1>Welcome to MeetSlot</h1>
+            <main className="flex h-dvh max-w-7xl flex-col justify-center">
+                <section className="flex h-20 items-start justify-center lg:justify-normal">
+                    <h1 className="font-semibold">Welcome to MeetSlot</h1>
                 </section>
 
                 <section className="md:mx-8 lg:mx-0">
-                    <h1>Login</h1>
+                    <h1 className="font-medium">Login</h1>
                     {step === "email" ? (
                         <LoginForm
                             step="email"

@@ -64,7 +64,7 @@ const BookingsList = ({ bookings, isPast, refetch }) => {
                         <section key={date}>
                             <p className="mb-2 font-bold">{date}</p>
 
-                            <div className="grid grid-cols-2 gap-4">
+                            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                                 {groupedBookings[date].map((booking) => (
                                     <BookingCard
                                         key={booking._id}

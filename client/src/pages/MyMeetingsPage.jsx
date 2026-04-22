@@ -4,7 +4,7 @@ import BookingsList from "../components/BookingsList";
 import { useAuth } from "../context/AuthContext";
 import { useBookings } from "../hooks/useBookings";
 
-const UserPage = () => {
+const MyMeetingsPage = () => {
     const { user } = useAuth();
     const { bookings, loading, refetch } = useBookings(user._id);
 
@@ -40,7 +40,7 @@ const UserPage = () => {
     );
 
     return (
-        <div className="p-4">
+        <div className="lg:p-4">
             <section className="my-2 flex min-h-[70vh] flex-col gap-6">
                 <div className="">
                     <h2>My meetings</h2>
@@ -75,4 +75,4 @@ const UserPage = () => {
     );
 };
 
-export default UserPage;
+export default MyMeetingsPage;

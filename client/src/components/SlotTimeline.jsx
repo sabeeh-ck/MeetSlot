@@ -74,8 +74,9 @@ const SlotTimeline = ({
                   const startDate = new Date(b.start);
                   const endDate = new Date(b.end);
                   const startMin =
-                      startDate.getHours() * 60 + startDate.getMinutes();
-                  const endMin = endDate.getHours() * 60 + endDate.getMinutes();
+                      startDate.getUTCHours() * 60 + startDate.getUTCMinutes();
+                  const endMin =
+                      endDate.getUTCHours() * 60 + endDate.getUTCMinutes();
 
                   let slots = [];
                   let cur = startMin;

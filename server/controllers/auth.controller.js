@@ -2,6 +2,8 @@ import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 import { sendOtpEmail } from "../utils/sendEmail.js";
 
+const isProd = process.env.ENV === "prod";
+
 export const getMe = async (req, res) => {
     try {
         res.set("Cache-Control", "no-store");
@@ -62,8 +64,8 @@ export const verifyOtp = async (req, res) => {
 
     res.cookie("token", token, {
         httpOnly: true,
-        secure: false,
-        sameSite: "lax",
+        secure: isProd,
+        sameSite: isProd ? "none" : "lax",
     }).json({ msg: "Login successfull", user });
 };
 

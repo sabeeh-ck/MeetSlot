@@ -26,11 +26,11 @@ const BookingCard = ({
     };
 
     const startTime = minutesTo12Hour(
-        new Date(start).getHours() * 60 + new Date(start).getMinutes(),
+        new Date(start).getUTCHours() * 60 + new Date(start).getUTCMinutes(),
     );
 
     const endTime = minutesTo12Hour(
-        new Date(end).getHours() * 60 + new Date(end).getMinutes(),
+        new Date(end).getUTCHours() * 60 + new Date(end).getUTCMinutes(),
     );
 
     const handleCancel = async (_id) => {

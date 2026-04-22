@@ -4,8 +4,10 @@ import { ChevronDoubleLeftIcon, LogoutIcon, PlusIcon } from "../icons";
 import Nav from "./Nav";
 
 const SideBar = ({ activeTab, setSearchParams }) => {
-    const { user } = useAuth();
+    const { user, logout } = useAuth();
     const navigate = useNavigate();
+
+    const isAdmin = user?.role === "admin";
 
     return (
         <div className="flex h-full flex-col justify-between">
@@ -15,7 +17,7 @@ const SideBar = ({ activeTab, setSearchParams }) => {
                 <div
                     className={`border-border flex w-full flex-col items-center gap-4 border-t py-10`}
                 >
-                    {user?.role === "admin" && (
+                    {isAdmin && (
                         <button
                             onClick={() => navigate("/admin/new-meeting")}
                             className="active:bg-textmute md:hover:bg-textmute bg-text text-bg flex w-40 items-center justify-center gap-2 rounded-lg p-2"
@@ -25,7 +27,13 @@ const SideBar = ({ activeTab, setSearchParams }) => {
                         </button>
                     )}
 
-                    <button className="active:bg-bookedBg md:hover:bg-bookedBg text-bookedText border-bookedBorder flex w-40 items-center justify-center gap-2 rounded-lg border p-2">
+                    <button
+                        onClick={() => {
+                            logout();
+                            navigate("/login");
+                        }}
+                        className="active:bg-bookedBg md:hover:bg-bookedBg text-bookedText border-bookedBorder flex w-40 items-center justify-center gap-2 rounded-lg border p-2"
+                    >
                         <LogoutIcon className="h-5" />
                         <p className="select-none">Log Out</p>
                     </button>

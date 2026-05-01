@@ -28,7 +28,7 @@ const Header = () => {
                 >
                     <div>
                         <Link
-                            to={isAdmin ? "/admin" : "/"}
+                            to={isAdmin ? "/admin" : "/home"}
                             className="text-lg font-black"
                         >
                             MeetSlot

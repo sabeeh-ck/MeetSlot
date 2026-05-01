@@ -16,7 +16,7 @@ const App = () => (
         <Route path="*" element={<NotFoundPage />} />
 
         <Route path="/" element={<Layout />}>
-            <Route index element={<Navigate to={"/home"} />} />
+            <Route index element={<Navigate to={"/login"} />} />
 
             <Route
                 path="/home"

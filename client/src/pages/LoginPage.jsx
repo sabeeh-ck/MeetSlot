@@ -15,7 +15,12 @@ const LoginPage = () => {
 
     const navigate = useNavigate();
 
-    if (user) return <Navigate to={user.role === "admin" ? "/admin" : "/"} />;
+    if (user)
+        return (
+            <Navigate
+                to={user.role === "admin" ? "/admin/dashboard" : "/home"}
+            />
+        );
 
     const sendOtp = async (e) => {
         e.preventDefault();
@@ -45,7 +50,7 @@ const LoginPage = () => {
 
             setUser(userData);
 
-            navigate(userData.role === "admin" ? "/admin/dashboard" : "/");
+            navigate(userData.role === "admin" ? "/admin/dashboard" : "/home");
         } catch (err) {
             if (err.response?.data?.msg) {
                 setError(err.response.data.msg);

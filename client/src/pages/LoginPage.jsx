@@ -34,7 +34,7 @@ const LoginPage = () => {
 
             setStep("otp");
         } catch (err) {
-            if (err.response?.data.msg) setError(err.response.data.msg);
+            if (err.response?.data?.msg) setError(err.response.data.msg);
             else console.log(err);
         } finally {
             setLoading(false);
@@ -52,11 +52,8 @@ const LoginPage = () => {
 
             navigate(userData.role === "admin" ? "/admin/dashboard" : "/home");
         } catch (err) {
-            if (err.response?.data?.msg) {
-                setError(err.response.data.msg);
-            } else {
-                console.log(err);
-            }
+            if (err.response?.data?.msg) setError(err.response.data.msg);
+            else console.log(err);
         } finally {
             setLoading(false);
         }

@@ -34,13 +34,19 @@ export const sendOtp = async (req, res) => {
     await user.save();
 
     try {
-        await sendOtpEmail(user.email, otp);
-        console.log("Sending OTP to:", user.email);
-        console.log("OTP: ", otp);
+        const success = await sendOtpEmail(user.email, otp);
 
-        res.json({ msg: "OTP sent" });
+        if (!success) {
+            return res.status(500).json({ msg: "Failed to send OTP" });
+        }
+
+        console.log("Sending OTP to:", user.email);
+        console.log("OTP:", otp);
+
+        return res.json({ msg: "OTP sent" });
     } catch (error) {
         console.error("Email error:", error);
+        return res.status(500).json({ msg: "Something went wrong" });
     }
 };
 

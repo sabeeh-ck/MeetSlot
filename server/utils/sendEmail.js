@@ -13,16 +13,19 @@ const transporter = nodemailer.createTransport({
 
 export const sendOtpEmail = async (to, otp) => {
     try {
-        await transporter.sendMail({
+        console.log("Trying to send email...");
+
+        const info = await transporter.sendMail({
             from: `"MeetSlot" <${process.env.EMAIL_USER}>`,
             to,
             subject: "Your OTP Code",
             text: `Your OTP is ${otp}. It expires in 5 minutes.`,
         });
 
+        console.log("Email sent:", info.response);
         return true;
     } catch (error) {
-        console.error("Email error:", error);
+        console.error("FULL EMAIL ERROR:", error);
         return false;
     }
 };

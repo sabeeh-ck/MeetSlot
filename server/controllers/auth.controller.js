@@ -3,6 +3,7 @@ import User from "../models/User.js";
 import { sendOtpEmail } from "../utils/sendEmail.js";
 
 const isProd = process.env.ENV === "prod";
+const isDemo = process.env.DEMO_MODE === "true";
 
 export const getMe = async (req, res) => {
     try {
@@ -22,7 +23,7 @@ export const sendOtp = async (req, res) => {
     const { email } = req.body;
 
     const user = await User.findOne({ email });
-    if (!user) return res.status(401).json({ msg: "Not authorised. Contact admin" });
+    if (!user) return res.status(401).json({ msg: "Not authorised. Contact admin!" });
 
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
 
@@ -32,6 +33,15 @@ export const sendOtp = async (req, res) => {
     };
 
     await user.save();
+
+    if (process.env.DEMO_MODE === "true") {
+        console.log("OTP (demo):", otp);
+
+        return res.json({
+            msg: "OTP generated (demo mode)",
+            otp,
+        });
+    }
 
     try {
         const success = await sendOtpEmail(user.email, otp);

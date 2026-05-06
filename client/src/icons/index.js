@@ -25,4 +25,5 @@ export {
     CogIcon as CogIconSolid,
     PlusIcon,
     ChevronDoubleLeftIcon,
+    InformationCircleIcon,
 } from "@heroicons/react/24/solid";

@@ -3,6 +3,7 @@ import { Navigate, useNavigate } from "react-router-dom";
 import api from "../api/axios";
 import LoginForm from "../components/LoginForm";
 import { useAuth } from "../context/AuthContext";
+import DemoHint from "../components/DemoHint";
 
 const LoginPage = () => {
     const [email, setEmail] = useState("");
@@ -28,11 +29,15 @@ const LoginPage = () => {
             setLoading(true);
             setError("");
 
-            await api.post("/auth/send-otp", {
+            const res = await api.post("/auth/send-otp", {
                 email,
             });
 
             setStep("otp");
+
+            if (res.data.otp) {
+                setOtp(res.data.otp);
+            }
         } catch (err) {
             if (err.response?.data?.msg) setError(err.response.data.msg);
             else console.log(err);
@@ -95,6 +100,8 @@ const LoginPage = () => {
                         />
                     )}
                 </section>
+
+                <DemoHint setEmail={setEmail} />
             </main>
         </>
     );

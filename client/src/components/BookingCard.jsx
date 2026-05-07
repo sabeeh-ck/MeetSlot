@@ -72,7 +72,7 @@ const BookingCard = ({
     return (
         <div
             key={_id}
-            className="bg-surface border-border flex justify-between rounded-xl border p-4"
+            className="bg-surface border-border flex h-28 items-center justify-between rounded-xl border p-4 lg:h-33"
         >
             <div className="flex flex-col gap-1">
                 <h2 className="font-medium">{title}</h2>

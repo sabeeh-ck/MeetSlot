@@ -14,7 +14,7 @@ const Layout = () => {
             <Header />
 
             {!loading && (
-                <div className="bg-bg border-border fixed top-16 left-0 z-40 hidden h-[calc(100vh-64px)] w-64 border-r lg:block">
+                <div className="bg-bg border-border fixed top-16 left-0 z-40 hidden h-[calc(100dvh-64px)] w-64 border-r lg:block">
                     <SideBar
                         activeTab={activeTab}
                         setSearchParams={setSearchParams}
@@ -23,7 +23,7 @@ const Layout = () => {
             )}
 
             <div className="lg:ml-64">
-                <main className="min-h-[calc(vh-64px)] pb-20 md:p-4 lg:min-h-screen">
+                <main className="min-h-[calc(100dvh-64px)] pt-4 pb-20 lg:pt-0">
                     <Outlet />
                 </main>
 

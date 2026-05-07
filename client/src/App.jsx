@@ -8,6 +8,7 @@ import NotFoundPage from "./pages/NotFoundPage";
 import AdminLayout from "./Layouts/AdminLayout";
 import DashboardPage from "./pages/admin/DashboardPage";
 import MyMeetingsPage from "./pages/MyMeetingsPage";
+import UserPage from "./pages/UserPage";
 
 const App = () => (
     <Routes>
@@ -35,6 +36,15 @@ const App = () => (
                     </ProtectedRoute>
                 }
             />
+
+            <Route
+                path="/user"
+                element={
+                    <ProtectedRoute requiredRole="employee">
+                        <UserPage />
+                    </ProtectedRoute>
+                }
+            />
         </Route>
 
         <Route
@@ -47,6 +57,7 @@ const App = () => (
         >
             <Route index element={<Navigate to="/admin/dashboard" />} />
             <Route path="dashboard" element={<DashboardPage />} />
+            <Route path="user" element={<UserPage />} />
         </Route>
     </Routes>
 );

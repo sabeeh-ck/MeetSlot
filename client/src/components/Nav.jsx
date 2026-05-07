@@ -16,6 +16,7 @@ import {
     UserIconSolid,
 } from "../icons";
 import { useAuth } from "../context/AuthContext";
+import { useWindowWidth } from "../hooks/useWindowWidth";
 
 const NAV_ITEMS = {
     employee: [
@@ -30,6 +31,12 @@ const NAV_ITEMS = {
             outline: EmployeesOutline,
             solid: EmployeesSolid,
             path: "/my-meetings",
+        },
+        {
+            name: "User",
+            outline: UserIconOutline,
+            solid: UserIconSolid,
+            path: "/user",
         },
     ],
     admin: [
@@ -46,22 +53,23 @@ const NAV_ITEMS = {
             path: "/admin/bookings",
         },
         {
-            name: "Rooms",
+            name: "Manage",
             outline: RoomIconOutline,
             solid: RoomIconSolid,
-            path: "/admin/rooms",
+            path: "/admin/manage",
         },
         {
-            name: "Users",
-            outline: EmployeesOutline,
-            solid: EmployeesSolid,
-            path: "/admin/users",
+            name: "User",
+            outline: UserIconOutline,
+            solid: UserIconSolid,
+            path: "/admin/user",
         },
     ],
 };
 
 const Nav = () => {
     const { user } = useAuth();
+    const { isLaptop } = useWindowWidth();
 
     const items = NAV_ITEMS[user?.role];
 
@@ -69,6 +77,8 @@ const Nav = () => {
         <nav className="z-60 flex h-full items-start justify-between gap-2 font-semibold lg:flex-col">
             <div className="flex w-full gap-2 lg:flex-col">
                 {items?.map(({ name, path, solid, outline }) => {
+                    if (isLaptop && name === "User") return;
+
                     return (
                         <NavLink
                             key={name}

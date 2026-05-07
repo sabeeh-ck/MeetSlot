@@ -11,7 +11,7 @@ export {
     BuildingOffice2Icon as RoomIconOutline,
     Squares2X2Icon as DashboardIconOutline,
     CogIcon as CogIconOutline,
-    UserCircleIcon,
+    UserCircleIcon as UserCircleOutline,
 } from "@heroicons/react/24/outline";
 
 export {
@@ -26,4 +26,5 @@ export {
     PlusIcon,
     ChevronDoubleLeftIcon,
     InformationCircleIcon,
+    UserCircleIcon as UserCircleSolid,
 } from "@heroicons/react/24/solid";

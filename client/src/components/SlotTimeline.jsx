@@ -148,7 +148,7 @@ const SlotTimeline = ({
                 </div>
             ) : (
                 <>
-                    <h3 className="hidden md:flex">
+                    <h3 className="bg-bg sticky top-0 z-30 hidden pt-4 md:flex">
                         {
                             availability?.find(
                                 (room) => room.roomId === currentRoom,

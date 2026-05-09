@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@plugin "tailwind-scrollbar";
+
 @theme {
     --font-google: "Google Sans", sans-serif;
     --color-bg: hsl(0, 0%, 2%);

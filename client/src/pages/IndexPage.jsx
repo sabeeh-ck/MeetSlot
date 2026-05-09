@@ -99,7 +99,8 @@ const IndexPage = () => {
                             />
                         </aside>
                     )}
-                    <div className="flex gap-4 lg:col-span-2 lg:snap-x lg:snap-mandatory lg:overflow-x-auto">
+
+                    <div className="scrollbar-thin scrollbar-track-surface scrollbar-thumb-border flex items-start gap-4 overflow-y-auto lg:col-span-2 lg:h-[calc(100dvh-80px)] lg:snap-x lg:snap-mandatory lg:overflow-x-auto">
                         <SlotTimeline
                             key={
                                 isLaptop

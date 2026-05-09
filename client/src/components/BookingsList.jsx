@@ -18,7 +18,7 @@ const BookingsList = ({ bookings, isPast, refetch }) => {
     });
 
     const sortedBookings = [...bookings].sort(
-        (a, b) => new Date(b.start) - new Date(a.start),
+        (a, b) => new Date(a.start) - new Date(b.start),
     );
 
     const groupedBookings =
@@ -43,9 +43,9 @@ const BookingsList = ({ bookings, isPast, refetch }) => {
         }, {});
 
     return (
-        <div className="flex flex-1 flex-col gap-6">
+        <div className="flex h-full flex-1 flex-col gap-6">
             {bookings?.length === 0 ? (
-                <div className="mx-auto my-auto flex flex-col items-center gap-2">
+                <div className="mx-auto my-auto flex flex-col items-center justify-center gap-2">
                     <p className="text-textmute">
                         {isPast
                             ? "No booking history found."

@@ -23,7 +23,7 @@ const Layout = () => {
             )}
 
             <div className="lg:ml-64">
-                <main className="min-h-[calc(100dvh-64px)] pt-4 pb-20 lg:pt-0">
+                <main className="flex min-h-[calc(100dvh-64px)] flex-col pb-20 lg:py-0">
                     <Outlet />
                 </main>
 

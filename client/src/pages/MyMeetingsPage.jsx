@@ -45,8 +45,8 @@ const MyMeetingsPage = () => {
     );
 
     return (
-        <div className="lg:p-4">
-            <section className="my-2 flex flex-col gap-6">
+        <div className="my-4 flex flex-1 flex-col">
+            <section className="flex flex-1 flex-col gap-6">
                 <div className="">
                     <h2>My meetings</h2>
                 </div>

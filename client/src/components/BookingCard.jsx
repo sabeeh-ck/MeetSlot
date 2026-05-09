@@ -35,11 +35,11 @@ const BookingCard = ({
 
     const handleCancel = async (_id) => {
         try {
+            setMenu(false);
             setDeleting(true);
 
             await api.delete(`/user/delete/${_id}`);
 
-            setMenu(false);
             setDeleting(false);
             refetch();
         } catch (error) {

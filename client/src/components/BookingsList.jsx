@@ -17,8 +17,10 @@ const BookingsList = ({ bookings, isPast, refetch }) => {
         year: "numeric",
     });
 
-    const sortedBookings = [...bookings].sort(
-        (a, b) => new Date(a.start) - new Date(b.start),
+    const sortedBookings = [...bookings].sort((a, b) =>
+        isPast
+            ? new Date(b.start) - new Date(a.start)
+            : new Date(a.start) - new Date(b.start),
     );
 
     const groupedBookings =

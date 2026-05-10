@@ -7,6 +7,8 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import NotFoundPage from "./pages/NotFoundPage";
 import AdminLayout from "./Layouts/AdminLayout";
 import DashboardPage from "./pages/admin/DashboardPage";
+import BookingsPage from "./pages/admin/BookingsPage";
+import ManagePage from "./pages/admin/ManagePage";
 import MyMeetingsPage from "./pages/MyMeetingsPage";
 import UserPage from "./pages/UserPage";
 
@@ -57,6 +59,8 @@ const App = () => (
         >
             <Route index element={<Navigate to="/admin/dashboard" />} />
             <Route path="dashboard" element={<DashboardPage />} />
+            <Route path="bookings" element={<BookingsPage />} />
+            <Route path="manage" element={<ManagePage />} />
             <Route path="user" element={<UserPage />} />
         </Route>
     </Routes>

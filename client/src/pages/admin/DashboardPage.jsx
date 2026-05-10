@@ -1,7 +1,7 @@
 const DashboardPage = () => {
     return (
-        <div>
-            <h2>Dashboard Summary</h2>
+        <div className="flex flex-col gap-8">
+            <h2>Dashboard (WIP)</h2>
         </div>
     );
 };

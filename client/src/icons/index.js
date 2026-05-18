@@ -12,6 +12,7 @@ export {
     Squares2X2Icon as DashboardIconOutline,
     CogIcon as CogIconOutline,
     UserCircleIcon as UserCircleOutline,
+    ArrowUpRightIcon,
 } from "@heroicons/react/24/outline";
 
 export {

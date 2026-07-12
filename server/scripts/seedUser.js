@@ -6,13 +6,15 @@ import path from "path";
 dotenv.config({ path: path.resolve(process.cwd(), ".env") });
 
 const seedUser = async () => {
+    const userEmail = process.env.TEST_USER_EMAIL;
+
     try {
         await mongoose.connect(process.env.MONGO_URI);
 
-        await User.deleteMany({ email: process.env.TEST_USER_EMAIL });
+        await User.deleteMany({ email: userEmail });
 
         const user = await User.create({
-            email: process.env.TEST_USER_EMAIL,
+            email: userEmail,
             name: "Test User",
             role: "employee",
         });

@@ -2,9 +2,6 @@ import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 import { sendOtpEmail } from "../utils/sendEmail.js";
 
-const isProd = process.env.ENV === "prod";
-const isDemo = process.env.DEMO_MODE === "true";
-
 export const getMe = async (req, res) => {
     try {
         res.set("Cache-Control", "no-store");
@@ -20,6 +17,8 @@ export const getMe = async (req, res) => {
 };
 
 export const sendOtp = async (req, res) => {
+    const isDemo = process.env.DEMO_MODE === "true";
+
     const { email } = req.body;
 
     const user = await User.findOne({ email });
@@ -34,26 +33,26 @@ export const sendOtp = async (req, res) => {
 
     await user.save();
 
-    if (process.env.DEMO_MODE === "true") {
-        console.log("OTP (demo):", otp);
-
-        return res.json({
-            msg: "OTP generated (demo mode)",
-            otp,
-        });
-    }
-
     try {
-        const success = await sendOtpEmail(user.email, otp);
+        if (isDemo) {
+            console.log("OTP (demo):", otp);
 
-        if (!success) {
-            return res.status(500).json({ msg: "Failed to send OTP" });
+            return res.json({
+                msg: "OTP generated (demo mode)",
+                otp,
+            });
+        } else {
+            const success = await sendOtpEmail(user.email, otp);
+
+            if (!success) {
+                return res.status(500).json({ msg: "Failed to send OTP" });
+            }
+
+            console.log("Sending OTP to:", user.email);
+            console.log("OTP:", otp);
+
+            return res.json({ msg: "OTP sent" });
         }
-
-        console.log("Sending OTP to:", user.email);
-        console.log("OTP:", otp);
-
-        return res.json({ msg: "OTP sent" });
     } catch (error) {
         console.error("Email error:", error);
         return res.status(500).json({ msg: "Something went wrong" });
@@ -61,6 +60,8 @@ export const sendOtp = async (req, res) => {
 };
 
 export const verifyOtp = async (req, res) => {
+    const isProd = process.env.ENV === "prod";
+
     const { email, otp } = req.body;
     if (!email || !otp) return res.status(400).json({ msg: "Missing email or otp" });
 
@@ -86,6 +87,8 @@ export const verifyOtp = async (req, res) => {
 };
 
 export const logout = async (req, res) => {
+    const isProd = process.env.ENV === "prod";
+
     res.clearCookie("token", {
         httpOnly: true,
         secure: isProd,

@@ -4,7 +4,7 @@ import TodaysMeetings from "../../components/admin/TodaysMeetings";
 import api from "../../api/axios";
 
 const DashboardPage = () => {
-    const [data, setData] = useState([]);
+    const [data, setData] = useState({});
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {

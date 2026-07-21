@@ -1,5 +1,6 @@
 import { Router } from "express";
 import Booking from "../models/Booking.js";
+import Room from "../models/Room.js";
 import User from "../models/User.js";
 
 const router = Router();
@@ -12,17 +13,38 @@ router.get("/dashboard", async (req, res) => {
         const endOfDay = new Date();
         endOfDay.setHours(23, 59, 59, 999);
 
-        const [totalBookings, masterSchedule, users, recentActivity] = await Promise.all([
-            Booking.countDocuments({ start: { $gte: startOfDay, $lte: endOfDay } }),
+        const now = new Date();
 
-            Booking.find({ start: { $gte: startOfDay, $lte: endOfDay } })
-                .populate("roomId", "name")
-                .populate("user", "name email"),
-        ]);
+        const [totalBookingsToday, totalRooms, totalUsers, upcomingBookings, masterSchedule, recentActivity] =
+            await Promise.all([
+                Booking.countDocuments({
+                    start: { $gte: startOfDay, $lte: endOfDay },
+                }),
+
+                Room.countDocuments(),
+
+                User.countDocuments(),
+
+                Booking.countDocuments({ start: { $gte: now } }),
+
+                Booking.find({ start: { $gte: startOfDay, $lte: endOfDay } })
+                    .populate("roomId", "name")
+                    .populate("user", "name email"),
+
+                Booking.find({})
+                    .sort({ createdAt: -1 })
+                    .limit(5)
+                    .populate("roomId", "name")
+                    .populate("user", "name email"),
+            ]);
 
         res.status(200).json({
-            totalBookings,
+            totalBookingsToday,
+            totalRooms,
+            totalUsers,
+            upcomingBookings,
             masterSchedule,
+            recentActivity,
         });
     } catch (error) {
         res.status(500).json({

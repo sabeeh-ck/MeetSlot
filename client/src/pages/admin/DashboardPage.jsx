@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import StatCards from "../../components/admin/StatCards";
-import TodaysMeetings from "../../components/admin/TodaysMeetings";
 import api from "../../api/axios";
 import RecentActivity from "../../components/admin/RecentActivity";
+import TodaysBookings from "../../components/admin/TodaysBookings";
 
 const DashboardPage = () => {
     const [data, setData] = useState({});
@@ -11,18 +11,18 @@ const DashboardPage = () => {
     const recentActivity = data?.recentActivity ?? [];
     const masterSchedule = data?.masterSchedule ?? [];
 
-    useEffect(() => {
-        const fetchDashboard = async () => {
-            try {
-                const res = await api.get("/admin/dashboard");
-                setData(res.data);
-            } catch (error) {
-                console.log(error);
-            } finally {
-                setLoading(false);
-            }
-        };
+    const fetchDashboard = async () => {
+        try {
+            const res = await api.get("/admin/dashboard");
+            setData(res.data);
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
+    useEffect(() => {
         fetchDashboard();
     }, []);
 
@@ -36,7 +36,10 @@ const DashboardPage = () => {
 
                 <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
                     <div className="lg:col-span-2">
-                        <TodaysMeetings data={masterSchedule} />
+                        <TodaysBookings
+                            data={masterSchedule}
+                            refetch={fetchDashboard}
+                        />
                     </div>
 
                     <div className="lg:col-span-1">

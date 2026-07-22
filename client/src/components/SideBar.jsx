@@ -11,7 +11,7 @@ const SideBar = ({ activeTab, setSearchParams }) => {
 
     return (
         <div className="flex h-full flex-col justify-between">
-            <div className="flex h-full flex-col p-4">
+            <div className="flex h-full flex-col p-4 pb-0">
                 <Nav activeTab={activeTab} setSearchParams={setSearchParams} />
 
                 <div

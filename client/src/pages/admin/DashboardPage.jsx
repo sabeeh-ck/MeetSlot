@@ -27,17 +27,18 @@ const DashboardPage = () => {
     }, []);
 
     return (
-        <section className="my-4 flex flex-col gap-4">
+        <section className="m-4 flex flex-col gap-4">
             <h2 className="font-semibold">Dashboard Summary</h2>
             <div className="flex flex-col gap-6">
                 <div>
-                    <StatCards data={data} />
+                    <StatCards data={data} loading={loading} />
                 </div>
 
                 <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
                     <div className="lg:col-span-2">
                         <TodaysBookings
                             data={masterSchedule}
+                            loading={loading}
                             refetch={fetchDashboard}
                         />
                     </div>

@@ -1,7 +1,8 @@
 import { Link } from "react-router";
 import { ArrowUpRightIcon } from "../../icons";
+import Skeleton from "react-loading-skeleton";
 
-const StatCards = ({ data }) => {
+const StatCards = ({ data, loading }) => {
     const cardDetails = [
         {
             title: "Today's Bookings",
@@ -27,17 +28,24 @@ const StatCards = ({ data }) => {
 
     return (
         <div className="grid w-full grid-cols-1 gap-4 lg:grid-cols-4">
-            {cardDetails.map(({ title, value, path }) => (
-                <Link key={title} to={path} className="cursor-pointer">
-                    <div className="border-border active:bg-border bg-surface lg:hover:bg-border flex w-full flex-col gap-2 rounded-xl border p-4">
+            {cardDetails.map(({ title, value, path }) => {
+                if (loading)
+                    return <Skeleton className="h-27.5" borderRadius={12} />;
+
+                return (
+                    <Link
+                        key={title}
+                        to={path}
+                        className="border-border active:bg-border bg-surface lg:hover:bg-border flex h-27.5 w-full cursor-pointer flex-col justify-center gap-2 rounded-xl border px-4"
+                    >
                         <div className="flex justify-between">
                             <span className="text-lg">{title}</span>
                             <ArrowUpRightIcon className="size-4" />
                         </div>
                         <span className="text-4xl font-bold">{value}</span>
-                    </div>
-                </Link>
-            ))}
+                    </Link>
+                );
+            })}
         </div>
     );
 };

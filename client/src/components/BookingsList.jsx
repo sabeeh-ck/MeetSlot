@@ -1,7 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import BookingCard from "./BookingCard";
+import Skeleton from "react-loading-skeleton";
 
-const BookingsList = ({ bookings, isPast, refetch }) => {
+const BookingsList = ({ bookings, isPast, loading, refetch }) => {
     const navigate = useNavigate();
 
     const today = new Date().toLocaleDateString("en-US", {
@@ -45,8 +46,16 @@ const BookingsList = ({ bookings, isPast, refetch }) => {
         }, {});
 
     return (
-        <div className="flex h-full flex-1 flex-col gap-6">
-            {bookings?.length === 0 ? (
+        <div className="mx-4 flex h-full flex-1 flex-col gap-6 lg:my-4 lg:h-auto">
+            {loading ? (
+                <div className="mx-4 flex flex-col gap-4">
+                    <Skeleton height={24} width={160} borderRadius={8} />
+                    <div className="grid gap-4 md:grid-cols-2">
+                        <Skeleton height={132} borderRadius={12} />
+                        <Skeleton height={132} borderRadius={12} />
+                    </div>
+                </div>
+            ) : bookings?.length === 0 ? (
                 <div className="mx-auto my-auto flex flex-col items-center justify-center gap-2">
                     <p className="text-textmute">
                         {isPast

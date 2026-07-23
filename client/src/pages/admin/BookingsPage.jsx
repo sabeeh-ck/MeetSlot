@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import Skeleton from "react-loading-skeleton";
 import BookingsList from "../../components/BookingsList";
 import api from "../../api/axios";
 
@@ -28,41 +27,39 @@ const BookingsPage = () => {
     const past = bookings.filter((booking) => new Date(booking.end) <= now);
 
     return (
-        <section className="my-4 flex flex-col gap-4">
-            <div className="flex items-center justify-between">
-                <h2 className="font-semibold">Bookings</h2>
-            </div>
-
-            <div className="border-border bg-surface flex gap-1 rounded-xl border p-1">
-                <button
-                    onClick={() => setView("upcoming")}
-                    className={`flex flex-1 items-center justify-center rounded-lg py-2 text-sm font-medium transition-all ${view === "upcoming" ? "bg-text text-bg shadow" : "text-textmute active:bg-border md:hover:bg-border"}`}
-                >
-                    Upcoming ({upcoming.length})
-                </button>
-                <button
-                    onClick={() => setView("past")}
-                    className={`flex flex-1 items-center justify-center rounded-lg py-2 text-sm font-medium transition-all ${view === "past" ? "bg-text text-bg shadow" : "active:bg-border text-textmute md:hover:bg-border"}`}
-                >
-                    Past ({past.length})
-                </button>
-            </div>
-
-            {loading ? (
-                <div className="flex flex-col gap-4">
-                    <Skeleton height={24} width={160} borderRadius={8} />
-                    <div className="grid gap-4 md:grid-cols-2">
-                        <Skeleton height={132} borderRadius={12} />
-                        <Skeleton height={132} borderRadius={12} />
-                    </div>
+        <section className="flex w-full flex-1 flex-col gap-4 lg:flex-row lg:gap-0">
+            <div className="lg:border-border flex flex-col gap-4 lg:w-64 lg:border-r">
+                <div className="mx-4 mt-4 flex items-center justify-between">
+                    <h2 className="font-semibold">Bookings</h2>
                 </div>
-            ) : (
-                <BookingsList
-                    bookings={view === "upcoming" ? upcoming : past}
-                    isPast={view === "past"}
-                    refetch={fetchBookings}
-                />
-            )}
+
+                <div className="border-border bg-surface lg:bg-bg mx-4 flex gap-1 rounded-xl border p-1 lg:flex-col lg:gap-2 lg:border-0 lg:p-0">
+                    <button
+                        onClick={() => setView("upcoming")}
+                        className={`flex flex-1 items-center justify-center gap-1 rounded-lg py-2 text-sm font-medium transition-all lg:justify-between lg:px-2 ${view === "upcoming" ? "bg-text text-bg lg:text-text lg:bg-border shadow lg:shadow-none" : "lg:text-text text-textmute active:bg-border lg:hover:bg-border"}`}
+                    >
+                        <span>Upcoming</span>
+                        <span className="lg:hidden">-</span>
+                        <span>{upcoming.length}</span>
+                    </button>
+
+                    <button
+                        onClick={() => setView("past")}
+                        className={`flex flex-1 items-center justify-center gap-1 rounded-lg py-2 text-sm font-medium transition-all lg:justify-between lg:px-2 ${view === "past" ? "bg-text text-bg lg:text-text lg:bg-border shadow lg:shadow-none" : "lg:text-text active:bg-border text-textmute lg:hover:bg-border"}`}
+                    >
+                        <span>Past</span>
+                        <span className="lg:hidden">-</span>
+                        <span>{past.length}</span>
+                    </button>
+                </div>
+            </div>
+
+            <BookingsList
+                loading={loading}
+                bookings={view === "upcoming" ? upcoming : past}
+                isPast={view === "past"}
+                refetch={fetchBookings}
+            />
         </section>
     );
 };

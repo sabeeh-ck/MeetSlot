@@ -54,4 +54,17 @@ router.get("/dashboard", async (req, res) => {
     }
 });
 
+router.get("/bookings", async (req, res) => {
+    try {
+        const bookings = await Booking.find({})
+            .sort({ start: 1 })
+            .populate("roomId", "name")
+            .populate("user", "name email");
+
+        res.status(200).json(bookings);
+    } catch (error) {
+        res.status(500).json({ message: "Failed to fetch admin bookings", error: error.message });
+    }
+});
+
 export default router;

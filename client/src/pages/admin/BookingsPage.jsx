@@ -27,8 +27,8 @@ const BookingsPage = () => {
     const past = bookings.filter((booking) => new Date(booking.end) <= now);
 
     return (
-        <section className="flex w-full flex-1 flex-col gap-4 lg:flex-row lg:gap-0">
-            <div className="lg:border-border flex flex-col gap-4 lg:w-64 lg:border-r">
+        <section className="flex w-full flex-1 flex-col gap-6 lg:flex-row lg:gap-0">
+            <div className="lg:border-border flex flex-col gap-5 lg:fixed lg:h-full lg:w-64 lg:border-r">
                 <div className="mx-4 mt-4 flex items-center justify-between">
                     <h2 className="font-semibold">Bookings</h2>
                 </div>

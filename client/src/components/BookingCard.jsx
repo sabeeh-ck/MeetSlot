@@ -51,10 +51,10 @@ const BookingCard = ({
     return (
         <div
             key={_id}
-            className="bg-surface border-border flex h-28 items-center justify-between rounded-xl border p-4 lg:h-33"
+            className="bg-surface border-border flex h-29.5 items-center justify-between rounded-xl border p-4 lg:h-33"
         >
-            <div className="flex flex-col gap-1">
-                <h2 className="font-medium">{title}</h2>
+            <div className="flex flex-col gap-2">
+                <h2 className="font-medium capitalize">{title}</h2>
                 <div className="flex items-center gap-2">
                     <ClockIcon className="h-4" />
                     <p>{`${startTime} - ${endTime}`}</p>

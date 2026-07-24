@@ -73,11 +73,11 @@ const LoginPage = () => {
             </header>
 
             <main className="flex h-dvh max-w-7xl flex-col justify-center">
-                <section className="flex h-20 items-start justify-center lg:justify-normal">
+                <section className="mx-4 flex h-20 items-start justify-center lg:justify-normal">
                     <h1 className="font-semibold">Welcome to MeetSlot</h1>
                 </section>
 
-                <section className="md:mx-8 lg:mx-0">
+                <section className="mx-4">
                     <h1 className="font-medium">Login</h1>
                     {step === "email" ? (
                         <LoginForm

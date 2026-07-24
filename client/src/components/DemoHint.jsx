@@ -1,14 +1,14 @@
 import { InformationCircleIcon } from "../icons";
 
 const DemoHint = ({ setEmail }) => (
-    <div className="mt-4 flex w-full flex-col gap-1 rounded-xl bg-yellow-600/5 p-2 text-yellow-700/90 lg:w-1/2">
+    <div className="m-4 flex flex-col gap-1 rounded-xl bg-yellow-600/5 p-4 text-yellow-700/90 lg:w-[calc(50%-16px)]">
         <span className="flex items-center gap-1 text-sm font-bold tracking-wide uppercase">
             <InformationCircleIcon className="size-4" />
             Portfolio Demo Mode
         </span>
         <div className="flex flex-col gap-1 text-xs leading-relaxed lg:text-sm">
             <span className="flex items-center gap-2">
-                Employee:{" "}
+                <span className="w-16">Employee:</span>
                 <code
                     onClick={() => setEmail("guest-employee@meetslot.com")}
                     className="inline-block cursor-pointer rounded bg-yellow-600/20 px-1.5 py-0.5 font-mono text-yellow-600 transition-all select-none active:scale-95 lg:hover:bg-yellow-600/40"

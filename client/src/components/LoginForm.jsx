@@ -23,7 +23,7 @@ const LoginForm = ({ step, onSubmit, value, onChange, loading, error }) => (
             />
 
             <button
-                className="text-bg bg-text relative mt-2 flex items-center justify-center gap-2 self-center rounded-lg px-4 py-2"
+                className="text-bg bg-text relative mt-2 flex items-center justify-center gap-2 self-center rounded-lg px-4 py-2 active:scale-95"
                 type="submit"
                 disabled={loading}
             >

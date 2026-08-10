@@ -8,7 +8,7 @@ const Header = () => {
     const isAdmin = user?.role === "admin";
 
     return (
-        <header className="bg-bg border-border sticky top-0 z-70 flex h-16 w-full items-center justify-between border-b">
+        <header className="bg-bg border-border fixed top-0 z-70 flex h-16 w-full items-center justify-between border-b">
             <div
                 className={`mx-auto flex w-full items-center justify-between px-4`}
             >

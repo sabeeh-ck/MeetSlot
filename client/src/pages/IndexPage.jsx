@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { AnimatePresence } from "motion/react";
 import SlotTimeline from "../components/SlotTimeline";
 import RoomSelector from "../components/RoomSelector";
 import BottomSheet from "../components/BottomSheet";
@@ -37,7 +36,7 @@ const IndexPage = () => {
     const currentRoom = isLaptop ? availability[0]?.roomId : selectedRoom;
 
     return (
-        <div className="w-full">
+        <div className="mx-4">
             <div>
                 <section className="bg-bg sticky top-16 z-30 flex w-full flex-col gap-4 pt-4 md:hidden">
                     <RoomSelector
@@ -154,24 +153,23 @@ const IndexPage = () => {
                 </div>
             )}
 
-            <AnimatePresence>
-                {sheet === "form" && (
-                    <BottomSheet open={sheet} closeSheet={() => setSheet(null)}>
-                        <BookingForm
-                            selectedDate={selectedDate}
-                            selectedSlots={selectedSlots[selectedRoom]}
-                            selectedRoom={selectedRoom}
-                            closeSheet={() => setSheet(null)}
-                            availability={availability}
-                            refetch={refetch}
-                            setSelectedDate={setSelectedDate}
-                            setSelectedRoom={setSelectedRoom}
-                            setSelectedSlots={setSelectedSlots}
-                            setSheet={setSheet}
-                        />
-                    </BottomSheet>
-                )}
-            </AnimatePresence>
+            <BottomSheet
+                open={sheet === "form"}
+                closeSheet={() => setSheet(null)}
+            >
+                <BookingForm
+                    selectedDate={selectedDate}
+                    selectedSlots={selectedSlots[selectedRoom]}
+                    selectedRoom={selectedRoom}
+                    closeSheet={() => setSheet(null)}
+                    availability={availability}
+                    refetch={refetch}
+                    setSelectedDate={setSelectedDate}
+                    setSelectedRoom={setSelectedRoom}
+                    setSelectedSlots={setSelectedSlots}
+                    setSheet={setSheet}
+                />
+            </BottomSheet>
         </div>
     );
 };

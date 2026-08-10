@@ -22,14 +22,14 @@ const Layout = () => {
                 </div>
             )}
 
-            <div className="lg:ml-64">
+            <div className="mt-16 lg:ml-64">
                 <main className="flex min-h-[calc(100dvh-64px)] flex-col pb-20 lg:py-0">
                     <Outlet />
                 </main>
 
-                <div className="bg-bg border-border fixed bottom-0 flex h-20 w-full items-center border-t lg:hidden">
-                    <BottomNav />
-                </div>
+                <BottomNav />
+
+                <div className="from-bg via-bg/75 fixed bottom-0 z-40 h-16 w-full bg-linear-to-t from-50% via-75% to-transparent to-100% lg:hidden" />
             </div>
         </>
     );

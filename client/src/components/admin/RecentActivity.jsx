@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import Skeleton from "react-loading-skeleton";
 
 const RecentActivity = ({ loading, data }) => {
@@ -36,11 +37,8 @@ const RecentActivity = ({ loading, data }) => {
                                 });
 
                                 return (
-                                    <>
-                                        <div
-                                            key={_id}
-                                            className="flex flex-col gap-1 py-2 last:border-b-0"
-                                        >
+                                    <Fragment key={_id}>
+                                        <div className="flex flex-col gap-1 py-2 last:border-b-0">
                                             <div className="text-sm font-medium capitalize">
                                                 {title}
                                             </div>
@@ -51,10 +49,11 @@ const RecentActivity = ({ loading, data }) => {
                                                 {activityTime}
                                             </div>
                                         </div>
+
                                         {index < data.length - 1 && (
                                             <hr className="border-border" />
                                         )}
-                                    </>
+                                    </Fragment>
                                 );
                             },
                         )

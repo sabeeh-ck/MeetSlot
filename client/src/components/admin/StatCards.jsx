@@ -1,4 +1,4 @@
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 import { ArrowUpRightIcon } from "../../icons";
 import Skeleton from "react-loading-skeleton";
 
@@ -30,7 +30,13 @@ const StatCards = ({ data, loading }) => {
         <div className="grid w-full grid-cols-1 gap-4 lg:grid-cols-4">
             {cardDetails.map(({ title, value, path }) => {
                 if (loading)
-                    return <Skeleton className="h-27.5" borderRadius={12} />;
+                    return (
+                        <Skeleton
+                            key={title}
+                            className="h-27.5"
+                            borderRadius={12}
+                        />
+                    );
 
                 return (
                     <Link

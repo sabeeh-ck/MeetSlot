@@ -3,13 +3,15 @@ import { useEffect } from "react";
 import { createPortal } from "react-dom";
 
 const MenuModal = ({ children, onClose, triggerRect }) => {
-    if (!triggerRect) return null;
-
     useEffect(() => {
+        if (!triggerRect) return;
+
         document.body.style.overflow = "hidden";
 
         return () => (document.body.style.overflow = "");
-    }, []);
+    }, [triggerRect]);
+
+    if (!triggerRect) return null;
 
     return createPortal(
         <>

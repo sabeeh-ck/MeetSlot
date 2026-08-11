@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { ChevronDoubleLeftIcon, LogoutIcon, PlusIcon } from "../icons";
 import Nav from "./Nav";

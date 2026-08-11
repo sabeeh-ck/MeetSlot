@@ -1,4 +1,4 @@
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 import { ArrowUpRightIcon, PlusIcon } from "../../icons";
 import { Fragment, useState } from "react";
 import { AnimatePresence } from "motion/react";
@@ -30,8 +30,6 @@ const TodaysBookings = ({ data, loading, refetch }) => {
             console.log(error);
         }
     };
-
-    console.log(data);
 
     return (
         <section className="flex h-full flex-col gap-2">

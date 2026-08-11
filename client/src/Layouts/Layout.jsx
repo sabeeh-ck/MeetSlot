@@ -1,4 +1,4 @@
-import { Outlet, useSearchParams } from "react-router";
+import { Outlet, useSearchParams } from "react-router-dom";
 import Header from "../components/Header";
 import SideBar from "../components/SideBar";
 import BottomNav from "../components/BottomNav";

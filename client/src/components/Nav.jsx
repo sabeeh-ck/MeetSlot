@@ -96,9 +96,8 @@ const Nav = ({ isExpanded, expandNav, minimiseNav }) => {
     const { user } = useAuth();
     const { isLaptop } = useWindowWidth();
 
-    const items = isExpanded
-        ? NAV_ITEMS[user?.role]
-        : NAV_ITEMS[user?.role].slice(0, 4);
+    const navItems = NAV_ITEMS[user?.role] ?? [];
+    const items = isExpanded ? navItems : navItems.slice(0, 4);
 
     return (
         <nav

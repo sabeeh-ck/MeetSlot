@@ -1,7 +1,6 @@
 import { useRef } from "react";
 import { CalendarIconSolid, CalendarIconOutline } from "../icons";
 import { today, tomorrow } from "../utils/time";
-import Skeleton from "react-loading-skeleton";
 
 const DateSelector = ({
     selectedDate,
@@ -44,17 +43,6 @@ const DateSelector = ({
     return (
         <div className="flex w-full items-center gap-2">
             {dateSelector.map(({ content, action, isSelected }, i) => {
-                if (loading)
-                    return (
-                        <Skeleton
-                            key={i}
-                            height={30}
-                            width={100}
-                            containerClassName="flex-1 leading-none"
-                            borderRadius={16}
-                        />
-                    );
-
                 return (
                     <button
                         key={i}

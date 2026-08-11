@@ -7,7 +7,7 @@ const UserPage = () => {
     const navigate = useNavigate;
 
     return (
-        <div className="my-4 flex flex-col gap-4">
+        <div className="m-4 flex flex-col gap-4">
             <div className="flex flex-col gap-2">
                 <UserCircleSolid className="size-20" />
                 <div>

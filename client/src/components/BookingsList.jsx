@@ -47,7 +47,7 @@ const BookingsList = ({ bookings, isPast, loading, refetch }) => {
         }, {});
 
     return (
-        <div className="mx-4 mb-4 flex h-full flex-1 flex-col gap-7 lg:mt-4 lg:ml-68 lg:h-auto">
+        <div className="mx-4 mt-36 mb-4 flex h-full flex-1 flex-col gap-7 lg:mt-4 lg:ml-68 lg:h-auto">
             {loading ? (
                 <div className="flex flex-col">
                     <Skeleton
@@ -115,7 +115,7 @@ const BookingsList = ({ bookings, isPast, loading, refetch }) => {
                 </>
             ) : (
                 <div className="text-textmute flex flex-1 flex-col items-center justify-center gap-4 py-4">
-                    <span>No bookings for today.</span>
+                    <span>No bookings to show.</span>
                     <div>
                         <Link
                             to={"/admin/new-meeting"}

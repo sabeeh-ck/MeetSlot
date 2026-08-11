@@ -28,7 +28,7 @@ const BookingsPage = () => {
 
     return (
         <section className="flex w-full flex-1 flex-col gap-6 lg:flex-row lg:gap-0">
-            <div className="lg:border-border flex flex-col gap-5 lg:fixed lg:h-full lg:w-64 lg:border-r">
+            <div className="lg:border-border bg-bg fixed flex h-32 w-full flex-col gap-5 pb-4 lg:h-full lg:w-64 lg:border-r">
                 <div className="mx-4 mt-4 flex items-center justify-between">
                     <h2 className="font-semibold">Bookings</h2>
                 </div>
@@ -53,6 +53,8 @@ const BookingsPage = () => {
                     </button>
                 </div>
             </div>
+
+            <div className="from-bg via-bg/25 pointer-events-none fixed top-48 left-0 z-40 h-8 w-full bg-linear-to-b to-transparent lg:hidden" />
 
             <BookingsList
                 loading={loading}

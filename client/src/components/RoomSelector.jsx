@@ -25,7 +25,7 @@ const RoomSelector = ({
 
     return (
         <div className="flex w-full items-center gap-2">
-            <div className="flex min-w-30 items-center gap-2">
+            <div className="flex min-w-30 items-center gap-4">
                 {loading ? (
                     <Skeleton
                         height={32}
@@ -33,26 +33,26 @@ const RoomSelector = ({
                         borderRadius={16}
                     />
                 ) : (
-                    <>
-                        <h3 className="w-19 font-semibold select-none">
-                            {
-                                availability?.find(
-                                    (room) => room.roomId === selectedRoom,
-                                )?.roomName
-                            }
-                        </h3>
-                        <button onClick={() => setSheet("room")}>
-                            <ChevronUpDownIcon
-                                className={`md:hover:bg-border border-border active:bg-border h-8 rounded-lg border py-1 text-sm ${sheet === "room" ? "bg-border" : "bg-surface"} `}
-                            />
-                        </button>
-                    </>
+                    <h3 className="font-semibold select-none">
+                        {
+                            availability?.find(
+                                (room) => room.roomId === selectedRoom,
+                            )?.roomName
+                        }
+                    </h3>
                 )}
+
+                <button onClick={() => setSheet("room")}>
+                    <ChevronUpDownIcon
+                        className={`md:hover:bg-border border-border active:bg-border h-8 rounded-lg border py-1 text-sm ${sheet === "room" ? "bg-border" : "bg-surface"} `}
+                    />
+                </button>
             </div>
 
             <BottomSheet open={sheet === "room"} closeSheet={closeSheet}>
                 <div className="flex flex-col gap-4">
-                    <h2 className="">Rooms</h2>
+                    <p className="text-textmute">Select room</p>
+
                     {availability.map(({ roomId, roomName }) => {
                         const isSelected = selectedRoom === roomId;
 

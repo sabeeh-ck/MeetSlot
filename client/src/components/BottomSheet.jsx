@@ -38,6 +38,7 @@ const BottomSheet = ({ closeSheet, open, children }) => {
                         }}
                     >
                         <div className="bg-textmute mx-auto mb-4 h-1.5 w-10 rounded-full" />
+
                         {children}
                     </motion.div>
                 </div>

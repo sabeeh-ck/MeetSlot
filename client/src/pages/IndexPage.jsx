@@ -38,7 +38,7 @@ const IndexPage = () => {
     return (
         <div className="mx-4">
             <div>
-                <section className="bg-bg sticky top-16 z-30 flex w-full flex-col gap-4 pt-4 md:hidden">
+                <section className="bg-bg fixed top-16 z-30 flex h-34 w-full flex-col gap-4 pt-4 md:hidden">
                     <RoomSelector
                         availability={availability}
                         loading={loading}
@@ -81,10 +81,13 @@ const IndexPage = () => {
                     </div>
                 </section>
 
-                <div className="w-full gap-6 md:grid md:grid-cols-2 md:pb-4 lg:grid-cols-3">
+                <div className="from-bg via-bg/25 pointer-events-none fixed top-50 left-0 z-40 h-8 w-full bg-linear-to-b to-transparent lg:hidden" />
+
+                <div className="mt-38 w-full gap-6 md:grid md:grid-cols-2 md:pb-4 lg:m-0 lg:grid-cols-3">
                     {!isMobile && (
                         <aside className="sticky top-20 hidden h-fit gap-4 md:z-30 md:flex md:flex-col">
                             <h3>Create Meeting</h3>
+
                             <BookingForm
                                 selectedDate={selectedDate}
                                 setSelectedDate={setSelectedDate}
@@ -143,14 +146,12 @@ const IndexPage = () => {
             </div>
 
             {isMobile && selectedSlots[selectedRoom]?.length > 0 && (
-                <div className="fixed right-4 bottom-24 flex flex-col items-end">
-                    <button
-                        className="bg-text text-bg drop-shadow-bg rounded-2xl p-4 drop-shadow-lg"
-                        onClick={() => setSheet("form")}
-                    >
-                        <PlusIcon className="size-8" />
-                    </button>
-                </div>
+                <button
+                    className="bg-text text-bg drop-shadow-bg border-border fixed right-6 bottom-24 rounded-full border p-4 drop-shadow-lg"
+                    onClick={() => setSheet("form")}
+                >
+                    <PlusIcon className="size-6" />
+                </button>
             )}
 
             <BottomSheet

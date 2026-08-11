@@ -7,16 +7,11 @@ import api from "../api/axios";
 import ConfirmMenu from "./ConfirmMenu";
 
 const BookingCard = ({
-    booking: {
-        _id,
-        start,
-        title,
-        end,
-        roomId: { name: roomName },
-    },
+    booking: { _id, start, title, end, roomId },
     isPast,
     refetch,
 }) => {
+    const roomName = roomId?.name ?? "Deleted room";
     const [menu, setMenu] = useState(false);
     const [rect, setRect] = useState(null);
     const [deleting, setDeleting] = useState(false);

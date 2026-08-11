@@ -60,7 +60,12 @@ router.get("/availability", async (req, res) => {
 
         rooms.forEach((room) => (map[room._id] = { roomId: room._id, roomName: room.name, bookedSlots: [] }));
 
-        bookings.forEach((b) => map[b.roomId._id].bookedSlots.push({ start: b.start, end: b.end }));
+        bookings.forEach((b) => {
+            const bookingRoomId = b.roomId?._id ?? b.roomId;
+            if (bookingRoomId && map[bookingRoomId]) {
+                map[bookingRoomId].bookedSlots.push({ start: b.start, end: b.end });
+            }
+        });
 
         res.json(Object.values(map));
     } catch (err) {

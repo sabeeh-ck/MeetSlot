@@ -13,6 +13,8 @@ export {
     CogIcon as CogIconOutline,
     UserCircleIcon as UserCircleOutline,
     ArrowUpRightIcon,
+    UsersIcon as UsersIconOutline,
+    EllipsisVerticalIcon,
 } from "@heroicons/react/24/outline";
 
 export {
@@ -28,4 +30,6 @@ export {
     ChevronDoubleLeftIcon,
     InformationCircleIcon,
     UserCircleIcon as UserCircleSolid,
+    UsersIcon as UsersIconSolid,
+    MapPinIcon as LocationIcon,
 } from "@heroicons/react/24/solid";

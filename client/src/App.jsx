@@ -11,6 +11,8 @@ import BookingsPage from "./pages/admin/BookingsPage";
 import ManagePage from "./pages/admin/ManagePage";
 import MyMeetingsPage from "./pages/MyMeetingsPage";
 import UserPage from "./pages/UserPage";
+import RoomsPage from "./pages/admin/RoomsPage";
+import UsersPage from "./pages/admin/UsersPage.jsx";
 
 const App = () => (
     <Routes>
@@ -63,6 +65,8 @@ const App = () => (
             <Route path="manage" element={<ManagePage />} />
             <Route path="new-meeting" element={<IndexPage />} />
             <Route path="user" element={<UserPage />} />
+            <Route path="rooms" element={<RoomsPage />} />
+            <Route path="users" element={<UsersPage />} />
         </Route>
     </Routes>
 );

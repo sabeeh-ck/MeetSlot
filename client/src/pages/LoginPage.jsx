@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import api from "../api/axios";
 import LoginForm from "../components/LoginForm";
@@ -11,6 +11,7 @@ const LoginPage = () => {
     const [step, setStep] = useState("email");
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
+    const [serverStatus, setSeverStatus] = useState("Waking up...");
 
     const { user, setUser } = useAuth();
 
@@ -22,6 +23,19 @@ const LoginPage = () => {
                 to={user.role === "admin" ? "/admin/dashboard" : "/home"}
             />
         );
+
+    useEffect(() => {
+        const wakeServer = async () => {
+            try {
+                await api.get("/auth/health");
+                setSeverStatus("Server is ready");
+            } catch (error) {
+                setSeverStatus("Server is ready");
+            }
+        };
+
+        wakeServer();
+    }, []);
 
     const sendOtp = async (e) => {
         e.preventDefault();

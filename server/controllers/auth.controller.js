@@ -2,6 +2,8 @@ import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 import { sendOtpEmail } from "../utils/sendEmail.js";
 
+export const checkHealth = (req, res) => res.status(200).json({ status: "awake" });
+
 export const getMe = async (req, res) => {
     try {
         res.set("Cache-Control", "no-store");

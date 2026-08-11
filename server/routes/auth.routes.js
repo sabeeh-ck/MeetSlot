@@ -1,9 +1,10 @@
 import { Router } from "express";
-import { getMe, logout, sendOtp, verifyOtp } from "../controllers/auth.controller.js";
+import { checkHealth, getMe, logout, sendOtp, verifyOtp } from "../controllers/auth.controller.js";
 import { auth } from "../middleware/authMiddleware.js";
 
 const router = Router();
 
+router.get("/health", checkHealth);
 router.get("/me", auth, getMe);
 
 router.post("/send-otp", sendOtp);

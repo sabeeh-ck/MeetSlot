@@ -14,28 +14,43 @@ const BottomNav = () => {
     const expandNav = () => setIsExpanded(true);
 
     return (
-        <AnimatePresence>
-            <div
-                className={`bg-surface border-border fixed inset-x-6 bottom-6 z-50 flex items-center border shadow-xl lg:hidden ${isExpanded ? "rounded-4xl" : "rounded-full"}`}
+        <>
+            <motion.div
+                key="bottom-nav"
+                initial={false}
+                animate={{
+                    height: isExpanded ? "auto" : "60px",
+                    scale: isExpanded ? 1 : 0.98,
+                }}
+                transition={{
+                    type: "spring",
+                    stiffness: 300,
+                    damping: 15,
+                    mass: 0.8,
+                }}
+                className="bg-surface border-border fixed inset-x-6 bottom-6 z-50 flex origin-bottom items-center overflow-hidden rounded-4xl border shadow-xl lg:hidden"
             >
                 <Nav
                     isExpanded={isExpanded}
                     expandNav={expandNav}
                     minimiseNav={minimiseNav}
                 />
-            </div>
+            </motion.div>
 
-            {isExpanded && (
-                <motion.div
-                    key="backdrop"
-                    className="fixed inset-0 z-49 bg-black/40"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    onClick={minimiseNav}
-                />
-            )}
-        </AnimatePresence>
+            <AnimatePresence>
+                {isExpanded && (
+                    <motion.div
+                        key="backdrop"
+                        className="fixed inset-0 z-49 bg-black/40 backdrop-blur-xs"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.3, ease: "easeOut" }}
+                        onClick={minimiseNav}
+                    />
+                )}
+            </AnimatePresence>
+        </>
     );
 };
 

@@ -155,7 +155,7 @@ const IndexPage = () => {
             )}
 
             <BottomSheet
-                open={sheet === "form"}
+                isOpen={sheet === "form"}
                 closeSheet={() => setSheet(null)}
             >
                 <BookingForm

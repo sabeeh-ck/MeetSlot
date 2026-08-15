@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import { ArrowUpRightIcon, PlusIcon } from "../../icons";
 import { Fragment, useState } from "react";
-import { AnimatePresence } from "motion/react";
 import MenuModal from "../MenuModal";
 import ConfirmMenu from "../ConfirmMenu";
 import api from "../../api/axios";
@@ -129,7 +128,7 @@ const TodaysBookings = ({ data, loading, refetch }) => {
                                                     <span className="hidden md:block">
                                                         {userName}
                                                     </span>
-                                                    <div className="text-textmute order-last flex gap-2 md:hidden">
+                                                    <div className="text-textmute order-last flex gap-2 text-xs md:hidden">
                                                         <span>{roomName}</span>
                                                         <span>|</span>
                                                         <span>{userName}</span>
@@ -156,33 +155,24 @@ const TodaysBookings = ({ data, loading, refetch }) => {
                                                         )}
                                                     </button>
 
-                                                    <AnimatePresence>
-                                                        {menu && (
-                                                            <MenuModal
-                                                                triggerRect={
-                                                                    rect
-                                                                }
-                                                                onClose={() =>
-                                                                    setMenu(
-                                                                        false,
-                                                                    )
-                                                                }
-                                                            >
-                                                                <ConfirmMenu
-                                                                    onConfirm={() =>
-                                                                        handleDelete(
-                                                                            _id,
-                                                                        )
-                                                                    }
-                                                                    onCancel={() =>
-                                                                        setMenu(
-                                                                            false,
-                                                                        )
-                                                                    }
-                                                                />
-                                                            </MenuModal>
-                                                        )}
-                                                    </AnimatePresence>
+                                                    <MenuModal
+                                                        open={menu}
+                                                        triggerRect={rect}
+                                                        onClose={() =>
+                                                            setMenu(false)
+                                                        }
+                                                    >
+                                                        <ConfirmMenu
+                                                            onConfirm={() =>
+                                                                handleDelete(
+                                                                    _id,
+                                                                )
+                                                            }
+                                                            onCancel={() =>
+                                                                setMenu(false)
+                                                            }
+                                                        />
+                                                    </MenuModal>
                                                 </div>
                                             </div>
 

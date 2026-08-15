@@ -16,6 +16,7 @@ const RoomSelector = ({
         setSelectedRoom(availability[0]?.roomId);
     }, []);
 
+    const openSheet = () => setSheet("room");
     const closeSheet = () => setSheet(null);
 
     const handleClick = (room) => {
@@ -42,14 +43,14 @@ const RoomSelector = ({
                     </h3>
                 )}
 
-                <button onClick={() => setSheet("room")}>
+                <button onClick={openSheet}>
                     <ChevronUpDownIcon
                         className={`md:hover:bg-border border-border active:bg-border h-8 rounded-lg border py-1 text-sm ${sheet === "room" ? "bg-border" : "bg-surface"} `}
                     />
                 </button>
             </div>
 
-            <BottomSheet open={sheet === "room"} closeSheet={closeSheet}>
+            <BottomSheet isOpen={sheet === "room"} closeSheet={closeSheet}>
                 <div className="flex flex-col gap-4">
                     <p className="text-textmute">Select room</p>
 

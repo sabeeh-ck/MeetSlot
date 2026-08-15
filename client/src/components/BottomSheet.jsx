@@ -2,15 +2,15 @@ import { useEffect } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { createPortal } from "react-dom";
 
-const BottomSheet = ({ closeSheet, open, children }) => {
+const BottomSheet = ({ closeSheet, isOpen, children }) => {
     useEffect(() => {
-        document.body.style.overflow = open ? "hidden" : "auto";
+        document.body.style.overflow = isOpen ? "hidden" : "auto";
         return () => (document.body.style.overflow = "auto");
-    }, [open]);
+    }, [isOpen]);
 
     return createPortal(
         <AnimatePresence>
-            {open && (
+            {isOpen && (
                 <div className="fixed inset-0 z-9998 flex items-end justify-center">
                     <motion.div
                         key="backdrop"

@@ -84,9 +84,10 @@ const BookingForm = ({
     const { isMobile, isLaptop } = useWindowWidth();
 
     return (
-        <section className="flex flex-col">
+        <section className="flex flex-col gap-4">
+            <h1 className="text-base!">Create booking</h1>
             <form
-                className="flex flex-col gap-4 text-sm"
+                className="flex flex-col gap-3 text-sm"
                 onKeyDown={(e) => {
                     if (e.key === "Enter") {
                         e.preventDefault();
@@ -94,7 +95,7 @@ const BookingForm = ({
                 }}
                 onSubmit={handleSubmit}
             >
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col gap-1">
                     <label htmlFor="purpose">
                         Meeting title <span className="text-red-700">*</span>
                     </label>
@@ -109,7 +110,7 @@ const BookingForm = ({
                     />
                 </div>
 
-                <div className="flex w-full flex-col gap-2">
+                <div className="flex w-full flex-col gap-1">
                     <label htmlFor="date">Date</label>
                     <input
                         type="date"
@@ -123,7 +124,7 @@ const BookingForm = ({
                     />
                 </div>
 
-                <div className="flex w-full flex-col gap-2">
+                <div className="flex w-full flex-col gap-1">
                     <label htmlFor="room">Room</label>
                     <select
                         id="room"
@@ -141,7 +142,7 @@ const BookingForm = ({
                 </div>
 
                 <div className="flex gap-4">
-                    <div className="flex w-full flex-col gap-2">
+                    <div className="flex w-full flex-col gap-1">
                         <label htmlFor="startTime">Beginning</label>
                         <input
                             type="text"
@@ -154,7 +155,7 @@ const BookingForm = ({
                         />
                     </div>
 
-                    <div className="flex w-full flex-col gap-2">
+                    <div className="flex w-full flex-col gap-1">
                         <label htmlFor="endTime">Ending</label>
                         <input
                             type="text"

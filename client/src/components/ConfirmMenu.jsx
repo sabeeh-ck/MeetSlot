@@ -1,7 +1,7 @@
 import { CheckIcon, XMarkIcon } from "../icons";
 
 const ConfirmMenu = ({ onConfirm, onCancel }) => (
-    <div className="bg-surface border-border flex items-center gap-4 rounded-xl border py-2 pr-2 pl-4">
+    <div className="flex items-center gap-4 pl-2">
         <p className="font-medium">Are you sure?</p>
         <div className="flex gap-2">
             <button

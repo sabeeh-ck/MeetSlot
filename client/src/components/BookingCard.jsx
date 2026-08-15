@@ -1,4 +1,3 @@
-import { AnimatePresence } from "motion/react";
 import { ClockIcon, RoomIconSolid } from "../icons";
 import { minutesTo12Hour } from "../utils/time";
 import MenuModal from "./MenuModal";
@@ -75,19 +74,15 @@ const BookingCard = ({
                         )}
                     </button>
 
-                    <AnimatePresence>
-                        {menu && (
-                            <MenuModal
-                                triggerRect={rect}
-                                onClose={() => setMenu(false)}
-                            >
-                                <ConfirmMenu
-                                    onConfirm={() => handleDelete(_id)}
-                                    onCancel={() => setMenu(false)}
-                                />
-                            </MenuModal>
-                        )}
-                    </AnimatePresence>
+                    <MenuModal
+                        triggerRect={rect}
+                        onClose={() => setMenu(false)}
+                    >
+                        <ConfirmMenu
+                            onConfirm={() => handleDelete(_id)}
+                            onCancel={() => setMenu(false)}
+                        />
+                    </MenuModal>
                 </div>
             )}
         </div>

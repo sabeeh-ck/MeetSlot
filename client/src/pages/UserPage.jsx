@@ -1,10 +1,10 @@
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { LogoutIcon, UserCircleSolid } from "../icons";
 
 const UserPage = () => {
     const { user, logout } = useAuth();
-    const navigate = useNavigate;
+    const navigate = useNavigate();
 
     return (
         <div className="m-4 flex flex-col gap-4">

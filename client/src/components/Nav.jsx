@@ -93,7 +93,7 @@ const itemVariants = {
         scale: 1,
         transition: { type: "spring", stiffness: 400, damping: 25 },
     },
-    exit: { opacity: 0, transition: { duration: 0.1 } },
+    exit: { opacity: 0, transition: { duration: 0.0001 } },
 };
 
 const Nav = ({ isExpanded, expandNav, minimiseNav }) => {
@@ -119,7 +119,7 @@ const Nav = ({ isExpanded, expandNav, minimiseNav }) => {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        transition={{ duration: 0.15, ease: "easeInOut" }}
+                        transition={{ duration: 0.01, ease: "easeInOut" }}
                         className="flex w-full flex-col items-start p-3 lg:hidden"
                     >
                         {navItems.map(({ name, path, solid, outline }) => {
@@ -171,7 +171,7 @@ const Nav = ({ isExpanded, expandNav, minimiseNav }) => {
                         exit={{ opacity: 0 }}
                         transition={{
                             duration: 0.15,
-                            exit: { duration: 0.01 },
+                            exit: { duration: 0.001 },
                         }}
                         className="flex w-full items-center justify-between lg:flex-col lg:items-start"
                     >

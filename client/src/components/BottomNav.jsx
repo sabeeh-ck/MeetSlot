@@ -19,7 +19,7 @@ const BottomNav = () => {
                 key="bottom-nav"
                 initial={false}
                 animate={{
-                    height: isExpanded ? "auto" : "60px",
+                    height: isExpanded ? "350px" : "60px",
                     scale: isExpanded ? 1 : 0.98,
                 }}
                 transition={{

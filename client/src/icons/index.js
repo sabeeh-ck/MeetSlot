@@ -4,17 +4,18 @@ export {
     ArrowLeftStartOnRectangleIcon as LogoutIcon,
     CalendarDaysIcon as CalendarIconOutline,
     ChevronUpDownIcon,
-    Bars3Icon as MenuIcon,
     HomeIcon as HomeIconOutline,
     XMarkIcon,
     CheckIcon,
     BuildingOffice2Icon as RoomIconOutline,
     Squares2X2Icon as DashboardIconOutline,
-    CogIcon as CogIconOutline,
     UserCircleIcon as UserCircleOutline,
     ArrowUpRightIcon,
     UsersIcon as UsersIconOutline,
     EllipsisVerticalIcon,
+    PencilIcon,
+    TrashIcon,
+    CheckCircleIcon,
 } from "@heroicons/react/24/outline";
 
 export {

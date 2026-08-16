@@ -19,7 +19,7 @@ const BottomNav = () => {
                 key="bottom-nav"
                 initial={false}
                 animate={{
-                    height: isExpanded ? "350px" : "60px",
+                    height: isExpanded ? "308px" : "60px",
                     scale: isExpanded ? 1 : 0.98,
                 }}
                 transition={{
@@ -28,7 +28,7 @@ const BottomNav = () => {
                     damping: 15,
                     mass: 0.8,
                 }}
-                className="bg-surface border-border fixed inset-x-6 bottom-6 z-50 flex origin-bottom items-center overflow-hidden rounded-4xl border shadow-xl lg:hidden"
+                className="bg-surface border-border fixed inset-x-6 bottom-6 z-50 flex origin-bottom items-center overflow-hidden rounded-[39px] border shadow-xl lg:hidden"
             >
                 <Nav
                     isExpanded={isExpanded}

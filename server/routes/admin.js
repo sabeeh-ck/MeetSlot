@@ -80,6 +80,16 @@ router.get("/manage", async (req, res) => {
     }
 });
 
+router.get("/rooms", async (req, res) => {
+    try {
+        const rooms = await Room.find({}).sort({ createdAt: -1 });
+
+        res.status(200).json({ rooms });
+    } catch (error) {
+        res.status(500).json({ message: "Failed to fetch data", error: error.message });
+    }
+});
+
 router.post("/manage/users", async (req, res) => {
     try {
         const { name, email, role } = req.body;

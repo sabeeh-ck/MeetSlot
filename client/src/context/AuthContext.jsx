@@ -18,6 +18,7 @@ export const AuthProvider = ({ children }) => {
                 setLoading(false);
             }
         };
+
         loadUser();
     }, []);
 
@@ -30,8 +31,12 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
+    const isDemo = import.meta.env.VITE_APP_DEMO_MODE;
+
     return (
-        <AuthContext.Provider value={{ setUser, user, loading, logout }}>
+        <AuthContext.Provider
+            value={{ setUser, user, loading, logout, isDemo }}
+        >
             {children}
         </AuthContext.Provider>
     );

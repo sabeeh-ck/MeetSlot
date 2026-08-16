@@ -3,7 +3,7 @@ import { Navigate, useNavigate } from "react-router-dom";
 import api from "../api/axios";
 import LoginForm from "../components/LoginForm";
 import { useAuth } from "../context/AuthContext";
-import DemoHint from "../components/DemoHint";
+import { DemoHint } from "../components/DemoComponents";
 
 const LoginPage = () => {
     const [email, setEmail] = useState("");

@@ -7,11 +7,9 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import NotFoundPage from "./pages/NotFoundPage";
 import DashboardPage from "./pages/admin/DashboardPage";
 import BookingsPage from "./pages/admin/BookingsPage";
-import ManagePage from "./pages/admin/ManagePage";
+import ManagePage from "./pages/admin/ManagePage.jsx";
 import MyMeetingsPage from "./pages/MyMeetingsPage";
 import UserPage from "./pages/UserPage";
-import RoomsPage from "./pages/admin/RoomsPage";
-import UsersPage from "./pages/admin/UsersPage.jsx";
 
 const App = () => (
     <Routes>
@@ -64,8 +62,8 @@ const App = () => (
             <Route path="manage" element={<ManagePage />} />
             <Route path="new-meeting" element={<IndexPage />} />
             <Route path="user" element={<UserPage />} />
-            <Route path="rooms" element={<RoomsPage />} />
-            <Route path="users" element={<UsersPage />} />
+            <Route path="rooms" element={<ManagePage items="rooms" />} />
+            <Route path="users" element={<ManagePage items="users" />} />
         </Route>
     </Routes>
 );

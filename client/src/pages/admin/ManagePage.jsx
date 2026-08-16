@@ -1,362 +1,225 @@
 import { useEffect, useState } from "react";
 import api from "../../api/axios";
+import {
+    AddUserIcon,
+    CheckIcon,
+    EmailIcon,
+    ExpandIcon,
+    LocationIcon,
+    PencilIcon,
+    PlusIcon,
+    ProjectorIcon,
+    RoleIcon,
+    RoomIcon,
+    TrashIcon,
+    UsersIcon,
+    WhiteBoardIcon,
+    XMarkIcon,
+} from "../../icons";
+import { useWindowWidth } from "../../hooks/useWindowWidth";
+import MenuModal from "../../components/MenuModal";
+import ConfirmMenu from "../../components/ConfirmMenu";
+import BottomSheet from "../../components/BottomSheet";
+import ManageForm from "../../components/ManageForm";
 
-const emptyUserForm = {
-    name: "",
-    email: "",
-    role: "employee",
-};
-
-const emptyRoomForm = {
-    name: "",
-    capacity: "",
-};
-
-const ManagePage = () => {
-    const [users, setUsers] = useState([]);
-    const [rooms, setRooms] = useState([]);
+const ManagePage = ({ items }) => {
     const [loading, setLoading] = useState(true);
-    const [userForm, setUserForm] = useState(emptyUserForm);
-    const [editingUserId, setEditingUserId] = useState(null);
-    const [roomForm, setRoomForm] = useState(emptyRoomForm);
-    const [editingRoomId, setEditingRoomId] = useState(null);
+    const [data, setData] = useState(null);
     const [message, setMessage] = useState("");
-    const [view, setView] = useState("users");
+    const [sheet, setSheet] = useState(false);
+    const [modal, setModal] = useState(false);
+    const [rect, setRect] = useState(null);
+    const [editingItem, setEditingItem] = useState(null);
 
-    const fetchManageData = async () => {
+    const { isLaptop } = useWindowWidth();
+    const isRooms = items === "rooms";
+
+    const fetchManageData = async (data) => {
         try {
-            const res = await api.get("/admin/manage");
-            setUsers(res.data.users ?? []);
-            setRooms(res.data.rooms ?? []);
+            const res = await api.get(`/admin/${data}`);
+            setData(isRooms ? res.data.rooms : res.data.users) ?? [];
         } catch (error) {
             console.log(error);
-            setMessage("Unable to load management data.");
+            setMessage("Unable to load data.");
         } finally {
             setLoading(false);
         }
     };
 
+    const openSheet = (roomId) => {
+        setEditingItem(data.find((room) => room._id === roomId));
+        setSheet(isRooms ? "room" : "user");
+    };
+    const closeSheet = () => setSheet(null);
+
+    const openModal = (e) => {
+        setRect(e.currentTarget.getBoundingClientRect());
+        setModal(true);
+    };
+
     useEffect(() => {
-        fetchManageData();
-    }, []);
+        fetchManageData(items);
+    }, [items]);
 
-    const resetUserForm = () => {
-        setUserForm(emptyUserForm);
-        setEditingUserId(null);
-    };
-
-    const resetRoomForm = () => {
-        setRoomForm(emptyRoomForm);
-        setEditingRoomId(null);
-    };
-
-    const handleUserSubmit = async (e) => {
-        e.preventDefault();
-
-        try {
-            if (editingUserId) {
-                await api.put(`/admin/manage/users/${editingUserId}`, userForm);
-                setMessage("User updated successfully.");
-            } else {
-                await api.post("/admin/manage/users", userForm);
-                setMessage("User created successfully.");
-            }
-
-            resetUserForm();
-            fetchManageData();
-        } catch (error) {
-            setMessage(error.response?.data?.message || "Unable to save user.");
-        }
-    };
-
-    const handleRoomSubmit = async (e) => {
-        e.preventDefault();
-
-        try {
-            if (editingRoomId) {
-                await api.put(`/admin/manage/rooms/${editingRoomId}`, roomForm);
-                setMessage("Room updated successfully.");
-            } else {
-                await api.post("/admin/manage/rooms", roomForm);
-                setMessage("Room created successfully.");
-            }
-
-            resetRoomForm();
-            fetchManageData();
-        } catch (error) {
-            setMessage(error.response?.data?.message || "Unable to save room.");
-        }
-    };
-
-    const handleDeleteUser = async (id) => {
-        try {
-            await api.delete(`/admin/manage/users/${id}`);
-            setMessage("User deleted successfully.");
-            fetchManageData();
-        } catch (error) {
-            setMessage(
-                error.response?.data?.message || "Unable to delete user.",
-            );
-        }
-    };
-
-    const handleDeleteRoom = async (id) => {
-        try {
-            await api.delete(`/admin/manage/rooms/${id}`);
-            setMessage("Room deleted successfully.");
-            fetchManageData();
-        } catch (error) {
-            setMessage(
-                error.response?.data?.message || "Unable to delete room.",
-            );
-        }
-    };
-
-    // if (loading) {
-    //     return (
-    //         <div className="text-textmute my-4">Loading management data...</div>
-    //     );
-    // }
+    if (data === null) return;
 
     return (
-        <section className="flex flex-1 flex-col lg:flex-row">
-            {/* {message && (
-                <div className="border-border bg-surface rounded-lg border p-3 text-sm">
-                    {message}
-                </div>
-            )} */}
+        <section className="flex flex-1 flex-col">
+            <div className="mx-4 mt-4 flex items-center justify-between">
+                <h2 className="font-semibold">{isRooms ? "Rooms" : "Users"}</h2>
 
-            <div className="lg:border-border flex flex-col gap-4 lg:w-64 lg:border-r">
-                <div className="mx-4 mt-4 flex items-center justify-between">
-                    <h2 className="font-semibold">Manage</h2>
-                </div>
-
-                <div className="border-border bg-surface lg:bg-bg mx-4 flex gap-1 rounded-xl border p-1 lg:flex-col lg:gap-2 lg:border-0 lg:p-0">
-                    <button
-                        onClick={() => setView("users")}
-                        className={`flex flex-1 items-center justify-center gap-1 rounded-lg py-2 text-sm font-medium transition-all lg:justify-between lg:px-2 ${view === "users" ? "bg-text text-bg lg:text-text lg:bg-border pointer-events-none shadow lg:shadow-none" : "lg:text-text text-textmute active:bg-border lg:hover:bg-border pointer-events-auto"}`}
-                    >
-                        <span>Users</span>
-                    </button>
-
-                    <button
-                        onClick={() => setView("rooms")}
-                        className={`flex flex-1 items-center justify-center gap-1 rounded-lg py-2 text-sm font-medium transition-all lg:justify-between lg:px-2 ${view === "rooms" ? "bg-text text-bg lg:text-text lg:bg-border pointer-events-none shadow lg:shadow-none" : "lg:text-text active:bg-border text-textmute lg:hover:bg-border pointer-events-auto"}`}
-                    >
-                        <span>Rooms</span>
-                    </button>
-                </div>
+                <button
+                    onClick={() => openSheet()}
+                    className="border-border bg-text text-bg flex items-center gap-2 rounded-xl border p-2 lg:static lg:rounded-lg lg:px-3 lg:py-1"
+                >
+                    {isRooms ? (
+                        <RoomIcon className="size-5" />
+                    ) : (
+                        <AddUserIcon className="size-4" />
+                    )}
+                    <span className="text-sm md:text-base">Add</span>
+                </button>
             </div>
 
-            <div className="m-4 h-full flex-1">
-                {view === "users" ? (
-                    <div className="flex h-full flex-col gap-4">
-                        <div className="flex items-center justify-between">
-                            <h3 className="font-semibold">Users</h3>
-                        </div>
+            <div className="m-4 flex flex-1 flex-col gap-3 md:gap-4">
+                <div
+                    className={`text-textmute hidden font-bold md:grid ${isRooms ? "md:grid-cols-[0.25fr_1.5fr_1.5fr_0.75fr_1fr_1fr_0.5fr]" : "md:grid-cols-[0.25fr_1.5fr_1.5fr_1fr_0.5fr]"}`}
+                >
+                    <span>No</span>
+                    <span>Name</span>
+                    {isRooms ? (
+                        <>
+                            <span>Location</span>
+                            <span className="text-center">Capacity</span>
+                            <span className="text-center">Projector</span>
+                            <span className="text-center">Whiteboard</span>
+                        </>
+                    ) : (
+                        <>
+                            <span>Email</span>
+                            <span>Role</span>
+                        </>
+                    )}
+                    <span className="text-center">Action</span>
+                </div>
 
-                        <form
-                            onSubmit={handleUserSubmit}
-                            className="flex flex-col gap-3"
+                <hr className="border-border hidden md:block" />
+
+                {data.map((data, index) => (
+                    <div
+                        key={data._id}
+                        className={`border-border lg:bg-bg bg-surface flex w-full items-start justify-between rounded-lg border p-4 md:grid md:border-0 md:px-0 md:py-2 ${isRooms ? "md:grid-cols-[0.25fr_1.5fr_1.5fr_0.75fr_1fr_1fr_0.5fr]" : "md:grid-cols-[0.25fr_1.5fr_1.5fr_1fr_0.5fr]"}`}
+                    >
+                        <div
+                            className={`flex w-full flex-col gap-2 md:grid md:gap-0 ${isRooms ? "md:col-span-6 md:grid-cols-[0.25fr_1.5fr_1.5fr_0.75fr_1fr_1fr]" : "md:col-span-4 md:grid-cols-[0.25fr_1.5fr_1.5fr_1fr]"}`}
                         >
-                            <input
-                                value={userForm.name}
-                                onChange={(e) =>
-                                    setUserForm({
-                                        ...userForm,
-                                        name: e.target.value,
-                                    })
-                                }
-                                placeholder="Full name"
-                                className="border-border bg-bg rounded-lg border px-3 py-2"
-                            />
-                            <input
-                                value={userForm.email}
-                                onChange={(e) =>
-                                    setUserForm({
-                                        ...userForm,
-                                        email: e.target.value,
-                                    })
-                                }
-                                placeholder="Email"
-                                className="border-border bg-bg rounded-lg border px-3 py-2"
-                            />
-                            <select
-                                value={userForm.role}
-                                onChange={(e) =>
-                                    setUserForm({
-                                        ...userForm,
-                                        role: e.target.value,
-                                    })
-                                }
-                                className="border-border bg-bg rounded-lg border px-3 py-2"
-                            >
-                                <option value="employee">Employee</option>
-                                <option value="admin">Admin</option>
-                            </select>
+                            <span className="hidden lg:block">{index + 1}</span>
+                            <p className="text-xl! font-medium lg:text-base!">
+                                {data.name}
+                            </p>
 
-                            <div className="flex gap-2">
-                                <button
-                                    type="submit"
-                                    className="bg-text text-bg rounded-lg px-4 py-2"
-                                >
-                                    {editingUserId
-                                        ? "Save changes"
-                                        : "Add user"}
-                                </button>
-                                {editingUserId && (
-                                    <button
-                                        type="button"
-                                        onClick={resetUserForm}
-                                        className="border-border rounded-lg border px-4 py-2"
-                                    >
-                                        Cancel
-                                    </button>
-                                )}
-                            </div>
-                        </form>
+                            {isRooms ? (
+                                <>
+                                    <div className="flex items-center gap-2">
+                                        <LocationIcon className="h-4 lg:hidden" />
+                                        <p>{data.location}</p>
+                                    </div>
+                                    <div className="flex items-center gap-2 md:justify-center">
+                                        <UsersIcon className="h-4 md:hidden" />
+                                        <p>{data.capacity}</p>
+                                    </div>
 
-                        <div className="flex flex-col gap-2">
-                            {users.map((user) => (
-                                <div
-                                    key={user._id}
-                                    className="border-border bg-surface flex w-full items-center justify-between rounded-lg border p-4"
-                                >
-                                    <div>
-                                        <p className="font-medium">
-                                            {user.name}
-                                        </p>
-                                        <p className="text-textmute text-sm">
-                                            {user.email}
-                                        </p>
-                                        <p className="text-textmute text-xs uppercase">
-                                            {user.role}
+                                    <div className="text-textmute flex items-center gap-1 lg:col-span-2 lg:grid lg:grid-cols-2">
+                                        {[
+                                            {
+                                                has: data.has_projector,
+                                                col: "col-start-1",
+                                                content: "Projector",
+                                                icon: ProjectorIcon,
+                                            },
+                                            {
+                                                has: data.has_whiteboard,
+                                                col: "col-start-2",
+                                                content: "Whiteboard",
+                                                icon: WhiteBoardIcon,
+                                            },
+                                        ].map(({ has, col, content, icon }) => {
+                                            const Icon = icon;
+                                            return has ? (
+                                                isLaptop ? (
+                                                    <div
+                                                        key={content}
+                                                        className={`flex items-center justify-center ${col}`}
+                                                    >
+                                                        <span className="flex items-center gap-1 rounded-full bg-green-950/50 px-3 py-1 text-sm text-green-600">
+                                                            <CheckIcon className="size-4" />
+                                                            Available
+                                                        </span>
+                                                    </div>
+                                                ) : (
+                                                    <div
+                                                        key={content}
+                                                        className="bg-border flex w-fit items-center gap-1 rounded-full px-2 py-1 text-xs"
+                                                    >
+                                                        <Icon className="size-3" />
+                                                        {content}
+                                                    </div>
+                                                )
+                                            ) : isLaptop ? (
+                                                <div
+                                                    key={content}
+                                                    className="flex items-center justify-center rounded-md text-sm"
+                                                >
+                                                    <span className="flex items-center gap-1 rounded-full bg-red-950/50 px-3 py-1 text-red-700/75">
+                                                        <XMarkIcon className="size-4" />
+                                                        Not Available
+                                                    </span>
+                                                </div>
+                                            ) : null;
+                                        })}
+                                    </div>
+                                </>
+                            ) : (
+                                <>
+                                    <div className="flex items-center gap-2">
+                                        <EmailIcon className="h-4 lg:hidden" />
+                                        <p>{data.email}</p>
+                                    </div>
+
+                                    <div className="flex items-center gap-2">
+                                        <RoleIcon className="h-4 lg:hidden" />
+                                        <p className="capitalize">
+                                            {data.role}
                                         </p>
                                     </div>
-                                    <div className="flex flex-col gap-2 lg:flex-row">
-                                        <button
-                                            onClick={() => {
-                                                setEditingUserId(user._id);
-                                                setUserForm({
-                                                    name: user.name,
-                                                    email: user.email,
-                                                    role: user.role,
-                                                });
-                                            }}
-                                            className="border-border rounded-lg border text-sm"
-                                        >
-                                            Edit
-                                        </button>
-                                        <button
-                                            onClick={() =>
-                                                handleDeleteUser(user._id)
-                                            }
-                                            className="border-bookedBorder text-bookedText rounded-lg border px-3 py-1 text-sm"
-                                        >
-                                            Delete
-                                        </button>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                ) : (
-                    <div className="border-border bg-surface flex h-full flex-col gap-4 rounded-xl border p-4">
-                        <div className="flex items-center justify-between">
-                            <h3 className="font-semibold">Rooms</h3>
+                                </>
+                            )}
                         </div>
 
-                        <form
-                            onSubmit={handleRoomSubmit}
-                            className="flex flex-col gap-3"
+                        <button
+                            className="lg:hover:bg-border flex items-center justify-center rounded-md md:h-full md:w-full"
+                            onClick={() => openSheet(data._id)}
                         >
-                            <input
-                                value={roomForm.name}
-                                onChange={(e) =>
-                                    setRoomForm({
-                                        ...roomForm,
-                                        name: e.target.value,
-                                    })
-                                }
-                                placeholder="Room name"
-                                className="border-border bg-bg rounded-lg border px-3 py-2"
-                            />
-                            <input
-                                type="number"
-                                min="1"
-                                value={roomForm.capacity}
-                                onChange={(e) =>
-                                    setRoomForm({
-                                        ...roomForm,
-                                        capacity: e.target.value,
-                                    })
-                                }
-                                placeholder="Capacity"
-                                className="border-border bg-bg rounded-lg border px-3 py-2"
-                            />
-                            <div className="flex gap-2">
-                                <button
-                                    type="submit"
-                                    className="bg-text text-bg rounded-lg px-4 py-2"
-                                >
-                                    {editingRoomId
-                                        ? "Save changes"
-                                        : "Add room"}
-                                </button>
-                                {editingRoomId && (
-                                    <button
-                                        type="button"
-                                        onClick={resetRoomForm}
-                                        className="border-border rounded-lg border px-4 py-2"
-                                    >
-                                        Cancel
-                                    </button>
-                                )}
-                            </div>
-                        </form>
-
-                        <div className="flex flex-col gap-2">
-                            {rooms.map((room) => (
-                                <div
-                                    key={room._id}
-                                    className="border-border flex items-center justify-between rounded-lg border p-3"
-                                >
-                                    <div>
-                                        <p className="font-medium">
-                                            {room.name}
-                                        </p>
-                                        <p className="text-textmute text-sm">
-                                            Capacity: {room.capacity}
-                                        </p>
-                                    </div>
-                                    <div className="flex gap-2">
-                                        <button
-                                            onClick={() => {
-                                                setEditingRoomId(room._id);
-                                                setRoomForm({
-                                                    name: room.name,
-                                                    capacity: room.capacity,
-                                                });
-                                            }}
-                                            className="border-border rounded-lg border px-3 py-1 text-sm"
-                                        >
-                                            Edit
-                                        </button>
-                                        <button
-                                            onClick={() =>
-                                                handleDeleteRoom(room._id)
-                                            }
-                                            className="border-bookedBorder text-bookedText rounded-lg border px-3 py-1 text-sm"
-                                        >
-                                            Delete
-                                        </button>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
+                            <ExpandIcon className="size-4" />
+                        </button>
                     </div>
-                )}
+                ))}
             </div>
+
+            {/* <MenuModal
+                open={modal}
+                triggerRect={rect}
+                onClose={() => setModal(false)}
+            >
+                <ConfirmMenu
+                            onConfirm={() => handleDelete(_id)}
+                            onCancel={() => setMenu(false)}
+                        />
+            </MenuModal> */}
+
+            <BottomSheet isOpen={sheet} closeSheet={closeSheet}>
+                <ManageForm variant={sheet} editingItem={editingItem} />
+            </BottomSheet>
         </section>
     );
 };

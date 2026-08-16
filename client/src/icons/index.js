@@ -21,4 +21,8 @@ export {
     CircleHelp as InformationCircleIcon,
     MapPin as LocationIcon,
     UserRoundPlus as AddUserIcon,
+    Mail as EmailIcon,
+    UserRoundKey as RoleIcon,
+    Projector as ProjectorIcon,
+    Presentation as WhiteBoardIcon,
 } from "lucide-react";

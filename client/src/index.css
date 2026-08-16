@@ -60,7 +60,7 @@ label {
 }
 
 button {
-    @apply cursor-pointer font-bold;
+    @apply cursor-pointer font-bold transition-transform duration-200 active:scale-90;
 }
 
 button:disabled {

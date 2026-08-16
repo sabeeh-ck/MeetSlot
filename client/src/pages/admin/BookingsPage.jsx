@@ -36,7 +36,7 @@ const BookingsPage = () => {
                 <div className="border-border bg-surface lg:bg-bg mx-4 flex gap-1 rounded-xl border p-1 lg:flex-col lg:gap-2 lg:border-0 lg:p-0">
                     <button
                         onClick={() => setView("upcoming")}
-                        className={`flex flex-1 items-center justify-center gap-1 rounded-lg py-2 text-sm font-medium transition-all lg:justify-between lg:px-2 ${view === "upcoming" ? "bg-text text-bg lg:text-text lg:bg-border shadow lg:shadow-none" : "lg:text-text text-textmute active:bg-border lg:hover:bg-border"}`}
+                        className={`flex flex-1 items-center justify-center gap-1 rounded-lg py-2 text-sm font-medium transition-all md:scale-100! lg:justify-between lg:px-2 ${view === "upcoming" ? "bg-text text-bg lg:text-text lg:bg-border shadow lg:shadow-none" : "lg:text-text text-textmute active:bg-border lg:hover:bg-border"}`}
                     >
                         <span>Upcoming</span>
                         <span className="lg:hidden">-</span>
@@ -45,7 +45,7 @@ const BookingsPage = () => {
 
                     <button
                         onClick={() => setView("past")}
-                        className={`flex flex-1 items-center justify-center gap-1 rounded-lg py-2 text-sm font-medium transition-all lg:justify-between lg:px-2 ${view === "past" ? "bg-text text-bg lg:text-text lg:bg-border shadow lg:shadow-none" : "lg:text-text active:bg-border text-textmute lg:hover:bg-border"}`}
+                        className={`flex flex-1 items-center justify-center gap-1 rounded-lg py-2 text-sm font-medium transition-all md:scale-100! lg:justify-between lg:px-2 ${view === "past" ? "bg-text text-bg lg:text-text lg:bg-border shadow lg:shadow-none" : "lg:text-text active:bg-border text-textmute lg:hover:bg-border"}`}
                     >
                         <span>Past</span>
                         <span className="lg:hidden">-</span>

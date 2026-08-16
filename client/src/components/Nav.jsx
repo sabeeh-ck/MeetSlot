@@ -1,23 +1,14 @@
 import { NavLink } from "react-router-dom";
 import {
-    CalendarIconOutline as BookingsIconOutline,
-    CalendarIconSolid as BookingsIconSolid,
+    CalendarIcon as BookingsIconOutline,
     ChevronUpDownIcon,
-    DashboardIconOutline,
-    DashboardIconSolid,
-    EmployeesOutline,
-    EmployeesSolid,
-    HomeIconOutline,
-    HomeIconSolid,
+    DashboardIcon,
+    HomeIcon,
     PlusIcon,
-    RoomIconOutline,
-    RoomIconSolid,
-    UserCircleOutline,
-    UserCircleSolid,
-    UserIconOutline,
-    UserIconSolid,
-    UsersIconOutline,
-    UsersIconSolid,
+    RoomIcon,
+    UserCircleIcon,
+    UserIcon,
+    UsersIcon,
 } from "../icons";
 import { useAuth } from "../context/AuthContext";
 import { useWindowWidth } from "../hooks/useWindowWidth";
@@ -27,20 +18,17 @@ const NAV_ITEMS = {
     employee: [
         {
             name: "Home",
-            outline: HomeIconOutline,
-            solid: HomeIconSolid,
+            icon: HomeIcon,
             path: "/home",
         },
         {
             name: "Meetings",
-            outline: EmployeesOutline,
-            solid: EmployeesSolid,
+            icon: UsersIcon,
             path: "/my-meetings",
         },
         {
             name: "User",
-            outline: UserIconOutline,
-            solid: UserIconSolid,
+            icon: UserIcon,
             path: "/user",
         },
     ],
@@ -48,38 +36,32 @@ const NAV_ITEMS = {
     admin: [
         {
             name: "Dashboard",
-            outline: DashboardIconOutline,
-            solid: DashboardIconSolid,
+            icon: DashboardIcon,
             path: "/admin/dashboard",
         },
         {
             name: "Bookings",
-            outline: BookingsIconOutline,
-            solid: BookingsIconSolid,
+            icon: BookingsIconOutline,
             path: "/admin/bookings",
         },
         {
             name: "Rooms",
-            outline: RoomIconOutline,
-            solid: RoomIconSolid,
+            icon: RoomIcon,
             path: "/admin/rooms",
         },
         {
             name: "Users",
-            outline: UsersIconOutline,
-            solid: UsersIconSolid,
+            icon: UsersIcon,
             path: "/admin/users",
         },
         {
             name: "New Meeting",
-            outline: PlusIcon,
-            solid: PlusIcon,
+            icon: PlusIcon,
             path: "/admin/new-meeting",
         },
         {
             name: "Login",
-            outline: UserCircleOutline,
-            solid: UserCircleSolid,
+            icon: UserCircleIcon,
             path: "/admin/user",
         },
     ],
@@ -122,7 +104,7 @@ const Nav = ({ isExpanded, expandNav, minimiseNav }) => {
                         transition={{ duration: 0.01, ease: "easeInOut" }}
                         className="flex w-full flex-col items-start p-3 lg:hidden"
                     >
-                        {navItems.map(({ name, path, solid, outline }) => {
+                        {navItems.map(({ name, path, icon }) => {
                             if (isLaptop && name === "User") return null;
 
                             return (
@@ -141,9 +123,7 @@ const Nav = ({ isExpanded, expandNav, minimiseNav }) => {
                                         }
                                     >
                                         {({ isActive }) => {
-                                            const Icon = isActive
-                                                ? solid
-                                                : outline;
+                                            const Icon = icon;
                                             return (
                                                 <>
                                                     <div className="flex size-6 shrink-0 items-center justify-center">
@@ -175,40 +155,40 @@ const Nav = ({ isExpanded, expandNav, minimiseNav }) => {
                         }}
                         className="flex w-full items-center justify-between lg:flex-col lg:items-start"
                     >
-                        {collapsedItems.map(
-                            ({ name, path, solid, outline }) => (
-                                <NavLink
-                                    key={name}
-                                    to={path}
-                                    onClick={minimiseNav}
-                                    aria-label={name}
-                                    className={({ isActive }) =>
-                                        `flex h-12 w-full flex-1 shrink-0 items-center justify-center rounded-full transition-all duration-200 lg:h-fit lg:justify-start lg:gap-2 lg:rounded-lg lg:p-2 ${
-                                            isActive
-                                                ? "lg:bg-border bg-text/10"
-                                                : ""
-                                        }`
-                                    }
-                                >
-                                    {({ isActive }) => {
-                                        const Icon = isActive ? solid : outline;
-                                        return (
-                                            <>
-                                                <div className="flex size-6 shrink-0 items-center justify-center">
-                                                    <Icon className="size-6 shrink-0" />
-                                                </div>
-                                                <span className="hidden text-xs font-bold whitespace-nowrap select-none lg:block lg:text-sm">
-                                                    {name}
-                                                </span>
-                                                {isActive && isLaptop && (
-                                                    <div className="bg-text ml-auto hidden h-5 w-1.5 rounded-sm lg:block" />
-                                                )}
-                                            </>
-                                        );
-                                    }}
-                                </NavLink>
-                            ),
-                        )}
+                        {collapsedItems.map(({ name, path, icon }) => (
+                            <NavLink
+                                key={name}
+                                to={path}
+                                onClick={minimiseNav}
+                                aria-label={name}
+                                className={({ isActive }) =>
+                                    `flex h-12 w-full flex-1 shrink-0 items-center justify-center rounded-full transition-all duration-200 lg:h-fit lg:justify-start lg:gap-2 lg:rounded-lg lg:p-2 ${
+                                        isActive
+                                            ? "lg:bg-border bg-text/10"
+                                            : ""
+                                    }`
+                                }
+                            >
+                                {({ isActive }) => {
+                                    const Icon = icon;
+                                    return (
+                                        <>
+                                            <div className="flex size-6 shrink-0 items-center justify-center">
+                                                <Icon
+                                                    className={`size-6 shrink-0`}
+                                                />
+                                            </div>
+                                            <span className="hidden text-xs font-bold whitespace-nowrap select-none lg:block lg:text-sm">
+                                                {name}
+                                            </span>
+                                            {isActive && isLaptop && (
+                                                <div className="bg-text ml-auto hidden h-5 w-1.5 rounded-sm lg:block" />
+                                            )}
+                                        </>
+                                    );
+                                }}
+                            </NavLink>
+                        ))}
 
                         {user?.role === "admin" && (
                             <button

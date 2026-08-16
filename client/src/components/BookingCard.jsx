@@ -1,4 +1,4 @@
-import { ClockIcon, RoomIconSolid } from "../icons";
+import { ClockIcon, RoomIcon } from "../icons";
 import { minutesTo12Hour } from "../utils/time";
 import MenuModal from "./MenuModal";
 import { useState } from "react";
@@ -54,7 +54,7 @@ const BookingCard = ({
                     <p>{`${startTime} - ${endTime}`}</p>
                 </div>
                 <div className="flex items-center gap-2">
-                    <RoomIconSolid className="h-4" />
+                    <RoomIcon className="h-4" />
                     <p>{roomName}</p>
                 </div>
             </div>

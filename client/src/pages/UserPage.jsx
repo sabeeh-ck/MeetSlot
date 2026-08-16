@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { LogoutIcon, UserCircleSolid } from "../icons";
+import { LogoutIcon, UserCircleIcon } from "../icons";
 
 const UserPage = () => {
     const { user, logout } = useAuth();
@@ -9,7 +9,7 @@ const UserPage = () => {
     return (
         <div className="m-4 flex flex-col gap-4">
             <div className="flex flex-col gap-2">
-                <UserCircleSolid className="size-20" />
+                <UserCircleIcon className="size-20" />
                 <div>
                     <h3 className="font-bold">{user.name}</h3>
                     <code className="text-textmute">{user.email}</code>

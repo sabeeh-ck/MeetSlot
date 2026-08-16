@@ -67,16 +67,13 @@ router.get("/bookings", async (req, res) => {
     }
 });
 
-router.get("/manage", async (req, res) => {
+router.get("/users", async (req, res) => {
     try {
-        const [users, rooms] = await Promise.all([
-            User.find({}).sort({ createdAt: -1 }),
-            Room.find({}).sort({ name: 1 }),
-        ]);
+        const users = await User.find({}).sort({ createdAt: -1 });
 
-        res.status(200).json({ users, rooms });
+        res.status(200).json({ users });
     } catch (error) {
-        res.status(500).json({ message: "Failed to fetch manage data", error: error.message });
+        res.status(500).json({ message: "Failed to fetch data", error: error.message });
     }
 });
 

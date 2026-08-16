@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { CalendarIconSolid, CalendarIconOutline } from "../icons";
+import { CalendarIcon } from "../icons";
 import { today, tomorrow } from "../utils/time";
 
 const DateSelector = ({
@@ -27,12 +27,13 @@ const DateSelector = ({
             isSelected: selectedDate === tomorrow,
         },
         {
-            content:
-                selectedDate === today || selectedDate === tomorrow ? (
-                    <CalendarIconOutline className="h-5" />
-                ) : (
-                    <CalendarIconSolid className="h-5" />
-                ),
+            content: (
+                // selectedDate === today || selectedDate === tomorrow ? (
+                <CalendarIcon className="h-5" />
+            ),
+            // ) : (
+            // <CalendarIconSolid className="h-5" />
+            // )
             action: () =>
                 dateInputRef.current?.showPicker?.() ??
                 dateInputRef.current?.click(),

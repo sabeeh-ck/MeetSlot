@@ -13,7 +13,7 @@ const Header = () => {
             <div
                 className={`mx-auto flex w-full items-center justify-between px-4`}
             >
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-3">
                     <Link
                         to={isAdmin ? "/admin" : "/home"}
                         className="text-lg font-black"

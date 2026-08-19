@@ -1,5 +1,12 @@
 import { Link } from "react-router-dom";
-import { ArrowUpRightIcon, PlusIcon } from "../../icons";
+import {
+    ArrowUpRightIcon,
+    LoaderIcon,
+    PlusIcon,
+    RoomIcon,
+    TrashIcon,
+    UserIcon,
+} from "../../icons";
 import { Fragment, useState } from "react";
 import MenuModal from "../MenuModal";
 import ConfirmMenu from "../ConfirmMenu";
@@ -7,26 +14,27 @@ import api from "../../api/axios";
 import Skeleton from "react-loading-skeleton";
 
 const TodaysBookings = ({ data, loading, refetch }) => {
-    const [menu, setMenu] = useState(false);
+    const [activeMenuId, setActiveMenuId] = useState(null);
     const [rect, setRect] = useState(null);
-    const [deleting, setDeleting] = useState(false);
+    const [deletingId, setDeletingId] = useState(null);
 
-    const handleOpenMenu = (e) => {
+    const handleOpenMenu = (e, _id) => {
         setRect(e.currentTarget.getBoundingClientRect());
-        setMenu(true);
+        setActiveMenuId(_id);
     };
 
     const handleDelete = async (_id) => {
         try {
-            setMenu(false);
-            setDeleting(true);
+            setActiveMenuId(null);
+            setDeletingId(_id);
 
             await api.delete(`/user/delete/${_id}`);
 
-            setDeleting(false);
+            setDeletingId(null);
             refetch();
         } catch (error) {
             console.log(error);
+            setDeletingId(null);
         }
     };
 
@@ -51,10 +59,10 @@ const TodaysBookings = ({ data, loading, refetch }) => {
                     borderRadius={12}
                 />
             ) : (
-                <div className="border-border bg-surface flex h-full flex-col gap-4 rounded-xl border p-4">
+                <div className="border-border bg-surface flex h-full flex-col gap-4 rounded-xl border p-4 md:gap-2">
                     {data?.length > 0 ? (
                         <>
-                            <div className="text-textmute hidden font-bold md:grid md:grid-cols-[0.5fr_1fr_1fr_1fr_1fr_1fr_0.5fr]">
+                            <div className="text-textmute hidden font-bold md:grid md:grid-cols-[0.25fr_1fr_1fr_1fr_1fr_1fr_0.5fr] md:gap-1">
                                 <span>No</span>
                                 <span>Start</span>
                                 <span>End</span>
@@ -80,10 +88,14 @@ const TodaysBookings = ({ data, loading, refetch }) => {
                                         title,
                                         user,
                                     } = booking;
+
                                     const roomName =
                                         roomId?.name ?? "Deleted room";
                                     const userName =
                                         user?.name ?? "Deleted user";
+
+                                    const isMenuOpen = activeMenuId === _id;
+                                    const isDeleting = deletingId === _id;
 
                                     const startTime = new Date(
                                         start,
@@ -105,8 +117,8 @@ const TodaysBookings = ({ data, loading, refetch }) => {
 
                                     return (
                                         <Fragment key={index}>
-                                            <div className="flex items-center justify-between md:grid md:grid-cols-[0.5fr_1fr_1fr_1fr_1fr_1fr_0.5fr] md:gap-0">
-                                                <div className="flex flex-col md:col-span-6 md:grid md:grid-cols-[0.5fr_1fr_1fr_1fr_1fr_1fr] md:gap-0">
+                                            <div className="flex items-center justify-between md:grid md:grid-cols-[0.25fr_1fr_1fr_1fr_1fr_1fr_0.5fr] md:gap-1">
+                                                <div className="flex flex-col gap-1 md:contents">
                                                     <span className="hidden md:block md:max-w-fit">
                                                         {index + 1}
                                                     </span>
@@ -116,7 +128,7 @@ const TodaysBookings = ({ data, loading, refetch }) => {
                                                     <span className="hidden md:block">
                                                         {endTime}
                                                     </span>
-                                                    <span className="text-textmute mb-1 text-xs md:hidden">
+                                                    <span className="text-textmute text-xs md:hidden">
                                                         {startTime} - {endTime}
                                                     </span>
                                                     <span className="hidden md:block">
@@ -128,38 +140,41 @@ const TodaysBookings = ({ data, loading, refetch }) => {
                                                     <span className="hidden md:block">
                                                         {userName}
                                                     </span>
-                                                    <div className="text-textmute order-last flex gap-2 text-xs md:hidden">
-                                                        <span>{roomName}</span>
-                                                        <span>|</span>
-                                                        <span>{userName}</span>
-                                                    </div>
+                                                    <span className="text-textmute flex gap-2 text-xs md:hidden">
+                                                        <RoomIcon className="size-3 stroke-3" />
+                                                        {roomName}
+                                                    </span>
+                                                    <span className="text-textmute flex gap-2 text-xs md:hidden">
+                                                        <UserIcon className="size-3 stroke-3" />
+                                                        {userName}
+                                                    </span>
                                                 </div>
 
                                                 <div className="md:flex md:w-full md:justify-center">
                                                     <button
-                                                        onClick={handleOpenMenu}
-                                                        disabled={deleting}
-                                                        className={`border-border md:hover:bg-border active:bg-border relative my-auto flex items-center justify-center gap-2 rounded-lg border px-4 py-1 ${menu ? "bg-border" : "bg-surface"}`}
+                                                        onClick={(e) =>
+                                                            handleOpenMenu(
+                                                                e,
+                                                                _id,
+                                                            )
+                                                        }
+                                                        disabled={isDeleting}
+                                                        className={`border-border md:hover:bg-border active:bg-border relative my-auto flex items-center justify-center gap-2 rounded-lg border px-4 py-2 ${isMenuOpen ? "bg-border" : "bg-surface"}`}
                                                     >
-                                                        <span
-                                                            className={
-                                                                deleting
-                                                                    ? "invisible"
-                                                                    : "visible text-sm"
-                                                            }
-                                                        >
-                                                            Cancel
-                                                        </span>
-                                                        {deleting && (
-                                                            <span className="border-text absolute h-4 w-4 animate-spin rounded-full border-3 border-t-transparent" />
+                                                        {isDeleting ? (
+                                                            <LoaderIcon className="s size-4 animate-spin" />
+                                                        ) : (
+                                                            <TrashIcon className="size-4 text-red-700/40" />
                                                         )}
                                                     </button>
 
                                                     <MenuModal
-                                                        open={menu}
+                                                        open={isMenuOpen}
                                                         triggerRect={rect}
                                                         onClose={() =>
-                                                            setMenu(false)
+                                                            setActiveMenuId(
+                                                                null,
+                                                            )
                                                         }
                                                     >
                                                         <ConfirmMenu
@@ -169,7 +184,9 @@ const TodaysBookings = ({ data, loading, refetch }) => {
                                                                 )
                                                             }
                                                             onCancel={() =>
-                                                                setMenu(false)
+                                                                setActiveMenuId(
+                                                                    null,
+                                                                )
                                                             }
                                                         />
                                                     </MenuModal>
@@ -177,7 +194,7 @@ const TodaysBookings = ({ data, loading, refetch }) => {
                                             </div>
 
                                             {index < data.length - 1 && (
-                                                <hr className="border-border md:hidden" />
+                                                <hr className="border-border" />
                                             )}
                                         </Fragment>
                                     );

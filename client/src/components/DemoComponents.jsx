@@ -37,7 +37,7 @@ export const DemoHint = ({ setEmail }) => (
 );
 
 export const DemoBadge = () => (
-    <div className="rounded-sm border border-yellow-600/40 bg-yellow-600/5 px-2 text-xs font-bold text-yellow-700/90">
-        Demo
+    <div className="rounded-sm bg-amber-400/10 px-2.5 py-0.5 text-xs font-bold text-amber-400 ring-1 ring-amber-400/20 ring-inset">
+        Demo Mode
     </div>
 );

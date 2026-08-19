@@ -159,8 +159,8 @@ const ManagePage = ({ items }) => {
                                                         key={content}
                                                         className={`flex items-center justify-center ${col}`}
                                                     >
-                                                        <span className="flex items-center gap-1 rounded-full bg-green-950/50 px-3 py-1 text-sm text-green-600">
-                                                            <CheckIcon className="size-4" />
+                                                        <span className="inline-flex items-center gap-1 rounded-full bg-emerald-400/10 px-2.5 py-0.5 text-xs font-medium text-emerald-400 ring-1 ring-emerald-400/20 ring-inset lg:text-sm">
+                                                            <CheckIcon className="size-4 stroke-3" />
                                                             Available
                                                         </span>
                                                     </div>
@@ -178,7 +178,7 @@ const ManagePage = ({ items }) => {
                                                     key={content}
                                                     className="flex items-center justify-center rounded-md text-sm"
                                                 >
-                                                    <span className="flex items-center gap-1 rounded-full bg-red-950/50 px-3 py-1 text-red-700/75">
+                                                    <span className="inline-flex items-center gap-1 rounded-full bg-red-400/10 px-2.5 py-0.5 text-xs font-medium text-red-400 ring-1 ring-red-400/20 ring-inset lg:text-sm">
                                                         <XMarkIcon className="size-4" />
                                                         Not Available
                                                     </span>
@@ -225,14 +225,16 @@ const ManagePage = ({ items }) => {
                         />
             </MenuModal> */}
 
-            <BottomSheet isOpen={sheet} closeSheet={closeSheet}>
-                <ManageForm
-                    variant={sheet}
-                    editingItem={editingItem}
-                    onShowToast={showToast}
-                    onDone={closeSheet}
-                />
-            </BottomSheet>
+            {!isLaptop && (
+                <BottomSheet isOpen={sheet} closeSheet={closeSheet}>
+                    <ManageForm
+                        variant={sheet}
+                        editingItem={editingItem}
+                        onShowToast={showToast}
+                        onDone={closeSheet}
+                    />
+                </BottomSheet>
+            )}
 
             <Toast
                 type={toast.type}

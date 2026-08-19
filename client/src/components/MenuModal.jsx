@@ -19,7 +19,7 @@ const MenuModal = ({ children, open, onClose, triggerRect }) => {
                 <>
                     <motion.div
                         key="backdrop"
-                        className="fixed inset-0 z-60 bg-black/40"
+                        className="fixed inset-0 z-49 bg-black/10"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
@@ -30,7 +30,7 @@ const MenuModal = ({ children, open, onClose, triggerRect }) => {
                         initial={{ opacity: 0, scale: 0.95, y: -10 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.95, y: -10 }}
-                        className="border-border bg-surface fixed z-70 min-h-2 rounded-2xl border p-4"
+                        className="border-border bg-surface fixed z-50 min-h-2 rounded-2xl border p-4"
                         style={{
                             top: triggerRect.bottom + 8,
                             right: window.innerWidth - triggerRect.right,

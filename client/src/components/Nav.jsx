@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom";
 import {
-    CalendarIcon as BookingsIconOutline,
+    CalendarIcon,
     ChevronUpDownIcon,
     DashboardIcon,
     HomeIcon,
@@ -23,7 +23,7 @@ const NAV_ITEMS = {
         },
         {
             name: "Meetings",
-            icon: UsersIcon,
+            icon: CalendarIcon,
             path: "/my-meetings",
         },
         {
@@ -41,7 +41,7 @@ const NAV_ITEMS = {
         },
         {
             name: "Bookings",
-            icon: BookingsIconOutline,
+            icon: CalendarIcon,
             path: "/admin/bookings",
         },
         {
@@ -162,7 +162,7 @@ const Nav = ({ isExpanded, expandNav, minimiseNav }) => {
                                 onClick={minimiseNav}
                                 aria-label={name}
                                 className={({ isActive }) =>
-                                    `flex h-12 w-full flex-1 shrink-0 items-center justify-center rounded-full transition-all duration-200 lg:h-fit lg:justify-start lg:gap-2 lg:rounded-lg lg:p-2 ${
+                                    `flex h-12 w-full flex-1 shrink-0 basis-0 items-center justify-center rounded-full transition-all duration-200 lg:h-fit lg:justify-start lg:gap-2 lg:rounded-lg lg:p-2 ${
                                         isActive
                                             ? "lg:bg-border bg-text/10"
                                             : ""
@@ -193,7 +193,7 @@ const Nav = ({ isExpanded, expandNav, minimiseNav }) => {
                         {user?.role === "admin" && (
                             <button
                                 onClick={expandNav}
-                                className="flex h-12 w-15 shrink-0 items-center justify-center rounded-full transition-all duration-200 active:scale-85 lg:hidden"
+                                className="flex h-12 w-full flex-1 shrink-0 basis-0 items-center justify-center rounded-full transition-all duration-200 active:scale-85 lg:hidden"
                                 aria-label="Expand Navigation"
                             >
                                 <ChevronUpDownIcon className="size-6" />

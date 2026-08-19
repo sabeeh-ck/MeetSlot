@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import api from "../../api/axios";
 import {
     SaveIcon,
     CheckIcon,
@@ -27,7 +28,13 @@ const emptyRoomForm = {
 const demoMessage =
     "Demo Mode: Editing and Deleting is simulated and was not completed.";
 
-const ManageForm = ({ variant, editingItem, onShowToast, onDone }) => {
+const ManageForm = ({
+    variant,
+    editingItem,
+    onShowToast,
+    onDone,
+    onRefresh,
+}) => {
     const { isDemo } = useAuth();
 
     const [formData, setFormData] = useState(
@@ -62,10 +69,13 @@ const ManageForm = ({ variant, editingItem, onShowToast, onDone }) => {
                 }
 
                 await api.put(
-                    `/admin/manage/${variant === "room" ? "rooms" : "users"}/${editingItem.id}`,
+                    `/admin/manage/${variant === "room" ? "rooms" : "users"}/${editingItem._id}`,
                     formData,
                 );
-                onShowToast("success", "Room updated successfully.");
+                onShowToast(
+                    "success",
+                    `${variant === "room" ? "Room" : "User"} updated successfully.`,
+                );
                 onDone();
             } else {
                 await api.post(
@@ -75,7 +85,7 @@ const ManageForm = ({ variant, editingItem, onShowToast, onDone }) => {
                 onShowToast("success", "Room created successfully.");
             }
 
-            fetchManageData();
+            onRefresh();
             onDone();
         } catch (error) {
             onShowToast(
@@ -97,7 +107,7 @@ const ManageForm = ({ variant, editingItem, onShowToast, onDone }) => {
             await api.delete(`/admin/manage/${table}/${id}`);
             onShowToast("success", "Deleted successfully.");
             onDone();
-            fetchManageData();
+            onRefresh();
         } catch (error) {
             onShowToast(
                 "error",
@@ -296,7 +306,7 @@ const ManageForm = ({ variant, editingItem, onShowToast, onDone }) => {
                     <div className="inset-x-0 flex justify-center">
                         <button
                             type="button"
-                            onClick={handleDelete}
+                            onClick={() => handleDelete(editingItem._id)}
                             className="border-bookedBorder text-bookedText flex items-center gap-2 rounded-2xl border px-8 py-4"
                         >
                             <TrashIcon className="size-4" />

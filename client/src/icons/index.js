@@ -12,7 +12,7 @@ export {
     ArrowUpRight as ArrowUpRightIcon,
     UsersRound as UsersIcon,
     Maximize2 as ExpandIcon,
-    Pencil as PencilIcon,
+    Pencil as EditIcon,
     Trash as TrashIcon,
     Save as SaveIcon,
     Clock3 as ClockIcon,

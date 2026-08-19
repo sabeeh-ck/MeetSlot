@@ -92,9 +92,9 @@ const IndexPage = () => {
                     </div>
                 </section>
 
-                <div className="from-bg via-bg/25 pointer-events-none fixed top-50 left-0 z-40 h-8 w-full bg-linear-to-b to-transparent lg:hidden" />
+                <div className="from-bg via-bg/25 pointer-events-none fixed top-50 left-0 z-40 h-8 w-full bg-linear-to-b to-transparent md:hidden" />
 
-                <div className="mt-38 w-full gap-6 md:grid md:grid-cols-2 md:pb-4 lg:m-0 lg:grid-cols-3">
+                <div className="mt-38 w-full gap-6 md:m-0 md:grid md:grid-cols-2 md:pb-4 lg:grid-cols-3">
                     {!isMobile && (
                         <aside className="sticky top-20 hidden h-fit gap-4 md:z-30 md:flex md:flex-col">
                             <h3>Create Meeting</h3>

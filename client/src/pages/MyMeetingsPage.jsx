@@ -29,7 +29,7 @@ const MyMeetingsPage = () => {
                         className={`flex flex-1 scale-100! items-center justify-center gap-1 rounded-lg py-2 text-sm font-medium transition-all lg:justify-between lg:px-2 ${view === "upcoming" ? "bg-text text-bg lg:text-text lg:bg-border shadow lg:shadow-none" : "lg:text-text text-textmute active:bg-border lg:hover:bg-border"}`}
                     >
                         <span>Upcoming</span>
-                        <span className="lg:hidden">-</span>
+                        <span className="md:hidden">-</span>
                         <span>{upcoming.length}</span>
                     </button>
 

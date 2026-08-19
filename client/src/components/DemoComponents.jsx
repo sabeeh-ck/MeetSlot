@@ -1,9 +1,9 @@
-import { InformationCircleIcon } from "../icons";
+import { InfoIcon } from "../icons";
 
 export const DemoHint = ({ setEmail }) => (
     <div className="m-4 flex flex-col gap-1 rounded-xl bg-yellow-600/5 p-4 text-yellow-700/90 lg:w-[calc(50%-16px)]">
         <span className="flex items-center gap-1 text-sm font-bold tracking-wide uppercase">
-            <InformationCircleIcon className="size-4" />
+            <InfoIcon className="size-4" />
             Portfolio Demo Mode
         </span>
         <div className="flex flex-col gap-1 text-xs leading-relaxed lg:text-sm">

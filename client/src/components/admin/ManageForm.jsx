@@ -6,7 +6,9 @@ import {
     XMarkIcon,
     ProjectorIcon,
     WhiteBoardIcon,
-} from "../icons";
+    InfoIcon,
+} from "../../icons";
+import { useAuth } from "../../context/AuthContext";
 
 const emptyUserForm = {
     name: "",
@@ -22,7 +24,9 @@ const emptyRoomForm = {
     has_whiteboard: false,
 };
 
-const ManageForm = ({ variant, editingItem }) => {
+const ManageForm = ({ variant, editingItem, onShowToast }) => {
+    const { isDemo } = useAuth();
+
     const [formData, setFormData] = useState(
         editingItem
             ? editingItem
@@ -43,31 +47,40 @@ const ManageForm = ({ variant, editingItem }) => {
         }));
     };
 
-    const handleRoomSubmit = async (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         try {
             if (editingItem) {
+                if (isDemo) {
+                    return;
+                }
+
                 await api.put(
-                    `/admin/manage/rooms/${editingItem.id}`,
+                    `/admin/manage/${variant === "room" ? "rooms" : "users"}/${editingItem.id}`,
                     formData,
                 );
-                setMessage("Room updated successfully.");
             } else {
-                await api.post("/admin/manage/rooms", formData);
-                setMessage("Room created successfully.");
+                await api.post(
+                    `/admin/manage/${variant === "room" ? "rooms" : "users"}`,
+                    formData,
+                );
             }
 
-            resetRoomForm();
             fetchManageData();
-        } catch (error) {
-            setMessage(error.response?.data?.message || "Unable to save room.");
-        }
+        } catch (error) {}
     };
 
-    const resetRoomForm = () => {
-        setFormData(emptyRoomForm);
-        setIsEditing(null);
+    const handleDelete = async (id) => {
+        if (isDemo) {
+            return;
+        }
+
+        const table = variant === "user" ? "users" : "rooms";
+        try {
+            await api.delete(`/admin/manage/${table}/${id}`);
+            fetchManageData();
+        } catch (error) {}
     };
 
     if (!formData) return;
@@ -85,7 +98,7 @@ const ManageForm = ({ variant, editingItem }) => {
             </h1>
 
             <form
-                onSubmit={handleRoomSubmit}
+                onSubmit={handleSubmit}
                 className="flex flex-col gap-3 text-sm"
             >
                 {variant === "room" ? (
@@ -241,8 +254,19 @@ const ManageForm = ({ variant, editingItem }) => {
                                 required
                             >
                                 <option value="employee">Employee</option>
-                                <option value="admin">Admin</option>
+                                <option value="admin" disabled={isDemo}>
+                                    Admin
+                                </option>
                             </select>
+
+                            {isDemo && (
+                                <div className="mt-2 w-full rounded-2xl bg-amber-950/30 px-4 py-2 text-amber-700">
+                                    <p className="text-xs">
+                                        Admin roles cannot be created or
+                                        assigned while in demo mode.
+                                    </p>
+                                </div>
+                            )}
                         </div>
                     </>
                 )}
@@ -251,7 +275,7 @@ const ManageForm = ({ variant, editingItem }) => {
                     <div className="inset-x-0 flex justify-center">
                         <button
                             type="button"
-                            onClick={resetRoomForm}
+                            onClick=""
                             className="border-bookedBorder text-bookedText flex items-center gap-2 rounded-2xl border px-8 py-4"
                         >
                             <TrashIcon className="size-4" />

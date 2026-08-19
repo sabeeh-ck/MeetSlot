@@ -20,12 +20,11 @@ import { useWindowWidth } from "../../hooks/useWindowWidth";
 import MenuModal from "../../components/MenuModal";
 import ConfirmMenu from "../../components/ConfirmMenu";
 import BottomSheet from "../../components/BottomSheet";
-import ManageForm from "../../components/ManageForm";
+import ManageForm from "../../components/admin/ManageForm";
 
 const ManagePage = ({ items }) => {
     const [loading, setLoading] = useState(true);
     const [data, setData] = useState(null);
-    const [message, setMessage] = useState("");
     const [sheet, setSheet] = useState(false);
     const [modal, setModal] = useState(false);
     const [rect, setRect] = useState(null);
@@ -51,7 +50,6 @@ const ManagePage = ({ items }) => {
         setSheet(isRooms ? "room" : "user");
     };
     const closeSheet = () => setSheet(null);
-
     const openModal = (e) => {
         setRect(e.currentTarget.getBoundingClientRect());
         setModal(true);
@@ -218,7 +216,10 @@ const ManagePage = ({ items }) => {
             </MenuModal> */}
 
             <BottomSheet isOpen={sheet} closeSheet={closeSheet}>
-                <ManageForm variant={sheet} editingItem={editingItem} />
+                <ManageForm
+                    variant={sheet}
+                    editingItem={editingItem}
+                />
             </BottomSheet>
         </section>
     );

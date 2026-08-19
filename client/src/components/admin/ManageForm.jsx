@@ -272,7 +272,6 @@ const ManageForm = ({ variant, editingItem, onShowToast, onDone }) => {
                             <select
                                 value={formData.role}
                                 onChange={handleChange}
-                                defaultValue={"employee"}
                                 id="role"
                                 required
                             >

@@ -31,7 +31,7 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
-    const isDemo = import.meta.env.VITE_APP_DEMO_MODE;
+    const isDemo = import.meta.env.VITE_APP_DEMO_MODE === "true";
 
     return (
         <AuthContext.Provider

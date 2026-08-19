@@ -11,10 +11,10 @@ const BottomSheet = ({ closeSheet, isOpen, children }) => {
     return createPortal(
         <AnimatePresence>
             {isOpen && (
-                <div className="fixed inset-0 z-9998 flex items-end justify-center">
+                <div className="fixed inset-0 z-199 flex items-end justify-center">
                     <motion.div
                         key="backdrop"
-                        className="fixed inset-0 z-9998 bg-black/40"
+                        className="fixed inset-0 z-199 bg-black/40"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
@@ -23,7 +23,7 @@ const BottomSheet = ({ closeSheet, isOpen, children }) => {
 
                     <motion.div
                         key="sheet"
-                        className="border-border bg-bg fixed inset-x-0 -bottom-10 z-9999 min-h-1/2 touch-none rounded-4xl border-t p-4 pb-16"
+                        className="border-border bg-bg fixed inset-x-0 -bottom-10 z-200 min-h-1/2 touch-none rounded-4xl border-t p-4 pb-16"
                         initial={{ y: "100%" }}
                         animate={{ y: 1 }}
                         exit={{ y: "100%" }}

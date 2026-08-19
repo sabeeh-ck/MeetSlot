@@ -9,6 +9,7 @@ import { useAvailability } from "../hooks/useAvailability";
 import DateSelector from "../components/DateSelector";
 import Skeleton from "react-loading-skeleton";
 import { PlusIcon } from "../icons";
+import Toast from "../components/Toast";
 
 const IndexPage = () => {
     const { isMobile, isLaptop } = useWindowWidth();
@@ -17,6 +18,11 @@ const IndexPage = () => {
     const [selectedSlots, setSelectedSlots] = useState({});
     const [selectedDate, setSelectedDate] = useState(today);
     const [sheet, setSheet] = useState(null);
+    const [toast, setToast] = useState({
+        isOpen: false,
+        type: "",
+        message: "",
+    });
 
     const { availability, loading, refetch } = useAvailability(selectedDate);
 
@@ -25,6 +31,11 @@ const IndexPage = () => {
             setSelectedRoom(availability[0].roomId);
         }
     }, [availability]);
+
+    const showToast = (type, message) => {
+        setToast({ isOpen: true, type, message });
+    };
+    const closeToast = () => setToast((prev) => ({ ...prev, isOpen: false }));
 
     const formattedDate = (() => {
         const [year, month, day] = selectedDate.split("-").map(Number);
@@ -169,8 +180,13 @@ const IndexPage = () => {
                     setSelectedRoom={setSelectedRoom}
                     setSelectedSlots={setSelectedSlots}
                     setSheet={setSheet}
+                    showToast={showToast}
                 />
             </BottomSheet>
+
+            <Toast isOpen={toast.isOpen} onClose={closeToast} type={toast.type}>
+                {toast.message}
+            </Toast>
         </div>
     );
 };

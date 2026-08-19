@@ -3,6 +3,7 @@ import { minutesTo12Hour, minutesTo24Hour } from "../utils/time";
 import { useWindowWidth } from "../hooks/useWindowWidth";
 import api from "../api/axios";
 import { useAuth } from "../context/AuthContext";
+import { LoaderIcon, SaveIcon } from "../icons";
 
 const BookingForm = ({
     selectedDate,
@@ -14,6 +15,7 @@ const BookingForm = ({
     availability,
     refetch,
     setSheet,
+    showToast,
 }) => {
     const today = new Date().toISOString().split("T")[0];
     const { token, user } = useAuth();
@@ -70,9 +72,10 @@ const BookingForm = ({
             setSheet("");
             setSelectedSlots({});
             await refetch();
+            showToast("success", "Booking Successfull");
         } catch (err) {
             if (err.response?.data.msg) {
-                setError(err.response.data.msg);
+                showToast("error", err.response.data.msg);
             } else {
                 console.log(err);
             }
@@ -170,15 +173,18 @@ const BookingForm = ({
                 </div>
 
                 <button
+                    type="submit"
                     disabled={loading}
-                    className="bg-text text-bg md:hover:bg-text/80 active:bg-text/80 relative mx-auto my-4 flex items-center justify-center rounded-lg px-8 py-2"
+                    className="bg-text text-bg absolute top-8 right-4 rounded-full px-4 py-2"
                 >
-                    <span className={loading ? "invisible" : "visible"}>
-                        Confirm
+                    <span className="flex items-center gap-1">
+                        {loading ? (
+                            <LoaderIcon className="size-4 animate-spin" />
+                        ) : (
+                            <SaveIcon className="size-4" />
+                        )}
+                        Save
                     </span>
-                    {loading && (
-                        <span className="border-bg absolute h-4 w-4 animate-spin rounded-full border-3 border-t-transparent" />
-                    )}
                 </button>
             </form>
         </section>

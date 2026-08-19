@@ -24,7 +24,10 @@ const emptyRoomForm = {
     has_whiteboard: false,
 };
 
-const ManageForm = ({ variant, editingItem, onShowToast }) => {
+const demoMessage =
+    "Demo Mode: Editing and Deleting is simulated and was not completed.";
+
+const ManageForm = ({ variant, editingItem, onShowToast, onDone }) => {
     const { isDemo } = useAuth();
 
     const [formData, setFormData] = useState(
@@ -53,6 +56,8 @@ const ManageForm = ({ variant, editingItem, onShowToast }) => {
         try {
             if (editingItem) {
                 if (isDemo) {
+                    onShowToast("warning", demoMessage);
+                    onDone();
                     return;
                 }
 
@@ -60,27 +65,45 @@ const ManageForm = ({ variant, editingItem, onShowToast }) => {
                     `/admin/manage/${variant === "room" ? "rooms" : "users"}/${editingItem.id}`,
                     formData,
                 );
+                onShowToast("success", "Room updated successfully.");
+                onDone();
             } else {
                 await api.post(
                     `/admin/manage/${variant === "room" ? "rooms" : "users"}`,
                     formData,
                 );
+                onShowToast("success", "Room created successfully.");
             }
 
             fetchManageData();
-        } catch (error) {}
+            onDone();
+        } catch (error) {
+            onShowToast(
+                "error",
+                error.response?.data?.message || "Unable to save room.",
+            );
+        }
     };
 
     const handleDelete = async (id) => {
         if (isDemo) {
+            onShowToast("warning", demoMessage);
+            onDone();
             return;
         }
 
         const table = variant === "user" ? "users" : "rooms";
         try {
             await api.delete(`/admin/manage/${table}/${id}`);
+            onShowToast("success", "Deleted successfully.");
+            onDone();
             fetchManageData();
-        } catch (error) {}
+        } catch (error) {
+            onShowToast(
+                "error",
+                error.response?.data?.message || "Unable to delete user.",
+            );
+        }
     };
 
     if (!formData) return;
@@ -260,12 +283,11 @@ const ManageForm = ({ variant, editingItem, onShowToast }) => {
                             </select>
 
                             {isDemo && (
-                                <div className="mt-2 w-full rounded-2xl bg-amber-950/30 px-4 py-2 text-amber-700">
-                                    <p className="text-xs">
-                                        Admin roles cannot be created or
-                                        assigned while in demo mode.
-                                    </p>
-                                </div>
+                                <span className="text-xs text-amber-900">
+                                    <InfoIcon className="mr-1 inline-block size-3" />
+                                    Admin roles cannot be created or assigned
+                                    while in demo mode.
+                                </span>
                             )}
                         </div>
                     </>
@@ -275,7 +297,7 @@ const ManageForm = ({ variant, editingItem, onShowToast }) => {
                     <div className="inset-x-0 flex justify-center">
                         <button
                             type="button"
-                            onClick=""
+                            onClick={handleDelete}
                             className="border-bookedBorder text-bookedText flex items-center gap-2 rounded-2xl border px-8 py-4"
                         >
                             <TrashIcon className="size-4" />
@@ -287,7 +309,7 @@ const ManageForm = ({ variant, editingItem, onShowToast }) => {
                 <div className="absolute top-8 right-4 flex gap-2 lg:static">
                     <button
                         type="submit"
-                        className="bg-text text-bg flex items-center gap-1 rounded-full px-3 py-2"
+                        className="bg-text text-bg flex items-center gap-1 rounded-full px-4 py-2"
                     >
                         <SaveIcon className="size-4" />
                         Save

@@ -26,7 +26,7 @@ const Slot = ({
                 type="button"
                 onClick={() => handleSelect(slot)}
                 disabled={isBooked}
-                className={`flex h-25 w-full flex-col items-start border-x py-1 pl-8 text-sm ${roundTop} ${roundBottom} ${
+                className={`flex h-25 w-full scale-100! flex-col items-start border-x py-1 pl-8 text-sm transition-all duration-300 ease-in-out ${roundTop} ${roundBottom} ${
                     isBooked
                         ? isBooked
                         : isSelected

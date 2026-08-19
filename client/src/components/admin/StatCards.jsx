@@ -17,12 +17,12 @@ const StatCards = ({ data, loading }) => {
         {
             title: "Total Users",
             value: data?.totalUsers ?? 0,
-            path: "/admin/manage",
+            path: "/admin/users",
         },
         {
             title: "Total Rooms",
             value: data?.totalRooms ?? 0,
-            path: "/admin/manage",
+            path: "/admin/rooms",
         },
     ];
 

@@ -21,6 +21,7 @@ import MenuModal from "../../components/MenuModal";
 import ConfirmMenu from "../../components/ConfirmMenu";
 import BottomSheet from "../../components/BottomSheet";
 import ManageForm from "../../components/admin/ManageForm";
+import Toast from "../../components/Toast";
 
 const ManagePage = ({ items }) => {
     const [loading, setLoading] = useState(true);
@@ -29,6 +30,11 @@ const ManagePage = ({ items }) => {
     const [modal, setModal] = useState(false);
     const [rect, setRect] = useState(null);
     const [editingItem, setEditingItem] = useState(null);
+    const [toast, setToast] = useState({
+        isOpen: false,
+        type: "",
+        message: "",
+    });
 
     const { isLaptop } = useWindowWidth();
     const isRooms = items === "rooms";
@@ -54,6 +60,10 @@ const ManagePage = ({ items }) => {
         setRect(e.currentTarget.getBoundingClientRect());
         setModal(true);
     };
+    const showToast = (type, message) => {
+        setToast({ isOpen: true, type, message });
+    };
+    const closeToast = () => setToast((prev) => ({ ...prev, isOpen: false }));
 
     useEffect(() => {
         fetchManageData(items);
@@ -219,8 +229,17 @@ const ManagePage = ({ items }) => {
                 <ManageForm
                     variant={sheet}
                     editingItem={editingItem}
+                    onShowToast={showToast}
+                    onDone={closeSheet}
                 />
             </BottomSheet>
+
+            <Toast
+                type={toast.type}
+                isOpen={toast.isOpen}
+                onClose={closeToast}
+                children={toast.message}
+            />
         </section>
     );
 };

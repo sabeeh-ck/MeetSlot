@@ -7,11 +7,10 @@ const BottomNav = () => {
 
     useEffect(() => {
         document.body.style.overflow = isExpanded ? "hidden" : "auto";
-        return () => (document.body.style.overflow = "auto");
+        return () => {
+            document.body.style.overflow = "auto";
+        };
     }, [isExpanded]);
-
-    const minimiseNav = () => setIsExpanded(false);
-    const expandNav = () => setIsExpanded(true);
 
     return (
         <>
@@ -32,8 +31,8 @@ const BottomNav = () => {
             >
                 <Nav
                     isExpanded={isExpanded}
-                    expandNav={expandNav}
-                    minimiseNav={minimiseNav}
+                    expandNav={() => setIsExpanded(true)}
+                    minimiseNav={() => setIsExpanded(false)}
                 />
             </motion.div>
 
@@ -46,7 +45,7 @@ const BottomNav = () => {
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         transition={{ duration: 0.3, ease: "easeOut" }}
-                        onClick={minimiseNav}
+                        onClick={() => setIsExpanded(false)}
                     />
                 )}
             </AnimatePresence>

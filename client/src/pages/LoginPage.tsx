@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { SyntheticEvent, useEffect, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import api from "../api/axios";
 import LoginForm from "../components/LoginForm";
 import { useAuth } from "../context/AuthContext";
 import { DemoHint } from "../components/DemoComponents";
+import { isAxiosError } from "axios";
 
 const LoginPage = () => {
     const [email, setEmail] = useState("");
@@ -17,19 +18,12 @@ const LoginPage = () => {
 
     const navigate = useNavigate();
 
-    if (user)
-        return (
-            <Navigate
-                to={user.role === "admin" ? "/admin/dashboard" : "/home"}
-            />
-        );
-
     useEffect(() => {
         const wakeServer = async () => {
             try {
                 await api.get("/auth/health");
                 setSeverStatus("Server is ready");
-            } catch (error) {
+            } catch (error: unknown) {
                 setSeverStatus("Server is ready");
             }
         };
@@ -37,8 +31,15 @@ const LoginPage = () => {
         wakeServer();
     }, []);
 
-    const sendOtp = async (e) => {
-        e.preventDefault();
+    if (user)
+        return (
+            <Navigate
+                to={user.role === "admin" ? "/admin/dashboard" : "/home"}
+            />
+        );
+
+    const sendOtp = async (event: SyntheticEvent<HTMLFormElement>) => {
+        event.preventDefault();
         try {
             setLoading(true);
             setError("");
@@ -52,15 +53,19 @@ const LoginPage = () => {
             if (res.data.otp) {
                 setOtp(res.data.otp);
             }
-        } catch (err) {
-            if (err.response?.data?.msg) setError(err.response.data.msg);
-            else console.log(err);
+        } catch (error: unknown) {
+            if (isAxiosError<{ msg?: string }>(error)) {
+                const message = error.response?.data?.msg;
+
+                if (message) setError(message);
+                else console.error(error);
+            } else console.error(error);
         } finally {
             setLoading(false);
         }
     };
 
-    const verifyOtp = async (event) => {
+    const verifyOtp = async (event: SyntheticEvent<HTMLFormElement>) => {
         event.preventDefault();
         try {
             setLoading(true);
@@ -70,9 +75,13 @@ const LoginPage = () => {
             setUser(userData);
 
             navigate(userData.role === "admin" ? "/admin/dashboard" : "/home");
-        } catch (err) {
-            if (err.response?.data?.msg) setError(err.response.data.msg);
-            else console.log(err);
+        } catch (error: unknown) {
+            if (isAxiosError<{ msg?: string }>(error)) {
+                const message = error.response?.data?.msg;
+
+                if (message) setError(message);
+                else console.error(error);
+            } else console.error(error);
         } finally {
             setLoading(false);
         }
@@ -108,14 +117,13 @@ const LoginPage = () => {
                             onSubmit={verifyOtp}
                             value={otp}
                             onChange={setOtp}
-                            email={email}
                             loading={loading}
                             error={error}
                         />
                     )}
                 </section>
 
-                <DemoHint setEmail={setEmail} />
+                <DemoHint selectEmail={(email) => setEmail(email)} />
             </main>
         </>
     );

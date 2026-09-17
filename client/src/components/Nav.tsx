@@ -12,7 +12,7 @@ import {
 } from "../icons";
 import { useAuth } from "../context/AuthContext";
 import { useWindowWidth } from "../hooks/useWindowWidth";
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, motion, Variants } from "motion/react";
 
 const NAV_ITEMS = {
     employee: [
@@ -76,13 +76,19 @@ const itemVariants = {
         transition: { type: "spring", stiffness: 400, damping: 25 },
     },
     exit: { opacity: 0, transition: { duration: 0.0001 } },
+} satisfies Variants;
+
+type NavProps = {
+    isExpanded?: boolean;
+    expandNav?: () => void;
+    minimiseNav?: () => void;
 };
 
-const Nav = ({ isExpanded, expandNav, minimiseNav }) => {
+const Nav = ({ isExpanded, expandNav, minimiseNav }: NavProps) => {
     const { user } = useAuth();
     const { isLaptop } = useWindowWidth();
 
-    const navItems = NAV_ITEMS[user?.role] ?? [];
+    const navItems = user?.role ? NAV_ITEMS[user?.role] : [];
     const collapsedItems = !isExpanded ? navItems.slice(0, 4) : navItems;
 
     return (
@@ -118,7 +124,7 @@ const Nav = ({ isExpanded, expandNav, minimiseNav }) => {
                                         onClick={minimiseNav}
                                         className={({ isActive }) =>
                                             `lg:hover:bg-border relative flex h-11.5 w-full shrink-0 items-center gap-3 rounded-full px-3 py-2 transition-all duration-200 ${
-                                                isActive ? " bg-text/10" : ""
+                                                isActive ? "bg-text/10" : ""
                                             }`
                                         }
                                     >
@@ -149,10 +155,7 @@ const Nav = ({ isExpanded, expandNav, minimiseNav }) => {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        transition={{
-                            duration: 0.15,
-                            exit: { duration: 0.001 },
-                        }}
+                        transition={{ duration: 0.15 }}
                         className="flex w-full items-center justify-between lg:flex-col lg:items-start"
                     >
                         {collapsedItems.map(({ name, path, icon }) => (

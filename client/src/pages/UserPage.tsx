@@ -6,6 +6,8 @@ const UserPage = () => {
     const { user, logout } = useAuth();
     const navigate = useNavigate();
 
+    if (!user) return;
+
     return (
         <div className="m-4 flex flex-col gap-4">
             <div className="flex flex-col gap-2">

@@ -9,33 +9,34 @@ import { useAvailability } from "../hooks/useAvailability";
 import DateSelector from "../components/DateSelector";
 import Skeleton from "react-loading-skeleton";
 import { PlusIcon } from "../icons";
-import Toast from "../components/Toast";
+import Toast, { ToastState, ToastType } from "../components/Toast";
+import { Room } from "../../../shared/types";
+
+type SelectedSlots = Record<string, number[]>;
 
 const IndexPage = () => {
     const { isMobile, isLaptop } = useWindowWidth();
 
     const [selectedRoom, setSelectedRoom] = useState("");
-    const [selectedSlots, setSelectedSlots] = useState({});
+    const [selectedSlots, setSelectedSlots] = useState<SelectedSlots>({});
     const [selectedDate, setSelectedDate] = useState(today);
-    const [sheet, setSheet] = useState(null);
-    const [toast, setToast] = useState({
-        isOpen: false,
-        type: "",
+    const [sheet, setSheet] = useState<"form" | "room" | null>(null);
+    const [toast, setToast] = useState<ToastState>({
+        type: "info",
         message: "",
     });
 
     const { availability, loading, refetch } = useAvailability(selectedDate);
 
     useEffect(() => {
-        if (availability.length > 0 && !selectedRoom) {
+        if (availability.length > 0 && !selectedRoom)
             setSelectedRoom(availability[0].roomId);
-        }
     }, [availability]);
 
-    const showToast = (type, message) => {
-        setToast({ isOpen: true, type, message });
-    };
-    const closeToast = () => setToast((prev) => ({ ...prev, isOpen: false }));
+    const showToast = (type: ToastType, message: string) =>
+        setToast({ type, message });
+
+    const closeToast = () => setToast(null);
 
     const formattedDate = (() => {
         const [year, month, day] = selectedDate.split("-").map(Number);
@@ -54,16 +55,21 @@ const IndexPage = () => {
                         availability={availability}
                         loading={loading}
                         selectedRoom={selectedRoom}
-                        setSelectedRoom={setSelectedRoom}
+                        onSelect={(room: Room["_id"]) => {
+                            setSelectedRoom(room);
+                            setSheet(null);
+                        }}
                         sheet={sheet}
-                        setSheet={setSheet}
+                        openSheet={() => setSheet("room")}
+                        closeSheet={() => setSheet(null)}
                     />
 
                     <DateSelector
                         selectedDate={selectedDate}
-                        setSelectedDate={setSelectedDate}
-                        setSelectedSlots={setSelectedSlots}
-                        loading={loading}
+                        onSelect={(date) => {
+                            setSelectedDate(date);
+                            setSelectedSlots({});
+                        }}
                     />
 
                     <div className="mb-4 flex gap-4 font-medium">
@@ -85,7 +91,8 @@ const IndexPage = () => {
                                 )}{" "}
                                 -{" "}
                                 {minutesTo12Hour(
-                                    selectedSlots[selectedRoom].at(-1) + 30,
+                                    (selectedSlots[selectedRoom].at(-1) ?? 0) +
+                                        30,
                                 )}
                             </p>
                         )}
@@ -101,14 +108,20 @@ const IndexPage = () => {
 
                             <BookingForm
                                 selectedDate={selectedDate}
-                                setSelectedDate={setSelectedDate}
                                 selectedSlots={selectedSlots[selectedRoom]}
-                                setSelectedSlots={setSelectedSlots}
                                 selectedRoom={selectedRoom}
-                                setSelectedRoom={setSelectedRoom}
                                 availability={availability}
-                                refetch={refetch}
-                                setSheet={setSheet}
+                                onDateChange={(date) => {
+                                    setSelectedDate(date);
+                                    setSelectedSlots({});
+                                }}
+                                onRoomChange={(room) => setSelectedRoom(room)}
+                                onSubmit={async () => {
+                                    setSheet(null);
+                                    setSelectedSlots({});
+                                    await refetch();
+                                }}
+                                showToast={showToast}
                             />
                         </aside>
                     )}
@@ -129,7 +142,6 @@ const IndexPage = () => {
                             }
                             selectedRoom={selectedRoom}
                             setSelectedRoom={setSelectedRoom}
-                            date={selectedDate}
                             availability={availability}
                             loading={loading}
                         />
@@ -146,7 +158,6 @@ const IndexPage = () => {
                                     }
                                     selectedRoom={selectedRoom}
                                     setSelectedRoom={setSelectedRoom}
-                                    date={selectedDate}
                                     currentRoom={roomId}
                                     availability={availability}
                                     loading={loading}
@@ -173,19 +184,27 @@ const IndexPage = () => {
                     selectedDate={selectedDate}
                     selectedSlots={selectedSlots[selectedRoom]}
                     selectedRoom={selectedRoom}
-                    closeSheet={() => setSheet(null)}
                     availability={availability}
-                    refetch={refetch}
-                    setSelectedDate={setSelectedDate}
-                    setSelectedRoom={setSelectedRoom}
-                    setSelectedSlots={setSelectedSlots}
-                    setSheet={setSheet}
+                    onDateChange={(date) => {
+                        setSelectedDate(date);
+                        setSelectedSlots({});
+                    }}
+                    onRoomChange={(room) => setSelectedRoom(room)}
+                    onSubmit={async () => {
+                        setSheet(null);
+                        setSelectedSlots({});
+                        await refetch();
+                    }}
                     showToast={showToast}
                 />
             </BottomSheet>
 
-            <Toast isOpen={toast.isOpen} onClose={closeToast} type={toast.type}>
-                {toast.message}
+            <Toast
+                isOpen={toast !== null}
+                onClose={closeToast}
+                type={toast?.type ?? "info"}
+            >
+                {toast?.message ?? ""}
             </Toast>
         </div>
     );

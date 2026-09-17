@@ -1,11 +1,19 @@
-import { useEffect } from "react";
+import { ReactNode, useEffect } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { createPortal } from "react-dom";
 
-const BottomSheet = ({ closeSheet, isOpen, children }) => {
+type BottomSheetProps = {
+    closeSheet: () => void;
+    isOpen: boolean;
+    children: ReactNode;
+};
+
+const BottomSheet = ({ closeSheet, isOpen, children }: BottomSheetProps) => {
     useEffect(() => {
         document.body.style.overflow = isOpen ? "hidden" : "auto";
-        return () => (document.body.style.overflow = "auto");
+        return () => {
+            document.body.style.overflow = "auto";
+        };
     }, [isOpen]);
 
     return createPortal(

@@ -2,38 +2,27 @@ import { useRef } from "react";
 import { CalendarIcon } from "../icons";
 import { today, tomorrow } from "../utils/time";
 
-const DateSelector = ({
-    selectedDate,
-    setSelectedDate,
-    setSelectedSlots,
-    loading,
-}) => {
-    const dateInputRef = useRef(null);
+type DateSelectorProps = {
+    selectedDate: string;
+    onSelect: (value: string) => void;
+};
 
-    const toggleDate = (date) => {
-        setSelectedDate(date);
-        setSelectedSlots({});
-    };
+const DateSelector = ({ selectedDate, onSelect }: DateSelectorProps) => {
+    const dateInputRef = useRef<HTMLInputElement>(null);
 
     const dateSelector = [
         {
             content: "Today",
-            action: () => toggleDate(today),
+            action: () => onSelect(today),
             isSelected: selectedDate === today,
         },
         {
             content: "Tomorrow",
-            action: () => toggleDate(tomorrow),
+            action: () => onSelect(tomorrow),
             isSelected: selectedDate === tomorrow,
         },
         {
-            content: (
-                // selectedDate === today || selectedDate === tomorrow ? (
-                <CalendarIcon className="h-5" />
-            ),
-            // ) : (
-            // <CalendarIconSolid className="h-5" />
-            // )
+            content: <CalendarIcon className="h-5" />,
             action: () =>
                 dateInputRef.current?.showPicker?.() ??
                 dateInputRef.current?.click(),
@@ -65,7 +54,7 @@ const DateSelector = ({
                 value={selectedDate}
                 hidden
                 min={today}
-                onChange={(e) => setSelectedDate(e.target.value || today)}
+                onChange={(e) => onSelect(e.target.value || today)}
             />
         </div>
     );

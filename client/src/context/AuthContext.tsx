@@ -1,10 +1,27 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import {
+    createContext,
+    Dispatch,
+    ReactNode,
+    SetStateAction,
+    useContext,
+    useEffect,
+    useState,
+} from "react";
 import api from "../api/axios";
+import { User } from "../../../shared/types";
 
-const AuthContext = createContext();
+type AuthContextValue = {
+    user: User | null;
+    setUser: Dispatch<SetStateAction<User | null>>;
+    loading: boolean;
+    logout: () => Promise<void>;
+    isDemo: boolean;
+};
 
-export const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState(null);
+const AuthContext = createContext<AuthContextValue | undefined>(undefined);
+
+export const AuthProvider = ({ children }: { children: ReactNode }) => {
+    const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -42,4 +59,10 @@ export const AuthProvider = ({ children }) => {
     );
 };
 
-export const useAuth = () => useContext(AuthContext);
+export const useAuth = () => {
+    const context = useContext(AuthContext);
+
+    if (!context) throw new Error("useAuth must be used inside AuthProvider");
+
+    return context;
+};

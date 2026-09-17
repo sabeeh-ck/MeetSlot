@@ -1,11 +1,22 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import BookingCard from "./BookingCard";
 import Skeleton from "react-loading-skeleton";
 import { PlusIcon } from "../icons";
+import { Booking } from "../hooks/useBookings";
 
-const BookingsList = ({ bookings, isPast, loading, refetch }) => {
-    const navigate = useNavigate();
+type BookingsListProps = {
+    bookings: Booking[];
+    isPast: boolean;
+    loading: boolean;
+    refetch: () => void;
+};
 
+const BookingsList = ({
+    bookings,
+    isPast,
+    loading,
+    refetch,
+}: BookingsListProps) => {
     const today = new Date().toLocaleDateString("en-US", {
         month: "short",
         day: "numeric",
@@ -19,32 +30,36 @@ const BookingsList = ({ bookings, isPast, loading, refetch }) => {
         year: "numeric",
     });
 
-    const sortedBookings = [...bookings].sort((a, b) =>
-        isPast
-            ? new Date(b.start) - new Date(a.start)
-            : new Date(a.start) - new Date(b.start),
-    );
+    const sortedBookings = [...bookings].sort((a, b) => {
+        const aStart = new Date(a.start).getTime();
+        const bStart = new Date(b.start).getTime();
 
-    const groupedBookings =
-        sortedBookings?.length !== 0 &&
-        sortedBookings.reduce((groups, booking) => {
-            let dateLabel = new Date(booking.start).toLocaleDateString(
-                "en-US",
-                {
-                    month: "short",
-                    day: "numeric",
-                    year: "numeric",
-                },
-            );
+        return isPast ? bStart - aStart : aStart - bStart;
+    });
 
-            if (dateLabel === today) dateLabel = "Today";
-            else if (dateLabel === tomorrow) dateLabel = "Tomorrow";
+    const groupedBookings = sortedBookings?.length
+        ? sortedBookings.reduce<Record<string, Booking[]>>(
+              (groups, booking) => {
+                  let dateLabel = new Date(booking.start).toLocaleDateString(
+                      "en-US",
+                      {
+                          month: "short",
+                          day: "numeric",
+                          year: "numeric",
+                      },
+                  );
 
-            if (!groups[dateLabel]) groups[dateLabel] = [];
+                  if (dateLabel === today) dateLabel = "Today";
+                  else if (dateLabel === tomorrow) dateLabel = "Tomorrow";
 
-            groups[dateLabel].push(booking);
-            return groups;
-        }, {});
+                  if (!groups[dateLabel]) groups[dateLabel] = [];
+
+                  groups[dateLabel].push(booking);
+                  return groups;
+              },
+              {},
+          )
+        : {};
 
     return (
         <div className="mx-4 mt-36 mb-4 flex h-full flex-1 flex-col gap-7 lg:mt-4 lg:ml-68 lg:h-auto">
@@ -101,14 +116,16 @@ const BookingsList = ({ bookings, isPast, loading, refetch }) => {
                             <p className="mb-2 font-bold">{date}</p>
 
                             <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-                                {groupedBookings[date].map((booking) => (
-                                    <BookingCard
-                                        key={booking._id}
-                                        booking={booking}
-                                        isPast={isPast}
-                                        refetch={refetch}
-                                    />
-                                ))}
+                                {groupedBookings[date].map(
+                                    (booking: Booking) => (
+                                        <BookingCard
+                                            key={booking._id}
+                                            booking={booking}
+                                            isPast={isPast}
+                                            refetch={refetch}
+                                        />
+                                    ),
+                                )}
                             </div>
                         </section>
                     ))}

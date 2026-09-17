@@ -3,9 +3,10 @@ import StatCards from "../../components/admin/StatCards";
 import api from "../../api/axios";
 import RecentActivity from "../../components/admin/RecentActivity";
 import TodaysBookings from "../../components/admin/TodaysBookings";
+import { DashboardData } from "../../../../shared/types";
 
 const DashboardPage = () => {
-    const [data, setData] = useState({});
+    const [data, setData] = useState<DashboardData | null>(null);
     const [loading, setLoading] = useState(true);
 
     const recentActivity = data?.recentActivity ?? [];

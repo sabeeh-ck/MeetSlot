@@ -1,11 +1,19 @@
 import { useEffect, useState } from "react";
 import api from "../api/axios";
 
-export const useAvailability = (date) => {
-    const [availability, setAvailability] = useState([]);
+type BookedSlot = { start: string; end: string };
+
+export type Availability = {
+    roomId: string;
+    roomName: string;
+    bookedSlots: BookedSlot[];
+};
+
+export const useAvailability = (date: string) => {
+    const [availability, setAvailability] = useState<Availability[]>([]);
     const [loading, setLoading] = useState(true);
 
-    const fetchAvailability = async () => {
+    const fetchAvailability = async (): Promise<void> => {
         const start = Date.now();
         setLoading(true);
 

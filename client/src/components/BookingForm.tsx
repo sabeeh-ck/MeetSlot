@@ -1,32 +1,52 @@
-import { useEffect, useState } from "react";
-import { minutesTo12Hour, minutesTo24Hour } from "../utils/time";
+import { ChangeEvent, SyntheticEvent, useEffect, useState } from "react";
+import { minutesTo12Hour } from "../utils/time";
 import { useWindowWidth } from "../hooks/useWindowWidth";
 import api from "../api/axios";
 import { useAuth } from "../context/AuthContext";
 import { LoaderIcon, SaveIcon } from "../icons";
+import { Availability } from "../hooks/useAvailability";
+import { ToastType } from "./Toast";
+import { isAxiosError } from "axios";
+
+type BookingFormProps = {
+    selectedDate: string;
+    selectedRoom: string;
+    selectedSlots: number[];
+    availability: Availability[];
+    showToast: (type: ToastType, message: string) => void;
+    onSubmit: () => void;
+    onDateChange: (date: string) => void;
+    onRoomChange: (room: string) => void;
+};
+
+type FormData = {
+    title: string;
+    date: string;
+    room: string;
+    startTime: number | null;
+    endTime: number | null;
+};
 
 const BookingForm = ({
     selectedDate,
-    setSelectedDate,
+    onDateChange,
     selectedSlots,
-    setSelectedSlots,
     selectedRoom,
-    setSelectedRoom,
+    onRoomChange,
     availability,
-    refetch,
-    setSheet,
+    onSubmit,
     showToast,
-}) => {
+}: BookingFormProps) => {
     const today = new Date().toISOString().split("T")[0];
-    const { token, user } = useAuth();
+    const { user } = useAuth();
 
     const [loading, setLoading] = useState(false);
-    const [formData, setFormData] = useState({
+    const [formData, setFormData] = useState<FormData>({
         title: "",
         date: selectedDate,
         room: selectedRoom,
-        startTime: "",
-        endTime: "",
+        startTime: null,
+        endTime: null,
     });
 
     useEffect(() => {
@@ -35,22 +55,23 @@ const BookingForm = ({
             date: selectedDate,
             room: selectedRoom,
             startTime: selectedSlots?.[0],
-            endTime: selectedSlots?.length ? selectedSlots.at(-1) + 30 : null,
+            endTime: selectedSlots?.length
+                ? (selectedSlots.at(-1) ?? 0) + 30
+                : null,
         });
     }, [selectedDate, selectedRoom, selectedSlots]);
 
-    const handleChange = (e) => {
+    const handleChange = (
+        e: ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+    ) => {
         const { name, value } = e.target;
 
-        if (name === "date") {
-            setSelectedDate(value || today);
-            setSelectedSlots({});
-        } else if (name === "room") {
-            setSelectedRoom(value);
-        } else setFormData((prev) => ({ ...prev, [name]: value }));
+        if (name === "date") onDateChange(value || today);
+        else if (name === "room") onRoomChange(value);
+        else setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e: SyntheticEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         if (!formData.title || !formData.date || !formData.room) return;
@@ -58,7 +79,7 @@ const BookingForm = ({
         const payload = {
             title: formData.title,
             roomId: formData.room,
-            user: user._id,
+            user: user?._id,
             date: formData.date,
             startTime: formData.startTime,
             endTime: formData.endTime,
@@ -67,17 +88,16 @@ const BookingForm = ({
         try {
             setLoading(true);
 
-            const res = await api.post("/bookings", payload);
+            await api.post("/bookings", payload);
 
-            setSheet("");
-            setSelectedSlots({});
-            await refetch();
+            onSubmit();
             showToast("success", "Booking Successfull");
-        } catch (err) {
-            if (err.response?.data.msg) {
-                showToast("error", err.response.data.msg);
+        } catch (error: unknown) {
+            if (isAxiosError<{ msg?: string }>(error)) {
+                const message = error.response?.data.msg ?? error.message;
+                showToast("error", message);
             } else {
-                console.log(err);
+                console.error(error);
             }
         } finally {
             setLoading(false);
@@ -120,7 +140,7 @@ const BookingForm = ({
                         id="date"
                         name="date"
                         value={formData.date}
-                        onClick={(e) => e.target.showPicker()}
+                        onClick={(e) => e.currentTarget.showPicker()}
                         onChange={handleChange}
                         disabled={isMobile}
                         min={today}

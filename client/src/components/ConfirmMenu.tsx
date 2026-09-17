@@ -1,6 +1,11 @@
 import { CheckIcon, XMarkIcon } from "../icons";
 
-const ConfirmMenu = ({ onConfirm, onCancel }) => (
+type ConfirmMenuProps = {
+    onConfirm: () => void;
+    onCancel: () => void;
+};
+
+const ConfirmMenu = ({ onConfirm, onCancel }: ConfirmMenuProps) => (
     <div className="flex items-center gap-4 pl-2">
         <p className="font-medium">Are you sure?</p>
         <div className="flex gap-2">

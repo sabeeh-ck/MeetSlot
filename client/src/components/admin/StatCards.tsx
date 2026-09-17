@@ -1,8 +1,14 @@
 import { Link } from "react-router-dom";
 import { ArrowUpRightIcon } from "../../icons";
 import Skeleton from "react-loading-skeleton";
+import { DashboardData } from "../../../../shared/types";
 
-const StatCards = ({ data, loading }) => {
+type StatCardsProps = {
+    data: DashboardData | null;
+    loading: boolean;
+};
+
+const StatCards = ({ data, loading }: StatCardsProps) => {
     const cardDetails = [
         {
             title: "Today's Bookings",

@@ -1,8 +1,20 @@
 import { useCallback, useEffect, useState } from "react";
 import api from "../api/axios";
 
-export const useBookings = (userId) => {
-    const [bookings, setBookings] = useState([]);
+export type Booking = {
+    __v: number;
+    _id: string;
+    createdAt: string;
+    end: string;
+    roomId: Record<string, string>;
+    start: string;
+    title: string;
+    updatedAt: string;
+    user: string;
+};
+
+export const useBookings = (userId: string) => {
+    const [bookings, setBookings] = useState<Booking[]>([]);
     const [loading, setLoading] = useState(false);
 
     const fetchBookings = useCallback(async () => {
@@ -24,6 +36,8 @@ export const useBookings = (userId) => {
             setTimeout(() => {
                 setLoading(false);
             }, remainingTime);
+
+            console.log(bookings);
         }
     }, [userId]);
 

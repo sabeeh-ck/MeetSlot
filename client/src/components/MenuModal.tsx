@@ -1,21 +1,37 @@
 import { AnimatePresence, motion } from "motion/react";
-import { useEffect } from "react";
+import { ReactNode, useEffect } from "react";
 import { createPortal } from "react-dom";
 
-const MenuModal = ({ children, open, onClose, triggerRect }) => {
+type MenuModalProps = {
+    children: ReactNode;
+    isOpen: boolean;
+    onClose: () => void;
+    triggerRect: DOMRect | null;
+};
+
+const MenuModal = ({
+    children,
+    isOpen,
+    onClose,
+    triggerRect,
+}: MenuModalProps) => {
     useEffect(() => {
         if (!triggerRect) return;
 
+        const previousOverflow = document.body.style.overflow;
+
         document.body.style.overflow = "hidden";
 
-        return () => (document.body.style.overflow = "");
+        return () => {
+            document.body.style.overflow = previousOverflow;
+        };
     }, [triggerRect]);
 
     if (!triggerRect) return null;
 
     return createPortal(
         <AnimatePresence>
-            {open && (
+            {isOpen && (
                 <>
                     <motion.div
                         key="backdrop"

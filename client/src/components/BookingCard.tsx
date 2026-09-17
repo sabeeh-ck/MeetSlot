@@ -1,21 +1,28 @@
 import { ClockIcon, RoomIcon } from "../icons";
 import { minutesTo12Hour } from "../utils/time";
 import MenuModal from "./MenuModal";
-import { useState } from "react";
+import { MouseEvent, useState } from "react";
 import api from "../api/axios";
 import ConfirmMenu from "./ConfirmMenu";
+import { Booking } from "../hooks/useBookings";
+
+type BookingCardProps = {
+    booking: Booking;
+    isPast: boolean;
+    refetch: () => void;
+};
 
 const BookingCard = ({
     booking: { _id, start, title, end, roomId },
     isPast,
     refetch,
-}) => {
+}: BookingCardProps) => {
     const roomName = roomId?.name ?? "Deleted room";
     const [menu, setMenu] = useState(false);
-    const [rect, setRect] = useState(null);
+    const [rect, setRect] = useState<DOMRect | null>(null);
     const [deleting, setDeleting] = useState(false);
 
-    const handleOpenMenu = (e) => {
+    const handleOpenMenu = (e: MouseEvent<HTMLButtonElement>) => {
         setRect(e.currentTarget.getBoundingClientRect());
         setMenu(true);
     };
@@ -28,7 +35,7 @@ const BookingCard = ({
         new Date(end).getUTCHours() * 60 + new Date(end).getUTCMinutes(),
     );
 
-    const handleDelete = async (_id) => {
+    const handleDelete = async (_id: string) => {
         try {
             setMenu(false);
             setDeleting(true);
@@ -76,6 +83,7 @@ const BookingCard = ({
 
                     <MenuModal
                         triggerRect={rect}
+                        isOpen={menu}
                         onClose={() => setMenu(false)}
                     >
                         <ConfirmMenu

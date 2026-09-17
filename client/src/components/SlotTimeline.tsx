@@ -1,6 +1,27 @@
 import { minutesTo12Hour } from "../utils/time";
 import { START_TIME, END_TIME, SLOT_DURATION } from "../../constants";
 import Skeleton from "react-loading-skeleton";
+import { Availability } from "../hooks/useAvailability";
+import { Dispatch, SetStateAction } from "react";
+
+type SlotTimelineProps = {
+    currentRoom: string;
+    selectedSlots: number[];
+    selectSlot: (slots: number[]) => void;
+    selectedRoom: string;
+    setSelectedRoom: Dispatch<SetStateAction<string>>;
+    availability: Availability[];
+    loading: boolean;
+};
+
+type SlotProps = {
+    slot: number;
+    isSelected: boolean;
+    isBooked: boolean;
+    isRoundTop: boolean;
+    isRoundBottom: boolean;
+    handleSelect: (slot: number) => void;
+};
 
 const generateSlots = () => {
     const result = [];
@@ -13,40 +34,39 @@ const slots = generateSlots();
 
 const Slot = ({
     slot,
-    i,
     isSelected,
     isBooked,
-    roundTop,
-    roundBottom,
+    isRoundTop,
+    isRoundBottom,
     handleSelect,
-}) => {
+}: SlotProps) => {
     return (
         <div key={slot}>
             <button
                 type="button"
                 onClick={() => handleSelect(slot)}
                 disabled={isBooked}
-                className={`flex h-25 w-full scale-100! flex-col items-start border-x py-1 pl-8 text-sm transition-all duration-300 ease-in-out ${roundTop} ${roundBottom} ${
+                className={`flex h-25 w-full scale-100! flex-col items-start border-x py-1 pl-8 text-sm transition-all duration-300 ease-in-out ${isRoundTop ? "rounded-t-3xl border-t" : ""} ${isRoundBottom ? "mb-2 rounded-b-3xl border-b" : ""} ${
                     isBooked
-                        ? isBooked
+                        ? "bg-bookedBg border-bookedBorder text-bookedText"
                         : isSelected
-                          ? isSelected
+                          ? "bg-border border-textmute"
                           : "border-border bg-surface"
                 } `}
             >
                 <div className="flex gap-2">
-                    {((!isSelected && !isBooked) || roundTop) && (
+                    {((!isSelected && !isBooked) || isRoundTop) && (
                         <p>{minutesTo12Hour(slot)}</p>
                     )}
 
-                    {isBooked && roundTop && <p>Reserved</p>}
+                    {isBooked && isRoundTop && <p>Reserved</p>}
                 </div>
 
-                {(isSelected || isBooked) && roundBottom && (
+                {(isSelected || isBooked) && isRoundBottom && (
                     <p className="mt-auto">{minutesTo12Hour(slot + 30)}</p>
                 )}
             </button>
-            {!roundBottom && (
+            {!isRoundBottom && (
                 <hr
                     className={`text-border border-x pt-1 ${isBooked ? "bg-bookedBg border-bookedBorder" : isSelected ? "bg-border border-textmute" : "border-border bg-surface"} `}
                 />
@@ -63,7 +83,7 @@ const SlotTimeline = ({
     setSelectedRoom,
     availability,
     loading,
-}) => {
+}: SlotTimelineProps) => {
     const currentRoomData = availability.find(
         (room) => room.roomId === currentRoom,
     );
@@ -91,7 +111,7 @@ const SlotTimeline = ({
               .sort((a, b) => a - b)
         : [];
 
-    const handleSelect = (slot) => {
+    const handleSelect = (slot: number) => {
         if (currentRoom !== selectedRoom) {
             setSelectedRoom(currentRoom);
             selectSlot([slot]);
@@ -158,9 +178,8 @@ const SlotTimeline = ({
 
                     <div className="grid grid-cols-1 rounded-3xl">
                         {slots.map((slot, i) => {
-                            const isSelected = selectedSlots?.includes(slot)
-                                ? "bg-border border-textmute"
-                                : "";
+                            const isSelected = selectedSlots?.includes(slot);
+                            const isBooked = bookedSlots.includes(slot);
 
                             const prevSelected = selectedSlots?.includes(
                                 slots[i - 1],
@@ -169,10 +188,6 @@ const SlotTimeline = ({
                                 slots[i + 1],
                             );
 
-                            const isBooked = bookedSlots.includes(slot)
-                                ? "bg-bookedBg border-bookedBorder text-bookedText"
-                                : "";
-
                             const prevBooked = bookedSlots.includes(
                                 slots[i - 1],
                             );
@@ -180,33 +195,28 @@ const SlotTimeline = ({
                                 slots[i + 1],
                             );
 
-                            const roundTop =
+                            const isRoundTop =
                                 i === 0 ||
                                 (isSelected && !prevSelected) ||
                                 (!isSelected && prevSelected) ||
                                 (isBooked && !prevBooked) ||
-                                (!isBooked && prevBooked)
-                                    ? "rounded-t-3xl border-t"
-                                    : "";
+                                (!isBooked && prevBooked);
 
-                            const roundBottom =
+                            const isRoundBottom =
                                 i === slots.length - 1 ||
                                 (isSelected && !nextSelected) ||
                                 (!isSelected && nextSelected) ||
                                 (isBooked && !nextBooked) ||
-                                (!isBooked && nextBooked)
-                                    ? "mb-2 rounded-b-3xl border-b"
-                                    : "";
+                                (!isBooked && nextBooked);
                             return (
                                 <Slot
                                     key={slot}
                                     slot={slot}
-                                    i={i}
                                     isSelected={isSelected}
                                     isBooked={isBooked}
                                     handleSelect={handleSelect}
-                                    roundTop={roundTop}
-                                    roundBottom={roundBottom}
+                                    isRoundTop={isRoundTop}
+                                    isRoundBottom={isRoundBottom}
                                 />
                             );
                         })}

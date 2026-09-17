@@ -1,4 +1,22 @@
-const LoginForm = ({ step, onSubmit, value, onChange, loading, error }) => (
+import { SyntheticEvent } from "react";
+
+type LoginFormProps = {
+    step: "email" | "otp";
+    onSubmit: (event: SyntheticEvent<HTMLFormElement>) => void | Promise<void>;
+    value: string;
+    onChange: (value: string) => void;
+    loading: boolean;
+    error: string;
+};
+
+const LoginForm = ({
+    step,
+    onSubmit,
+    value,
+    onChange,
+    loading,
+    error,
+}: LoginFormProps) => (
     <div className="mt-4 flex w-full flex-col gap-2 lg:w-1/2 lg:items-start">
         <div className="flex w-full items-center justify-between">
             <h3>{step === "email" ? "Email" : "Enter OTP"}</h3>

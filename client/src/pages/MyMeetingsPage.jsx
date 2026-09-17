@@ -1,14 +1,11 @@
 import { useState } from "react";
-import Skeleton from "react-loading-skeleton";
 import BookingsList from "../components/BookingsList";
 import { useAuth } from "../context/AuthContext";
 import { useBookings } from "../hooks/useBookings";
-import { useWindowWidth } from "../hooks/useWindowWidth";
 
 const MyMeetingsPage = () => {
     const { user } = useAuth();
-    const { isLaptop, isTablet } = useWindowWidth();
-    const { bookings, loading, refetch } = useBookings(user._id);
+    const { bookings, refetch } = useBookings(user._id);
 
     const [view, setView] = useState("upcoming");
 

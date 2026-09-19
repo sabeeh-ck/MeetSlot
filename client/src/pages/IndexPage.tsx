@@ -9,7 +9,6 @@ import { useAvailability } from "../hooks/useAvailability";
 import DateSelector from "../components/DateSelector";
 import Skeleton from "react-loading-skeleton";
 import { PlusIcon } from "../icons";
-import Toast, { ToastState, ToastType } from "../components/Toast";
 import { Room } from "../../../shared/types";
 
 type SelectedSlots = Record<string, number[]>;
@@ -21,10 +20,6 @@ const IndexPage = () => {
     const [selectedSlots, setSelectedSlots] = useState<SelectedSlots>({});
     const [selectedDate, setSelectedDate] = useState(today);
     const [sheet, setSheet] = useState<"form" | "room" | null>(null);
-    const [toast, setToast] = useState<ToastState>({
-        type: "info",
-        message: "",
-    });
 
     const { availability, loading, refetch } = useAvailability(selectedDate);
 
@@ -32,11 +27,6 @@ const IndexPage = () => {
         if (availability.length > 0 && !selectedRoom)
             setSelectedRoom(availability[0].roomId);
     }, [availability]);
-
-    const showToast = (type: ToastType, message: string) =>
-        setToast({ type, message });
-
-    const closeToast = () => setToast(null);
 
     const formattedDate = (() => {
         const [year, month, day] = selectedDate.split("-").map(Number);
@@ -121,7 +111,6 @@ const IndexPage = () => {
                                     setSelectedSlots({});
                                     await refetch();
                                 }}
-                                showToast={showToast}
                             />
                         </aside>
                     )}
@@ -195,17 +184,8 @@ const IndexPage = () => {
                         setSelectedSlots({});
                         await refetch();
                     }}
-                    showToast={showToast}
                 />
             </BottomSheet>
-
-            <Toast
-                isOpen={toast !== null}
-                onClose={closeToast}
-                type={toast?.type ?? "info"}
-            >
-                {toast?.message ?? ""}
-            </Toast>
         </div>
     );
 };

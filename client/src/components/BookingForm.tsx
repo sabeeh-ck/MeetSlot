@@ -5,15 +5,14 @@ import api from "../api/axios";
 import { useAuth } from "../context/AuthContext";
 import { LoaderIcon, SaveIcon } from "../icons";
 import { Availability } from "../hooks/useAvailability";
-import { ToastType } from "./Toast";
 import { isAxiosError } from "axios";
+import { useToast } from "../context/ToastContext";
 
 type BookingFormProps = {
     selectedDate: string;
     selectedRoom: string;
     selectedSlots: number[];
     availability: Availability[];
-    showToast: (type: ToastType, message: string) => void;
     onSubmit: () => void;
     onDateChange: (date: string) => void;
     onRoomChange: (room: string) => void;
@@ -35,10 +34,10 @@ const BookingForm = ({
     onRoomChange,
     availability,
     onSubmit,
-    showToast,
 }: BookingFormProps) => {
     const today = new Date().toISOString().split("T")[0];
     const { user } = useAuth();
+    const { showToast } = useToast();
 
     const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState<FormData>({
@@ -91,11 +90,11 @@ const BookingForm = ({
             await api.post("/bookings", payload);
 
             onSubmit();
-            showToast("success", "Booking Successfull");
+            showToast("Booking Successfull", "success");
         } catch (error: unknown) {
             if (isAxiosError<{ msg?: string }>(error)) {
                 const message = error.response?.data.msg ?? error.message;
-                showToast("error", message);
+                showToast(message, "error");
             } else {
                 console.error(error);
             }

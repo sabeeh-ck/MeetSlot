@@ -90,11 +90,11 @@ const BookingForm = ({
             await api.post("/bookings", payload);
 
             onSubmit();
-            showToast("Booking Successfull", "success");
+            showToast("success", "Booking Successfull");
         } catch (error: unknown) {
             if (isAxiosError<{ msg?: string }>(error)) {
                 const message = error.response?.data.msg ?? error.message;
-                showToast(message, "error");
+                showToast("error", message);
             } else {
                 console.error(error);
             }

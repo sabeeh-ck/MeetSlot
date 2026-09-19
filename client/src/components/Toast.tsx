@@ -51,7 +51,7 @@ export const Toast = ({ toast, onClose, duration = 4000 }: ToastProps) => {
             <span className="inline-block w-fit text-xs md:text-sm">
                 {toast.message}
             </span>
-            <button>
+            <button onClick={onClose}>
                 <CloseIcon />
             </button>
         </motion.div>

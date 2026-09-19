@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { UserCircleIcon, UserIcon } from "../icons";
+import { UserCircleIcon } from "../icons";
 import { DemoBadge } from "./DemoComponents";
 
 const Header = () => {

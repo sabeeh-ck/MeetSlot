@@ -10,7 +10,7 @@ import { AnimatePresence } from "motion/react";
 
 type ToastContextType = {
     toast: ToastState | null;
-    showToast: (message: string, type?: ToastType) => void;
+    showToast: (type: ToastType, message: string) => void;
     hideToast: () => void;
 };
 
@@ -20,7 +20,7 @@ export const ToastProvider = ({ children }: { children: ReactNode }) => {
     const [toast, setToast] = useState<ToastState | null>(null);
 
     const showToast = useCallback(
-        (message: string, type: ToastType = "info") => {
+        (type: ToastType = "info", message: string) => {
             setToast({ type, message });
             setTimeout(() => setToast(null), 4000);
         },

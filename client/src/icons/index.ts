@@ -28,4 +28,5 @@ export {
     Loader as LoaderIcon,
     CircleX as ErrorIcon,
     SaveCheck as SuccessIcon,
+    X as CloseIcon,
 } from "lucide-react";

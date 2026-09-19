@@ -8,57 +8,56 @@ import {
     ExpandIcon,
     LocationIcon,
     ProjectorIcon,
-    RoleIcon,
+    AdminIcon,
     RoomIcon,
-    UsersIcon,
     WhiteBoardIcon,
     XMarkIcon,
+    UserIcon,
+    CapacityIcon,
 } from "../../icons";
 import { useWindowWidth } from "../../hooks/useWindowWidth";
 import BottomSheet from "../../components/BottomSheet";
-import ManageForm from "../../components/admin/ManageForm";
-import Toast from "../../components/Toast";
+import ManageUserForm from "../../components/admin/ManageUserForm";
 import Skeleton from "react-loading-skeleton";
+import ManageRoomForm from "../../components/admin/ManageRoomForm";
+import { Room, User } from "../../../../shared/types";
+import { useToast } from "../../context/ToastContext";
+import { isAxiosError } from "axios";
 
-const ManagePage = ({ items }) => {
+type ManagePageProps = {
+    items: "rooms" | "users";
+};
+
+const ManagePage = ({ items }: ManagePageProps) => {
     const [loading, setLoading] = useState(true);
-    const [data, setData] = useState(null);
-    const [sheet, setSheet] = useState(false);
-    const [editingItem, setEditingItem] = useState(null);
-    const [toast, setToast] = useState({
-        isOpen: false,
-        type: "",
-        message: "",
-    });
+    const [rooms, setRooms] = useState<Room[] | null>(null);
+    const [users, setUsers] = useState<User[] | null>(null);
+    const [isSheetOpen, setIsSheetOpen] = useState(false);
+    const [editingItem, setEditingItem] = useState<Room | User | null>(null);
 
     const { isLaptop, isTablet } = useWindowWidth();
+    const { showToast } = useToast();
     const isRooms = items === "rooms";
 
-    const fetchManageData = async (data) => {
+    const fetchManageData = async (data: "rooms" | "users") => {
         setLoading(true);
         try {
             const res = await api.get(`/admin/${data}`);
-            setData(isRooms ? res.data.rooms : res.data.users);
-        } catch (error) {
-            console.log(error);
-            setData([]);
+            isRooms ? setRooms(res.data.rooms) : setUsers(res.data.users);
+        } catch (error: unknown) {
+            if (isAxiosError<{ msg?: string }>(error)) {
+                const message = error.response?.data.msg ?? error.message;
+                showToast("error", message);
+            } else {
+                console.error(error || "Unable to delete room.");
+            }
         } finally {
             setLoading(false);
         }
     };
 
-    const openSheet = (roomId) => {
-        setEditingItem(data.find((room) => room._id === roomId));
-        setSheet(isRooms ? "room" : "user");
-    };
-    const closeSheet = () => setSheet(null);
-    const showToast = (type, message) => {
-        setToast({ isOpen: true, type, message });
-    };
-    const closeToast = () => setToast((prev) => ({ ...prev, isOpen: false }));
-
     useEffect(() => {
-        setSheet(false);
+        setIsSheetOpen(false);
         setEditingItem(null);
         fetchManageData(items);
     }, [items]);
@@ -73,7 +72,10 @@ const ManagePage = ({ items }) => {
                         </h2>
 
                         <button
-                            onClick={() => openSheet()}
+                            onClick={() => {
+                                setIsSheetOpen(true);
+                                setEditingItem(null);
+                            }}
                             className="border-border bg-text text-bg flex items-center gap-2 rounded-xl border p-2 md:static md:rounded-lg md:px-3 md:py-1"
                         >
                             {isRooms ? (
@@ -123,8 +125,14 @@ const ManagePage = ({ items }) => {
                                 />
                             ))}
                         </div>
+                    ) : !(isRooms ? rooms : users)?.length ? (
+                        <div className="flex h-full w-full items-center justify-center">
+                            <p className="text-textmute text-sm lg:text-base">
+                                No {items} found. Add new {items}
+                            </p>
+                        </div>
                     ) : (
-                        data?.map((data, index) => (
+                        (isRooms ? rooms : users)?.map((data, index) => (
                             <div
                                 key={data._id}
                                 className={`border-border md:bg-bg bg-surface flex w-full items-start justify-between rounded-lg border p-4 md:grid md:border-0 md:px-0 md:py-2 ${isRooms ? "h-37.5 md:h-10 md:grid-cols-[0.25fr_1.5fr_1.5fr_0.75fr_1fr_1fr_0.5fr]" : "h-29.5 md:h-10 md:grid-cols-[0.25fr_1.5fr_1.5fr_1fr_0.5fr]"}`}
@@ -143,23 +151,25 @@ const ManagePage = ({ items }) => {
                                         <>
                                             <div className="flex items-center gap-2">
                                                 <LocationIcon className="h-4 md:hidden" />
-                                                <p>{data.location}</p>
+                                                <p>{(data as Room).location}</p>
                                             </div>
                                             <div className="flex items-center gap-2 md:justify-center">
-                                                <UsersIcon className="h-4 md:hidden" />
-                                                <p>{data.capacity}</p>
+                                                <CapacityIcon className="h-4 md:hidden" />
+                                                <p>{(data as Room).capacity}</p>
                                             </div>
 
                                             <div className="text-textmute flex items-center gap-1 md:col-span-2 md:grid md:grid-cols-2">
                                                 {[
                                                     {
-                                                        has: data.has_projector,
+                                                        has: (data as Room)
+                                                            .has_projector,
                                                         col: "col-start-1",
                                                         content: "Projector",
                                                         icon: ProjectorIcon,
                                                     },
                                                     {
-                                                        has: data.has_whiteboard,
+                                                        has: (data as Room)
+                                                            .has_whiteboard,
                                                         col: "col-start-2",
                                                         content: "Whiteboard",
                                                         icon: WhiteBoardIcon,
@@ -216,13 +226,18 @@ const ManagePage = ({ items }) => {
                                         <>
                                             <div className="flex items-center gap-2">
                                                 <EmailIcon className="h-4 md:hidden" />
-                                                <p>{data.email}</p>
+                                                <p>{(data as User).email}</p>
                                             </div>
 
                                             <div className="flex items-center gap-2">
-                                                <RoleIcon className="h-4 md:hidden" />
+                                                {(data as User).role ===
+                                                "admin" ? (
+                                                    <AdminIcon className="h-4" />
+                                                ) : (
+                                                    <UserIcon className="h-4" />
+                                                )}
                                                 <p className="capitalize">
-                                                    {data.role}
+                                                    {(data as User).role}
                                                 </p>
                                             </div>
                                         </>
@@ -231,7 +246,10 @@ const ManagePage = ({ items }) => {
 
                                 <button
                                     className="lg:hover:bg-border flex items-center justify-center rounded-md md:h-full md:w-full"
-                                    onClick={() => openSheet(data._id)}
+                                    onClick={() => {
+                                        setEditingItem(data);
+                                        setIsSheetOpen(true);
+                                    }}
                                 >
                                     {isLaptop ? (
                                         <EditIcon className="size-4" />
@@ -245,42 +263,56 @@ const ManagePage = ({ items }) => {
                 </div>
 
                 <aside className="border-border hidden w-90 shrink-0 border-l p-6 lg:block">
-                    {sheet ? (
-                        <ManageForm
-                            key={`${sheet}-${editingItem?._id || "new"}`}
-                            variant={sheet}
-                            editingItem={editingItem}
-                            onShowToast={showToast}
-                            onDone={closeSheet}
+                    {isRooms ? (
+                        <ManageRoomForm
+                            key={editingItem?._id || "new"}
+                            editingItem={editingItem as Room}
+                            onDone={() => {
+                                setIsSheetOpen(false);
+                                setEditingItem(null);
+                            }}
                             onRefresh={() => fetchManageData(items)}
                         />
                     ) : (
-                        <div className="text-textmute flex h-full items-center justify-center text-center text-sm">
-                            Select an item or add a new one to manage it.
-                        </div>
+                        <ManageUserForm
+                            key={editingItem?._id || "new"}
+                            editingItem={editingItem as User}
+                            onDone={() => {
+                                setIsSheetOpen(false);
+                                setEditingItem(null);
+                            }}
+                            onRefresh={() => fetchManageData(items)}
+                        />
                     )}
                 </aside>
             </div>
 
             {!isLaptop && (
-                <BottomSheet isOpen={sheet} closeSheet={closeSheet}>
-                    <ManageForm
-                        key={`${sheet}-${editingItem?._id || "new"}`}
-                        variant={sheet}
-                        editingItem={editingItem}
-                        onShowToast={showToast}
-                        onDone={closeSheet}
-                        onRefresh={() => fetchManageData(items)}
-                    />
+                <BottomSheet
+                    isOpen={isSheetOpen}
+                    closeSheet={() => setIsSheetOpen(false)}
+                >
+                    {isRooms ? (
+                        <ManageRoomForm
+                            editingItem={editingItem as Room}
+                            onDone={() => {
+                                setIsSheetOpen(false);
+                                setEditingItem(null);
+                            }}
+                            onRefresh={() => fetchManageData(items)}
+                        />
+                    ) : (
+                        <ManageUserForm
+                            editingItem={editingItem as User}
+                            onDone={() => {
+                                setIsSheetOpen(false);
+                                setEditingItem(null);
+                            }}
+                            onRefresh={() => fetchManageData(items)}
+                        />
+                    )}
                 </BottomSheet>
             )}
-
-            <Toast
-                type={toast.type}
-                isOpen={toast.isOpen}
-                onClose={closeToast}
-                children={toast.message}
-            />
         </section>
     );
 };

@@ -1,5 +1,4 @@
 import { Navigate, Route, Routes } from "react-router-dom";
-
 import IndexPage from "./pages/IndexPage";
 import LoginPage from "./pages/LoginPage";
 import Layout from "./Layouts/Layout";
@@ -59,7 +58,6 @@ const App = () => (
             <Route index element={<Navigate to="/admin/dashboard" />} />
             <Route path="dashboard" element={<DashboardPage />} />
             <Route path="bookings" element={<BookingsPage />} />
-            <Route path="manage" element={<ManagePage />} />
             <Route path="new-meeting" element={<IndexPage />} />
             <Route path="user" element={<UserPage />} />
             <Route path="rooms" element={<ManagePage items="rooms" />} />

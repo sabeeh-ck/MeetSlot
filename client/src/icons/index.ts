@@ -1,5 +1,5 @@
 export {
-    User as UserIcon,
+    UserRound as UserIcon,
     LogOut as LogoutIcon,
     CalendarDays as CalendarIcon,
     ChevronsUpDown as ChevronUpDownIcon,
@@ -22,11 +22,12 @@ export {
     MapPin as LocationIcon,
     UserRoundPlus as AddUserIcon,
     Mail as EmailIcon,
-    UserRoundKey as RoleIcon,
+    UserRoundKey as AdminIcon,
     Projector as ProjectorIcon,
     Presentation as WhiteBoardIcon,
     Loader as LoaderIcon,
     CircleX as ErrorIcon,
     SaveCheck as SuccessIcon,
     X as CloseIcon,
+    UserRoundGroup as CapacityIcon,
 } from "lucide-react";

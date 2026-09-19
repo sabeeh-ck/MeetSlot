@@ -12,7 +12,7 @@ export type Room = {
     _id: string;
     name: string;
     location: string;
-    capacity: number | null;
+    capacity: number;
     has_projector: boolean;
     has_whiteboard: boolean;
 };

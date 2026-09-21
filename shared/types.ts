@@ -29,11 +29,23 @@ export type RecentActivity = {
     __v: number;
 };
 
+export type MasterSchedule = {
+    __v: number;
+    _id: string;
+    createdAt: string;
+    end: string;
+    roomId: Pick<Room, "_id" | "name">;
+    start: string;
+    title: string;
+    updatedAt: string;
+    user: Pick<User, "_id" | "name" | "email">;
+};
+
 export type DashboardData = {
     totalBookingsToday: number;
     totalRooms: number;
     totalUsers: number;
     upcomingBookings: number;
-    masterSchedule: [];
+    masterSchedule: MasterSchedule[];
     recentActivity: RecentActivity[];
 };

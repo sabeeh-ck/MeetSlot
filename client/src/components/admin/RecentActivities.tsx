@@ -1,7 +1,13 @@
 import { Fragment } from "react";
 import Skeleton from "react-loading-skeleton";
+import { RecentActivity } from "../../../../shared/types";
 
-const RecentActivity = ({ loading, data }) => {
+type RecentActivityProps = {
+    loading: boolean;
+    data: RecentActivity[];
+};
+
+const RecentActivities = ({ loading, data }: RecentActivityProps) => {
     return (
         <section className="flex flex-col gap-2">
             <div className="flex items-center justify-between">
@@ -68,4 +74,4 @@ const RecentActivity = ({ loading, data }) => {
     );
 };
 
-export default RecentActivity;
+export default RecentActivities;

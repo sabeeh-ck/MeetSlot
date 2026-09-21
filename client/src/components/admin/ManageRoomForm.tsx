@@ -139,7 +139,7 @@ const ManageRoomForm = ({
                 className="flex flex-col gap-3 text-sm"
             >
                 {formFields.slice(0, 3).map(({ name, type, placeholder }) => (
-                    <div className="flex flex-col gap-1">
+                    <div key={name} className="flex flex-col gap-1">
                         <label htmlFor={name} className="capitalize">
                             {name}
                             <span className="ml-1 text-red-700">*</span>
@@ -170,6 +170,7 @@ const ManageRoomForm = ({
                         const Icon = icon;
                         return (
                             <label
+                                key={name}
                                 htmlFor={name}
                                 className="flex items-center justify-between"
                             >

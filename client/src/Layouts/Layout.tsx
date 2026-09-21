@@ -1,4 +1,4 @@
-import { Outlet, useSearchParams } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import Header from "../components/Header";
 import SideBar from "../components/SideBar";
 import BottomNav from "../components/BottomNav";
@@ -6,8 +6,6 @@ import { useAuth } from "../context/AuthContext";
 
 const Layout = () => {
     const { loading } = useAuth();
-    const [searchParams, setSearchParams] = useSearchParams();
-    const activeTab = searchParams.get("tab") || "Dashboard";
 
     return (
         <>
@@ -15,10 +13,7 @@ const Layout = () => {
 
             {!loading && (
                 <div className="bg-bg border-border fixed top-16 left-0 z-40 hidden h-[calc(100dvh-64px)] w-64 border-r lg:block">
-                    <SideBar
-                        activeTab={activeTab}
-                        setSearchParams={setSearchParams}
-                    />
+                    <SideBar />
                 </div>
             )}
 

@@ -1,14 +1,18 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
-import App from "./App.jsx";
-import { AuthProvider } from "./context/AuthContext.jsx";
+import App from "./App.js";
+import { AuthProvider } from "./context/AuthContext.js";
 import { SkeletonTheme } from "react-loading-skeleton";
-import ScrollToTop from "./components/ScrollToTop.jsx";
+import ScrollToTop from "./components/ScrollToTop.js";
 import { BrowserRouter } from "react-router-dom";
 import { ToastProvider } from "./context/ToastContext";
 
-createRoot(document.getElementById("root")).render(
+const rootElement = document.getElementById("root");
+
+if (!rootElement) throw new Error("Root element not found");
+
+createRoot(rootElement).render(
     <StrictMode>
         <ToastProvider>
             <AuthProvider>

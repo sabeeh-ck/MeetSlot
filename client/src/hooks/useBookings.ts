@@ -13,7 +13,7 @@ export type Booking = {
     user: string;
 };
 
-export const useBookings = (userId: string) => {
+export const useBookings = (userId: string | undefined) => {
     const [bookings, setBookings] = useState<Booking[]>([]);
     const [loading, setLoading] = useState(false);
 

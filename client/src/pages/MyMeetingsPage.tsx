@@ -5,7 +5,7 @@ import { useBookings } from "../hooks/useBookings";
 
 const MyMeetingsPage = () => {
     const { user } = useAuth();
-    const { bookings, refetch } = useBookings(user._id);
+    const { bookings, refetch, loading } = useBookings(user?._id);
 
     const [view, setView] = useState("upcoming");
 
@@ -47,6 +47,7 @@ const MyMeetingsPage = () => {
                 bookings={view === "upcoming" ? upcoming : past}
                 isPast={view === "past"}
                 refetch={refetch}
+                loading={loading}
             />
         </section>
     );

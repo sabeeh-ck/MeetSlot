@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import StatCards from "../../components/admin/StatCards";
 import api from "../../api/axios";
-import RecentActivity from "../../components/admin/RecentActivity";
+import RecentActivities from "../../components/admin/RecentActivities";
 import TodaysBookings from "../../components/admin/TodaysBookings";
 import { DashboardData } from "../../../../shared/types";
 
@@ -45,7 +45,7 @@ const DashboardPage = () => {
                     </div>
 
                     <div className="lg:col-span-1">
-                        <RecentActivity
+                        <RecentActivities
                             loading={loading}
                             data={recentActivity}
                         />

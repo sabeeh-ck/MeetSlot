@@ -3,11 +3,7 @@ import { useAuth } from "../context/AuthContext";
 import { ChevronDoubleLeftIcon, LogoutIcon, PlusIcon } from "../icons";
 import Nav from "./Nav";
 
-type SideBarProps = {
-    activeTab: string;
-};
-
-const SideBar = ({ activeTab /* setSearchParams */ }: SideBarProps) => {
+const SideBar = () => {
     const { user, logout } = useAuth();
     const navigate = useNavigate();
 
@@ -16,8 +12,7 @@ const SideBar = ({ activeTab /* setSearchParams */ }: SideBarProps) => {
     return (
         <div className="flex h-full flex-col justify-between">
             <div className="flex h-full flex-col p-4 pb-0">
-                <Nav /* activeTab={activeTab} setSearchParams={setSearchParams} */
-                />
+                <Nav />
 
                 <div
                     className={`border-border flex w-full flex-col items-center gap-4 border-t py-10`}

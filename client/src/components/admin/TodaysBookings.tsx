@@ -7,23 +7,37 @@ import {
     TrashIcon,
     UserIcon,
 } from "../../icons";
-import { Fragment, useState } from "react";
+import { Fragment, MouseEvent, useState } from "react";
 import MenuModal from "../MenuModal";
 import ConfirmMenu from "../ConfirmMenu";
 import api from "../../api/axios";
 import Skeleton from "react-loading-skeleton";
+import { MasterSchedule } from "../../../../shared/types";
 
-const TodaysBookings = ({ data, loading, refetch }) => {
-    const [activeMenuId, setActiveMenuId] = useState(null);
-    const [rect, setRect] = useState(null);
-    const [deletingId, setDeletingId] = useState(null);
+type TodaysBookingsProps = {
+    data: MasterSchedule[];
+    loading: boolean;
+    refetch: () => void;
+};
 
-    const handleOpenMenu = (e, _id) => {
+const TodaysBookings = ({ data, loading, refetch }: TodaysBookingsProps) => {
+    const [activeMenuId, setActiveMenuId] = useState<
+        MasterSchedule["_id"] | null
+    >(null);
+    const [rect, setRect] = useState<DOMRect | null>(null);
+    const [deletingId, setDeletingId] = useState<MasterSchedule["_id"] | null>(
+        null,
+    );
+
+    const handleOpenMenu = (
+        e: MouseEvent<HTMLButtonElement>,
+        _id: MasterSchedule["_id"],
+    ) => {
         setRect(e.currentTarget.getBoundingClientRect());
         setActiveMenuId(_id);
     };
 
-    const handleDelete = async (_id) => {
+    const handleDelete = async (_id: MasterSchedule["_id"]) => {
         try {
             setActiveMenuId(null);
             setDeletingId(_id);
@@ -77,7 +91,8 @@ const TodaysBookings = ({ data, loading, refetch }) => {
                             {[...data]
                                 .sort(
                                     (a, b) =>
-                                        new Date(a.start) - new Date(b.start),
+                                        new Date(a.start).getTime() -
+                                        new Date(b.start).getTime(),
                                 )
                                 .map((booking, index) => {
                                     const {
@@ -140,11 +155,11 @@ const TodaysBookings = ({ data, loading, refetch }) => {
                                                     <span className="hidden md:block">
                                                         {userName}
                                                     </span>
-                                                    <span className="text-textmute flex gap-2 text-xs md:hidden">
+                                                    <span className="text-textmute flex items-center gap-2 text-xs md:hidden">
                                                         <RoomIcon className="size-3 stroke-3" />
                                                         {roomName}
                                                     </span>
-                                                    <span className="text-textmute flex gap-2 text-xs md:hidden">
+                                                    <span className="text-textmute flex items-center gap-2 text-xs md:hidden">
                                                         <UserIcon className="size-3 stroke-3" />
                                                         {userName}
                                                     </span>
@@ -169,7 +184,7 @@ const TodaysBookings = ({ data, loading, refetch }) => {
                                                     </button>
 
                                                     <MenuModal
-                                                        open={isMenuOpen}
+                                                        isOpen={isMenuOpen}
                                                         triggerRect={rect}
                                                         onClose={() =>
                                                             setActiveMenuId(

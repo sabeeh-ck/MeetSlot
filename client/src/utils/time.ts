@@ -1,7 +1,7 @@
-export const minutesTo24Hour = (minutes) =>
+export const minutesTo24Hour = (minutes: number) =>
     `${String(Math.floor(minutes / 60)).padStart(2, "0")}:${String(minutes % 60).padStart(2, "0")}`;
 
-export const minutesTo12Hour = (minutes) => {
+export const minutesTo12Hour = (minutes: number) => {
     if (minutes == null) return "-- --";
 
     const hours24 = Math.floor(minutes / 60);

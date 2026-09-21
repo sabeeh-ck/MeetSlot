@@ -6,9 +6,9 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import NotFoundPage from "./pages/NotFoundPage";
 import DashboardPage from "./pages/admin/DashboardPage";
 import BookingsPage from "./pages/admin/BookingsPage";
-import ManagePage from "./pages/admin/ManagePage.jsx";
 import MyMeetingsPage from "./pages/MyMeetingsPage";
 import UserPage from "./pages/UserPage";
+import ManagePage from "./pages/admin/ManagePage";
 
 const App = () => (
     <Routes>

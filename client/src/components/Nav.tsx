@@ -112,6 +112,7 @@ const Nav = ({ isExpanded, expandNav, minimiseNav }: NavProps) => {
                     >
                         {navItems.map(({ name, path, icon }) => {
                             if (isLaptop && name === "User") return null;
+                            const Icon = icon;
 
                             return (
                                 <motion.div
@@ -123,27 +124,17 @@ const Nav = ({ isExpanded, expandNav, minimiseNav }: NavProps) => {
                                         to={path}
                                         onClick={minimiseNav}
                                         className={({ isActive }) =>
-                                            `lg:hover:bg-border relative flex h-11.5 w-full shrink-0 items-center gap-3 rounded-full px-3 py-2 transition-all duration-200 ${
+                                            `relative flex h-11.5 w-full shrink-0 items-center gap-3 rounded-full px-3 py-2 transition-all duration-200 ${
                                                 isActive ? "bg-text/10" : ""
                                             }`
                                         }
                                     >
-                                        {({ isActive }) => {
-                                            const Icon = icon;
-                                            return (
-                                                <>
-                                                    <div className="flex size-6 shrink-0 items-center justify-center">
-                                                        <Icon className="size-6 shrink-0" />
-                                                    </div>
-                                                    <span className="text-xs font-bold whitespace-nowrap select-none lg:text-sm">
-                                                        {name}
-                                                    </span>
-                                                    {isActive && (
-                                                        <div className="bg-text ml-auto hidden h-5 w-1.5 rounded-sm lg:block" />
-                                                    )}
-                                                </>
-                                            );
-                                        }}
+                                        <div className="flex size-6 shrink-0 items-center justify-center">
+                                            <Icon className="size-6 shrink-0" />
+                                        </div>
+                                        <span className="text-xs font-bold whitespace-nowrap select-none lg:text-sm">
+                                            {name}
+                                        </span>
                                     </NavLink>
                                 </motion.div>
                             );

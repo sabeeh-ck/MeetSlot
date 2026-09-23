@@ -1,12 +1,13 @@
 import { useEffect } from "react";
 import { motion } from "framer-motion";
-import { CloseIcon, ErrorIcon, InfoIcon, SuccessIcon } from "../icons";
+import { ErrorIcon, InfoIcon, SuccessIcon } from "../icons";
 
 export type ToastType = "success" | "error" | "warning" | "info";
 
 export type ToastState = {
     type: ToastType;
     message: string;
+    duration?: number;
 };
 
 const types: Record<ToastType, { style: string; icon: typeof InfoIcon }> = {
@@ -25,9 +26,11 @@ const types: Record<ToastType, { style: string; icon: typeof InfoIcon }> = {
     info: { style: "bg-sky-950 border-sky-900 text-sky-200", icon: InfoIcon },
 };
 
-type ToastProps = { toast: ToastState; onClose: () => void; duration?: number };
+type ToastProps = { toast: ToastState; onClose: () => void };
 
-export const Toast = ({ toast, onClose, duration = 4000 }: ToastProps) => {
+export const Toast = ({ toast, onClose }: ToastProps) => {
+    const duration = toast.duration ?? 4000;
+
     useEffect(() => {
         const timer = setTimeout(onClose, duration);
 
@@ -44,7 +47,7 @@ export const Toast = ({ toast, onClose, duration = 4000 }: ToastProps) => {
             animate={{ opacity: 1, x: 0, scale: 1 }}
             exit={{ opacity: 0, x: 20, scale: 0.95 }}
             transition={{ duration: 0.25, ease: "easeInOut" }}
-            className={`pointer-events-auto flex items-center justify-center gap-2 rounded-xl border p-2 shadow-xl md:p-4 ${types[toast.type].style}`}
+            className={`pointer-events-auto flex w-full items-center justify-start gap-2 rounded-xl border p-2 shadow-xl md:px-4 ${types[toast.type].style}`}
             role="alert"
         >
             <Icon className="h-full md:size-5" />

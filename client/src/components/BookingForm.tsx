@@ -170,7 +170,9 @@ const BookingForm = ({
                             type="text"
                             id="startTime"
                             name="startTime"
-                            value={minutesTo12Hour(formData.startTime)}
+                            value={minutesTo12Hour(
+                                formData.startTime as number,
+                            )}
                             onChange={handleChange}
                             disabled
                             required
@@ -183,7 +185,7 @@ const BookingForm = ({
                             type="text"
                             id="endTime"
                             name="endTime"
-                            value={minutesTo12Hour(formData.endTime)}
+                            value={minutesTo12Hour(formData.endTime as number)}
                             onChange={handleChange}
                             disabled
                             required

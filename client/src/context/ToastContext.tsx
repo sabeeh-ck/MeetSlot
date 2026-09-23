@@ -8,8 +8,10 @@ import {
 import { Toast, ToastState, ToastType } from "../components/Toast";
 import { AnimatePresence } from "motion/react";
 
+const DEFAULT_TOAST_DURATION = 4000;
+
 type ToastContextType = {
-    showToast: (type: ToastType, message: string) => void;
+    showToast: (type: ToastType, message: string, duration?: number) => void;
 };
 
 const ToastContext = createContext<ToastContextType | undefined>(undefined);
@@ -18,8 +20,12 @@ export const ToastProvider = ({ children }: { children: ReactNode }) => {
     const [toast, setToast] = useState<ToastState | null>(null);
 
     const showToast = useCallback(
-        (type: ToastType = "info", message: string) =>
-            setToast({ type, message }),
+        (type: ToastType = "info", message: string, duration?: number) =>
+            setToast({
+                type,
+                message,
+                duration: duration ?? DEFAULT_TOAST_DURATION,
+            }),
         [],
     );
 
@@ -29,7 +35,7 @@ export const ToastProvider = ({ children }: { children: ReactNode }) => {
         <ToastContext.Provider value={{ showToast }}>
             {children}
 
-            <div className="pointer-events-none fixed inset-x-0 top-4 z-300 flex px-4 md:top-auto md:right-4 md:bottom-4 md:left-auto md:w-fit">
+            <div className="pointer-events-none fixed inset-x-0 top-4 z-300 flex px-4 md:top-auto md:right-4 md:bottom-4 md:left-auto md:w-1/4">
                 <AnimatePresence>
                     {toast && <Toast toast={toast} onClose={hideToast} />}
                 </AnimatePresence>

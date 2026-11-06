@@ -176,8 +176,6 @@ router.post("/manage/rooms", async (req: Request, res: Response) => {
             return res.status(400).json({ message: "Room name is required" });
         }
 
-        console.log(name.trim(), Number(capacity), has_projector, has_whiteboard, location.trim());
-
         const room = await Room.create({
             name: name.trim(),
             capacity: capacity ? Number(capacity) : 1,

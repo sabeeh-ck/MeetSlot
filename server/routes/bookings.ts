@@ -1,17 +1,25 @@
-import { Router } from "express";
+import { Request, Response, Router } from "express";
 import { auth } from "../middleware/authMiddleware.js";
 import Booking from "../models/Booking.js";
 import Room from "../models/Room.js";
+import { CreateBookingInput } from "../../shared/types.js";
 
 const router = Router();
 
-router.post("/", auth, async (req, res) => {
+type AvailabilityRoom = {
+    roomId: string;
+    roomName: string;
+    bookedSlots: { start: Date; end: Date }[];
+};
+
+router.post("/", auth, async (req: Request<{}, unknown, CreateBookingInput>, res: Response) => {
     try {
-        const { title, roomId, user, date, startTime, endTime } = req.body;
+        const { title, roomId, date, startTime, endTime } = req.body;
 
         if (!title || !roomId || !date) return res.status(400).json({ msg: "Missing fields" });
 
-        if (startTime >= endTime) return res.status(400).json({ msg: "Invalid time range" });
+        if (startTime == null || endTime == null || startTime >= endTime)
+            return res.status(400).json({ msg: "Invalid time range" });
 
         const baseDate = new Date(`${date}T00:00:00`);
         const start = new Date(baseDate);
@@ -27,12 +35,7 @@ router.post("/", auth, async (req, res) => {
 
         if (conflict) return res.status(400).json({ msg: "Slot already booked" });
 
-        const existingBookings = await Booking.find({
-            roomId,
-            date,
-        });
-
-        const booking = await Booking.create({ title, roomId, user, start, end });
+        const booking = await Booking.create({ title, roomId, user: req.userId, start, end });
 
         res.status(201).json(booking);
     } catch (err) {
@@ -41,7 +44,7 @@ router.post("/", auth, async (req, res) => {
     }
 });
 
-router.get("/availability", async (req, res) => {
+router.get("/availability", async (req: Request, res: Response) => {
     try {
         const { date } = req.query;
         if (!date) return res.status(400).json({ msg: "Date required" });
@@ -56,12 +59,15 @@ router.get("/availability", async (req, res) => {
             "name",
         );
 
-        const map = {};
+        const map: Record<string, AvailabilityRoom> = {};
 
-        rooms.forEach((room) => (map[room._id] = { roomId: room._id, roomName: room.name, bookedSlots: [] }));
+        rooms.forEach((room) => {
+            const roomId = room._id.toString();
+            map[roomId] = { roomId, roomName: room.name, bookedSlots: [] };
+        });
 
         bookings.forEach((b) => {
-            const bookingRoomId = b.roomId?._id ?? b.roomId;
+            const bookingRoomId = (b.roomId?._id ?? b.roomId).toString();
             if (bookingRoomId && map[bookingRoomId]) {
                 map[bookingRoomId].bookedSlots.push({ start: b.start, end: b.end });
             }

@@ -4,7 +4,7 @@ import MenuModal from "./MenuModal";
 import { MouseEvent, useState } from "react";
 import api from "../api/axios";
 import ConfirmMenu from "./ConfirmMenu";
-import { Booking } from "../hooks/useBookings";
+import { Booking } from "../../../shared/types";
 
 type BookingCardProps = {
     booking: Booking;
@@ -45,7 +45,7 @@ const BookingCard = ({
             setDeleting(false);
             refetch();
         } catch (error) {
-            console.log(error);
+            console.error(error);
         }
     };
 

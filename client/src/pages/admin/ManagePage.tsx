@@ -20,7 +20,7 @@ import BottomSheet from "../../components/BottomSheet";
 import ManageUserForm from "../../components/admin/ManageUserForm";
 import Skeleton from "react-loading-skeleton";
 import ManageRoomForm from "../../components/admin/ManageRoomForm";
-import { Room, User } from "../../../../shared/types";
+import { RoomType, UserType } from "../../../../shared/types";
 import { useToast } from "../../context/ToastContext";
 import { isAxiosError } from "axios";
 
@@ -30,10 +30,12 @@ type ManagePageProps = {
 
 const ManagePage = ({ items }: ManagePageProps) => {
     const [loading, setLoading] = useState(true);
-    const [rooms, setRooms] = useState<Room[] | null>(null);
-    const [users, setUsers] = useState<User[] | null>(null);
+    const [rooms, setRooms] = useState<RoomType[] | null>(null);
+    const [users, setUsers] = useState<UserType[] | null>(null);
     const [isSheetOpen, setIsSheetOpen] = useState(false);
-    const [editingItem, setEditingItem] = useState<Room | User | null>(null);
+    const [editingItem, setEditingItem] = useState<RoomType | UserType | null>(
+        null,
+    );
 
     const { isLaptop, isTablet } = useWindowWidth();
     const { showToast } = useToast();
@@ -151,24 +153,34 @@ const ManagePage = ({ items }: ManagePageProps) => {
                                         <>
                                             <div className="flex items-center gap-2">
                                                 <LocationIcon className="h-4 md:hidden" />
-                                                <p>{(data as Room).location}</p>
+                                                <p>
+                                                    {
+                                                        (data as RoomType)
+                                                            .location
+                                                    }
+                                                </p>
                                             </div>
                                             <div className="flex items-center gap-2 md:justify-center">
                                                 <CapacityIcon className="h-4 md:hidden" />
-                                                <p>{(data as Room).capacity}</p>
+                                                <p>
+                                                    {
+                                                        (data as RoomType)
+                                                            .capacity
+                                                    }
+                                                </p>
                                             </div>
 
                                             <div className="text-textmute flex items-center gap-1 md:col-span-2 md:grid md:grid-cols-2">
                                                 {[
                                                     {
-                                                        has: (data as Room)
+                                                        has: (data as RoomType)
                                                             .has_projector,
                                                         col: "col-start-1",
                                                         content: "Projector",
                                                         icon: ProjectorIcon,
                                                     },
                                                     {
-                                                        has: (data as Room)
+                                                        has: (data as RoomType)
                                                             .has_whiteboard,
                                                         col: "col-start-2",
                                                         content: "Whiteboard",
@@ -226,18 +238,20 @@ const ManagePage = ({ items }: ManagePageProps) => {
                                         <>
                                             <div className="flex items-center gap-2">
                                                 <EmailIcon className="h-4 md:hidden" />
-                                                <p>{(data as User).email}</p>
+                                                <p>
+                                                    {(data as UserType).email}
+                                                </p>
                                             </div>
 
                                             <div className="flex items-center gap-2">
-                                                {(data as User).role ===
+                                                {(data as UserType).role ===
                                                 "admin" ? (
                                                     <AdminIcon className="h-4" />
                                                 ) : (
                                                     <UserIcon className="h-4" />
                                                 )}
                                                 <p className="capitalize">
-                                                    {(data as User).role}
+                                                    {(data as UserType).role}
                                                 </p>
                                             </div>
                                         </>
@@ -266,7 +280,7 @@ const ManagePage = ({ items }: ManagePageProps) => {
                     {isRooms ? (
                         <ManageRoomForm
                             key={editingItem?._id || "new"}
-                            editingItem={editingItem as Room}
+                            editingItem={editingItem as RoomType}
                             onDone={() => {
                                 setIsSheetOpen(false);
                                 setEditingItem(null);
@@ -276,7 +290,7 @@ const ManagePage = ({ items }: ManagePageProps) => {
                     ) : (
                         <ManageUserForm
                             key={editingItem?._id || "new"}
-                            editingItem={editingItem as User}
+                            editingItem={editingItem as UserType}
                             onDone={() => {
                                 setIsSheetOpen(false);
                                 setEditingItem(null);
@@ -294,7 +308,7 @@ const ManagePage = ({ items }: ManagePageProps) => {
                 >
                     {isRooms ? (
                         <ManageRoomForm
-                            editingItem={editingItem as Room}
+                            editingItem={editingItem as RoomType}
                             onDone={() => {
                                 setIsSheetOpen(false);
                                 setEditingItem(null);
@@ -303,7 +317,7 @@ const ManagePage = ({ items }: ManagePageProps) => {
                         />
                     ) : (
                         <ManageUserForm
-                            editingItem={editingItem as User}
+                            editingItem={editingItem as UserType}
                             onDone={() => {
                                 setIsSheetOpen(false);
                                 setEditingItem(null);

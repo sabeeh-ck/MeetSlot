@@ -3,13 +3,12 @@ import { ChevronUpDownIcon } from "../icons";
 import BottomSheet from "./BottomSheet";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import { Room } from "../../../shared/types";
-import { Availability } from "../hooks/useAvailability";
+import { Availability, RoomType } from "../../../shared/types";
 
 type RoomSelectorProps = {
     availability: Availability[];
     selectedRoom: string;
-    onSelect: (roomId: Room["_id"]) => void;
+    onSelect: (roomId: RoomType["_id"]) => void;
     loading: boolean;
     sheet: "room" | "form" | null;
     closeSheet: () => void;
@@ -29,7 +28,7 @@ const RoomSelector = ({
         onSelect(availability[0]?.roomId);
     }, []);
 
-    const handleClick = (room: Room["_id"]) => {
+    const handleClick = (room: RoomType["_id"]) => {
         onSelect(room);
         closeSheet();
     };

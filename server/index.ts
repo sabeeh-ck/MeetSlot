@@ -10,6 +10,7 @@ import bookingRoutes from "./routes/bookings.js";
 import userRoutes from "./routes/users.js";
 import adminRoutes from "./routes/admin.js";
 import connectDB from "./db.js";
+import { auth, requireAdmin } from "./middleware/authMiddleware.js";
 
 const app = express();
 
@@ -38,7 +39,7 @@ connectDB();
 app.use("/auth", authRoutes);
 app.use("/bookings", bookingRoutes);
 app.use("/user", userRoutes);
-app.use("/admin", adminRoutes);
+app.use("/admin", auth, requireAdmin, adminRoutes);
 
 app.listen(PORT, () => {
     console.log("Server running on port 4000");

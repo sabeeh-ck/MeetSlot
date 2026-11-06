@@ -1,13 +1,6 @@
 import { useEffect, useState } from "react";
 import api from "../api/axios";
-
-type BookedSlot = { start: string; end: string };
-
-export type Availability = {
-    roomId: string;
-    roomName: string;
-    bookedSlots: BookedSlot[];
-};
+import { Availability } from "../../../shared/types";
 
 export const useAvailability = (date: string) => {
     const [availability, setAvailability] = useState<Availability[]>([]);
@@ -22,7 +15,7 @@ export const useAvailability = (date: string) => {
 
             setAvailability([...res.data]);
         } catch (error) {
-            console.log(error);
+            console.error(error);
         } finally {
             const elapsed = Date.now() - start;
             const minDelay = 700;

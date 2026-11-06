@@ -8,7 +8,7 @@ const transporter = nodemailer.createTransport({
     },
 });
 
-export const sendOtpEmail = async (to, otp) => {
+export const sendOtpEmail = async (to: string, otp: string) => {
     try {
         console.log("Trying to send email...");
 

@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import BookingsList from "../../components/BookingsList";
 import api from "../../api/axios";
+import { Booking } from "../../../../shared/types";
 
 const BookingsPage = () => {
-    const [bookings, setBookings] = useState([]);
+    const [bookings, setBookings] = useState<Booking[]>([]);
     const [loading, setLoading] = useState(true);
     const [view, setView] = useState("upcoming");
 
@@ -12,7 +13,7 @@ const BookingsPage = () => {
             const res = await api.get("/admin/bookings");
             setBookings(res.data);
         } catch (error) {
-            console.log(error);
+            console.error(error);
         } finally {
             setLoading(false);
         }

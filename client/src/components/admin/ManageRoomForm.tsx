@@ -9,7 +9,7 @@ import {
     WhiteBoardIcon,
 } from "../../icons";
 import { useAuth } from "../../context/AuthContext";
-import { Room } from "../../../../shared/types";
+import { RoomType } from "../../../../shared/types";
 import { ManageRoom } from "../../types";
 import { useToast } from "../../context/ToastContext";
 import { isAxiosError } from "axios";
@@ -26,7 +26,7 @@ const demoMessage =
     "Demo Mode: Editing and Deleting is simulated and was not completed.";
 
 type ManageRoomFormProps = {
-    editingItem: Room | null;
+    editingItem: RoomType | null;
     onDone: () => void;
     onRefresh: () => void;
 };
@@ -105,7 +105,7 @@ const ManageRoomForm = ({
         }
     };
 
-    const handleDelete = async (id: Room["_id"]) => {
+    const handleDelete = async (id: RoomType["_id"]) => {
         if (isDemo) {
             showToast("warning", demoMessage);
             onDone();
@@ -178,22 +178,28 @@ const ManageRoomForm = ({
                                     <Icon className="size-4" />
                                     {name}
                                 </span>
-                                <input
-                                    type="checkbox"
-                                    name={`has_${name}`}
-                                    onChange={handleChange}
-                                    checked={
-                                        name === "projector"
-                                            ? formData.has_projector
-                                            : formData.has_whiteboard
-                                    }
-                                    id={name}
-                                    className="peer sr-only hidden"
-                                />
-                                <div className="bg-surface border-border peer after:bg-text peer-checked:after:border-text peer-checked:bg-border flex h-8 w-16 cursor-pointer items-center justify-between rounded-full border px-2 py-1 peer-focus:outline-none after:absolute after:-mx-1 after:h-6 after:w-8 after:rounded-full after:transition-all after:duration-200 after:ease-in after:content-[''] peer-checked:after:translate-x-5.5">
-                                    <CheckIcon className="size-4 text-green-700" />
-                                    <XMarkIcon className="size-4 text-red-700" />
-                                </div>
+
+                                <span className="border-border bg-surface relative flex h-8 w-16 items-center justify-between rounded-full border px-2 py-1">
+                                    <input
+                                        type="checkbox"
+                                        name={`has_${name}`}
+                                        onChange={handleChange}
+                                        checked={
+                                            name === "projector"
+                                                ? formData.has_projector
+                                                : formData.has_whiteboard
+                                        }
+                                        id={name}
+                                        className="peer absolute inset-0 z-10 m-0 h-full w-full cursor-pointer opacity-0"
+                                    />
+
+                                    <span className="pointer-events-none absolute inset-0 flex items-center justify-between px-2">
+                                        <CheckIcon className="size-4 text-green-700" />
+                                        <XMarkIcon className="size-4 text-red-700" />
+                                    </span>
+
+                                    <span className="bg-text pointer-events-none absolute top-1/2 left-1 z-0 h-6 w-8 -translate-y-1/2 rounded-full transition-transform duration-200 peer-checked:translate-x-6" />
+                                </span>
                             </label>
                         );
                     })}

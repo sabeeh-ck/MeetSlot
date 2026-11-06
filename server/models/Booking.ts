@@ -1,4 +1,12 @@
-import { model, Schema, Types } from "mongoose";
+import { HydratedDocument, model, Schema, Types } from "mongoose";
+
+type BookingFields = {
+    title: string;
+    roomId: Types.ObjectId;
+    user: Types.ObjectId;
+    start: Date;
+    end: Date;
+};
 
 const bookingSchema = new Schema(
     {
@@ -11,6 +19,8 @@ const bookingSchema = new Schema(
     { timestamps: true },
 );
 
+export type BookingDocument = HydratedDocument<BookingFields>;
+
 bookingSchema.index({ roomId: 1, start: 1, end: 1 }, { unique: true });
 
-export default model("Booking", bookingSchema);
+export default model<BookingFields>("Booking", bookingSchema);

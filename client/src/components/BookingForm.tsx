@@ -4,9 +4,9 @@ import { useWindowWidth } from "../hooks/useWindowWidth";
 import api from "../api/axios";
 import { useAuth } from "../context/AuthContext";
 import { LoaderIcon, SaveIcon } from "../icons";
-import { Availability } from "../hooks/useAvailability";
 import { isAxiosError } from "axios";
 import { useToast } from "../context/ToastContext";
+import { Availability, CreateBookingInput } from "../../../shared/types";
 
 type BookingFormProps = {
     selectedDate: string;
@@ -78,11 +78,10 @@ const BookingForm = ({
         const payload = {
             title: formData.title,
             roomId: formData.room,
-            user: user?._id,
             date: formData.date,
             startTime: formData.startTime,
             endTime: formData.endTime,
-        };
+        } satisfies CreateBookingInput;
 
         try {
             setLoading(true);

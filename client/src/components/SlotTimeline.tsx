@@ -1,8 +1,8 @@
 import { minutesTo12Hour } from "../utils/time";
 import { START_TIME, END_TIME, SLOT_DURATION } from "../../constants";
 import Skeleton from "react-loading-skeleton";
-import { Availability } from "../hooks/useAvailability";
 import { Dispatch, SetStateAction } from "react";
+import { Availability } from "../../../shared/types";
 
 type SlotTimelineProps = {
     currentRoom: string;

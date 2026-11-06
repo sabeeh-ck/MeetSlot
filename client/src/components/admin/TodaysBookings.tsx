@@ -47,7 +47,7 @@ const TodaysBookings = ({ data, loading, refetch }: TodaysBookingsProps) => {
             setDeletingId(null);
             refetch();
         } catch (error) {
-            console.log(error);
+            console.error(error);
             setDeletingId(null);
         }
     };

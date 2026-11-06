@@ -1,6 +1,17 @@
-import { model, Schema } from "mongoose";
+import { HydratedDocument, model, Schema } from "mongoose";
+import type { UserRole } from "../../shared/types.js";
 
-const userSchema = new Schema(
+type UserFields = {
+    name: string;
+    email: string;
+    role: UserRole;
+    otp?: {
+        code?: string;
+        expiresAt: Date;
+    };
+};
+
+const userSchema = new Schema<UserFields>(
     {
         name: { type: String, required: true },
         email: {
@@ -26,4 +37,6 @@ const userSchema = new Schema(
     { timestamps: true },
 );
 
-export default model("User", userSchema);
+export type UserDocument = HydratedDocument<UserFields>;
+
+export default model<UserFields>("User", userSchema);

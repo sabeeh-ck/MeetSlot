@@ -9,7 +9,7 @@ const seedUser = async () => {
     const userEmail = process.env.TEST_USER_EMAIL;
 
     try {
-        await mongoose.connect(process.env.MONGO_URI);
+        await mongoose.connect(process.env.MONGO_URI as string);
 
         await User.deleteMany({ email: userEmail });
 

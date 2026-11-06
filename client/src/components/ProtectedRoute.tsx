@@ -1,11 +1,11 @@
 import { Navigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { ReactNode } from "react";
-import { User } from "../../../shared/types";
+import { UserType } from "../../../shared/types";
 
 type ProtectedRouteProps = {
     children: ReactNode;
-    requiredRole: User["role"];
+    requiredRole: UserType["role"];
 };
 
 const ProtectedRoute = ({ children, requiredRole }: ProtectedRouteProps) => {

@@ -9,7 +9,7 @@ import { useAvailability } from "../hooks/useAvailability";
 import DateSelector from "../components/DateSelector";
 import Skeleton from "react-loading-skeleton";
 import { PlusIcon } from "../icons";
-import { Room } from "../../../shared/types";
+import { RoomType } from "../../../shared/types";
 
 type SelectedSlots = Record<string, number[]>;
 
@@ -45,7 +45,7 @@ const IndexPage = () => {
                         availability={availability}
                         loading={loading}
                         selectedRoom={selectedRoom}
-                        onSelect={(room: Room["_id"]) => {
+                        onSelect={(room: RoomType["_id"]) => {
                             setSelectedRoom(room);
                             setSheet(null);
                         }}

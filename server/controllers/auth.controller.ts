@@ -1,10 +1,11 @@
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 import { sendOtpEmail } from "../utils/sendEmail.js";
+import { Request, Response } from "express";
 
-export const checkHealth = (req, res) => res.status(200).json({ status: "awake" });
+export const checkHealth = (req: Request, res: Response) => res.status(200).json({ status: "awake" });
 
-export const getMe = async (req, res) => {
+export const getMe = async (req: Request, res: Response) => {
     try {
         res.set("Cache-Control", "no-store");
 
@@ -18,10 +19,11 @@ export const getMe = async (req, res) => {
     }
 };
 
-export const sendOtp = async (req, res) => {
+export const sendOtp = async (req: Request, res: Response) => {
     const isDemo = process.env.DEMO_MODE === "true";
 
-    const { email } = req.body;
+    const { email } = req.body as { email?: string };
+    if (!email) return res.status(400).json({ msg: "Email is required" });
 
     const user = await User.findOne({ email });
     if (!user) return res.status(401).json({ msg: "Not authorised. Contact admin!" });
@@ -50,9 +52,6 @@ export const sendOtp = async (req, res) => {
                 return res.status(500).json({ msg: "Failed to send OTP" });
             }
 
-            console.log("Sending OTP to:", user.email);
-            console.log("OTP:", otp);
-
             return res.json({ msg: "OTP sent" });
         }
     } catch (error) {
@@ -61,22 +60,27 @@ export const sendOtp = async (req, res) => {
     }
 };
 
-export const verifyOtp = async (req, res) => {
+export const verifyOtp = async (req: Request, res: Response) => {
     const isProd = process.env.ENV === "prod";
 
-    const { email, otp } = req.body;
+    const { email, otp } = req.body as { email?: string; otp?: string };
     if (!email || !otp) return res.status(400).json({ msg: "Missing email or otp" });
 
     const user = await User.findOne({ email }).select("+otp");
 
     if (!user || !user.otp) return res.status(400).json({ msg: "Invalid OTP" });
 
-    if (user.otp.expiresAt < Date.now()) return res.status(400).json({ msg: "OTP expired" });
+    if (user.otp.expiresAt.getTime() < Date.now()) return res.status(400).json({ msg: "OTP expired" });
 
     if (user.otp.code !== otp) return res.status(400).json({ msg: "Wrong OTP" });
 
     console.log("OTP verified");
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: "7d" });
+
+    const jwtSecret = process.env.JWT_SECRET;
+
+    if (!jwtSecret) return res.status(500).json({ msg: "Server misconfiguration: JWT secret missing" });
+
+    const token = jwt.sign({ userId: user._id }, jwtSecret, { expiresIn: "7d" });
 
     user.otp = undefined;
     await user.save();
@@ -88,7 +92,7 @@ export const verifyOtp = async (req, res) => {
     }).json({ msg: "Login successfull", user });
 };
 
-export const logout = async (req, res) => {
+export const logout = async (req: Request, res: Response) => {
     const isProd = process.env.ENV === "prod";
 
     res.clearCookie("token", {

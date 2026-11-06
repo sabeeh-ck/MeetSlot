@@ -1,17 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import api from "../api/axios";
-
-export type Booking = {
-    __v: number;
-    _id: string;
-    createdAt: string;
-    end: string;
-    roomId: Record<string, string>;
-    start: string;
-    title: string;
-    updatedAt: string;
-    user: string;
-};
+import { Booking } from "../../../shared/types";
 
 export const useBookings = (userId: string | undefined) => {
     const [bookings, setBookings] = useState<Booking[]>([]);
@@ -27,7 +16,7 @@ export const useBookings = (userId: string | undefined) => {
             const res = await api.get(`/user/bookings`);
             setBookings(res.data);
         } catch (err) {
-            console.log(err);
+            console.error(err);
         } finally {
             const elapsed = Date.now() - start;
             const minDelay = 700;
@@ -36,8 +25,6 @@ export const useBookings = (userId: string | undefined) => {
             setTimeout(() => {
                 setLoading(false);
             }, remainingTime);
-
-            console.log(bookings);
         }
     }, [userId]);
 

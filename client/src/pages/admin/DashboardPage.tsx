@@ -17,7 +17,7 @@ const DashboardPage = () => {
             const res = await api.get("/admin/dashboard");
             setData(res.data);
         } catch (error) {
-            console.log(error);
+            console.error(error);
         } finally {
             setLoading(false);
         }

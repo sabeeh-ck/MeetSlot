@@ -8,11 +8,11 @@ import {
     useState,
 } from "react";
 import api from "../api/axios";
-import { User } from "../../../shared/types";
+import { UserType } from "../../../shared/types";
 
 type AuthContextValue = {
-    user: User | null;
-    setUser: Dispatch<SetStateAction<User | null>>;
+    user: UserType | null;
+    setUser: Dispatch<SetStateAction<UserType | null>>;
     loading: boolean;
     logout: () => Promise<void>;
     isDemo: boolean;
@@ -21,7 +21,7 @@ type AuthContextValue = {
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-    const [user, setUser] = useState<User | null>(null);
+    const [user, setUser] = useState<UserType | null>(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -44,7 +44,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             await api.post("/auth/logout");
             setUser(null);
         } catch (err) {
-            console.log(err);
+            console.error(err);
         }
     };
 

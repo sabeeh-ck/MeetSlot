@@ -1,14 +1,17 @@
-import mongoose from "mongoose";
 import dotenv from "dotenv";
 import Booking from "../models/Booking.js";
 import Room from "../models/Room.js";
 import User from "../models/User.js";
+import { connect } from "mongoose";
 
 dotenv.config();
 
 const seedBookings = async () => {
     try {
-        await mongoose.connect(process.env.MONGO_URI);
+        const mongoUri = process.env.MONGO_URI;
+        if (!mongoUri) throw new Error("MONGO_URI is not defined");
+
+        await connect(mongoUri);
 
         const rooms = await Room.find();
         const user = await User.findOne();

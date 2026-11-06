@@ -2,7 +2,7 @@ import { ChangeEvent, SyntheticEvent, useState } from "react";
 import api from "../../api/axios";
 import { SaveIcon, TrashIcon, InfoIcon } from "../../icons";
 import { useAuth } from "../../context/AuthContext";
-import { Room, User } from "../../../../shared/types";
+import { RoomType, UserType } from "../../../../shared/types";
 import { ToastType } from "../Toast";
 import { ManageRoom, ManageUser } from "../../types";
 import { useToast } from "../../context/ToastContext";
@@ -18,7 +18,7 @@ const demoMessage =
     "Demo Mode: Editing and Deleting is simulated and was not completed.";
 
 type ManageUserFormProps = {
-    editingItem: User | null;
+    editingItem: UserType | null;
     onDone: () => void;
     onRefresh: () => void;
 };
@@ -78,7 +78,7 @@ const ManageUserForm = ({
         }
     };
 
-    const handleDelete = async (id: User["_id"]) => {
+    const handleDelete = async (id: UserType["_id"]) => {
         if (isDemo) {
             showToast("warning", demoMessage);
             onDone();
